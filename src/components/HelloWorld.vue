@@ -1,58 +1,79 @@
 <template>
-  <div class="hello">
-    <h1>{{ msg }}</h1>
-    <p>
-      For a guide and recipes on how to configure / customize this project,<br>
-      check out the
-      <a href="https://cli.vuejs.org" target="_blank" rel="noopener">vue-cli documentation</a>.
-    </p>
-    <h3>Installed CLI Plugins</h3>
-    <ul>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-babel" target="_blank" rel="noopener">babel</a></li>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint" target="_blank" rel="noopener">eslint</a></li>
-    </ul>
-    <h3>Essential Links</h3>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank" rel="noopener">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank" rel="noopener">Forum</a></li>
-      <li><a href="https://chat.vuejs.org" target="_blank" rel="noopener">Community Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank" rel="noopener">Twitter</a></li>
-      <li><a href="https://news.vuejs.org" target="_blank" rel="noopener">News</a></li>
-    </ul>
-    <h3>Ecosystem</h3>
-    <ul>
-      <li><a href="https://router.vuejs.org" target="_blank" rel="noopener">vue-router</a></li>
-      <li><a href="https://vuex.vuejs.org" target="_blank" rel="noopener">vuex</a></li>
-      <li><a href="https://github.com/vuejs/vue-devtools#vue-devtools" target="_blank" rel="noopener">vue-devtools</a></li>
-      <li><a href="https://vue-loader.vuejs.org" target="_blank" rel="noopener">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank" rel="noopener">awesome-vue</a></li>
-    </ul>
-  </div>
+    <div class="hello">
+        <audio
+            ref="audioFile"
+            preload="auto"
+            style="display: none"
+            @timeupdate="update"
+            @loadeddata="load"
+            @buffered="update"
+            @pause="setPlayingState(false)"
+            @play="setPlayingState(true)"
+        >
+            <source src="../assets/audio.mp3">
+        </audio>
+        <button @click="play">Play</button>
+        <button @click="stop">Stop</button>
+        <p v-if="player">{{ convertToTime(currentSeconds) }}</p>
+    </div>
 </template>
 
 <script>
 export default {
-  name: 'HelloWorld',
-  props: {
-    msg: String
-  }
+    name: 'HelloWorld',
+    data() {
+        return {
+            player: null,
+            currentSeconds: 0,
+            buffered: 0,
+            playing: false,
+            volume: 0,
+        }
+    },
+    methods: {
+        play() {
+            this.player.play();
+        },
+        stop() {
+            this.player.pause();
+        },
+        update() {
+            this.currentSeconds = this.player.currentTime
+            this.buffered = this.player.buffered.end(0)
+        },
+        load() {
+            if (this.player.readyState >= 2) {
+                this.loaded = true
+                this.durationSeconds = parseInt(this.player.duration)
+                return this.playing
+            }
+            throw new Error('Failed to load sound file.')
+        },
+        convertToTime(value) {
+            const time = new Date(value * 1000).toISOString().substr(11, 8);
+            return time.indexOf('00:') === 0 ? time.substr(3) : time
+        },
+        setPlayingState(value = null) {
+            this.playing = value === null ? !this.playing : value;
+        }
+    },
+    watch: {
+        playing(value) {
+            if (value)
+                return this.player.play();
+
+            this.player.pause();
+        },
+        volume() {
+            this.player.volume = this.volume / 100;
+        }
+    },
+    mounted() {
+        this.player = this.$refs.audioFile;
+    }
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-h3 {
-  margin: 40px 0 0;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
-}
+
 </style>
