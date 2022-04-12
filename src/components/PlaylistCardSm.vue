@@ -1,8 +1,8 @@
 <template>
-    <div class="playlist-block">
+    <RouterLink to="" class="playlist-block">
         <img :src="getImage(playlist.ogImage)" :alt="playlist.title">
         <h4>{{ playlist.title }}</h4>
-    </div>
+    </RouterLink>
 </template>
 
 <script>
