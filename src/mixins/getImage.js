@@ -4,4 +4,4 @@ export default {
 			return `https://${ogImage.replace('%%', size)}`;
 		},
 	}
-}
+};

@@ -1,15 +1,19 @@
 <template>
-    <RouterLink to="" class="playlist-block">
-        <img :src="getImage(playlist.ogImage)" :alt="playlist.title">
+    <RouterLink
+        :to="{name: 'playlist', params: {kind: playlist.kind}}"
+        class="playlist-block">
+        <img
+            :src="getImage(playlist.ogImage)"
+            :alt="playlist.title">
         <h4>{{ playlist.title }}</h4>
     </RouterLink>
 </template>
 
 <script>
-import getImage from "../mixins/getImage";
+import getImage from '../mixins/getImage';
 
 export default {
-    name: "PlaylistCardSm",
+    name: 'PlaylistCardSmall',
     mixins: [getImage],
     props: {
         playlist: {
@@ -17,7 +21,7 @@ export default {
             type: Object,
         }
     },
-}
+};
 </script>
 
 <style scoped>

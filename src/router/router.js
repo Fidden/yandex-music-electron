@@ -1,6 +1,7 @@
-import {createRouter, createWebHistory} from "vue-router";
-import HomePage from "../pages/HomePage";
-import ItemTracksPage from "../pages/ItemTracksPage";
+import {createRouter, createWebHistory} from 'vue-router';
+import HomePage from '../pages/HomePage';
+import PlaylistPage from '../pages/PlaylistPage';
+import AlbumPage from '../pages/AlbumPage';
 
 export default createRouter({
 	history: createWebHistory(),
@@ -11,9 +12,14 @@ export default createRouter({
 			name: 'home',
 		},
 		{
-			path: '/item/:id',
-			component: ItemTracksPage,
-			name: 'tracks'
-		}
+			path: '/playlist/:kind',
+			component: PlaylistPage,
+			name: 'playlist'
+		},
+		{
+			path: '/album/:id',
+			component: AlbumPage,
+			name: 'album'
+		},
 	]
-})
+});

@@ -1,15 +1,17 @@
 <template>
   <div class="bar">
-    <RouterLink :to="{name: 'home'}" class="bar-button active">
-      <i class="far fa-home-alt"></i>
+    <RouterLink
+:to="{name: 'home'}"
+class="bar-button active">
+      <i class="far fa-home-alt"/>
     </RouterLink>
   </div>
 </template>
 
 <script>
 export default {
-  name: "TheBar"
-}
+  name: 'TheBar'
+};
 </script>
 
 <style scoped>

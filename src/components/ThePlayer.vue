@@ -1,176 +1,324 @@
 <template>
-  <div class="player-container">
-    <div class="player-seek-slider">
-      <p class="start-time">0:00</p>
+    <div
+        v-show="currentTrack"
+        class="player-container">
+        <div class="player-seek-slider">
+            <p class="start-time">
+                {{ convertToTime(time) }}
+            </p>
 
-      <div class="player-seek-slider-body">
-        <div class="seek-slider-selected">
-          <div class="seek-slider-circle">
-            <div class="seek-slider-circle-inside"></div>
-          </div>
+            <div class="player-seek-slider-body">
+                <div
+                    class="seek-slider-selected"
+                    :style="{width: getSliderWidth}">
+                    <div class="seek-slider-circle">
+                        <div class="seek-slider-circle-inside"/>
+                    </div>
+                </div>
+                <div
+                    class="seek-container"
+                    @click="seek"/>
+            </div>
+
+            <p class="end-time">
+                {{ convertToTime(duration) }}
+            </p>
         </div>
-      </div>
+        <div class="player-body">
+            <audio
+                ref="audioFile"
+                preload="auto"
+                style="display: none"
+                @timeupdate="update"
+                @loadeddata="load"
+                @buffered="update"
+                @pause="setPlayingState(false)"
+                @play="setPlayingState(true)"
+            />
 
-      <p class="end-time">5:00</p>
+            <div
+                v-if="currentTrack"
+                class="player-track-info">
+                <img
+                    :src="getImage(currentTrack.track.ogImage)"
+                    alt="img"
+                    class="player-track-image">
+                <h5>
+                    {{ currentTrack.track.title }}<br>
+                    <span>{{ getArtist(currentTrack.track.artists) }}</span>
+                </h5>
+            </div>
+
+            <button class="like control-btn">
+                <i class="fal fa-heart"/>
+            </button>
+
+            <div class="player-body-controls">
+                <button class="control-btn">
+                    <i class="fal fa-random"/>
+                </button>
+                <button class="control-btn">
+                    <i class="fal fa-step-backward"/>
+                </button>
+                <button
+                    v-if="playing"
+                    class="control-btn"
+                    @click="pause">
+                    <i class="fas fa-pause"/>
+                </button>
+                <button
+                    v-else
+                    class="control-btn"
+                    @click="play">
+                    <i class="fas fa-play"/>
+                </button>
+                <button
+                    class="control-btn"
+                    @click="next">
+                    <i class="fal fa-step-forward"/>
+                </button>
+                <button class="control-btn">
+                    <i class="fal fa-repeat"/>
+                </button>
+                <button class="control-btn">
+                    <i class="fal fa-volume"/>
+                </button>
+            </div>
+        </div>
     </div>
-    <div class="player-body">
-      <div class="player-track-info">
-        <img src="https://lastfm.freetls.fastly.net/i/u/770x0/82baebc4b85543eac3aad9f7a75e2f1e.jpg" alt="img"
-             class="player-track-image">
-        <h5>Взрослые травмы<br>
-          <span>Валентин Стрыкало</span>
-        </h5>
-      </div>
-
-      <button class="like control-btn">
-        <i class="fal fa-heart"></i>
-      </button>
-
-      <div class="player-body-controls">
-        <button class="control-btn">
-          <i class="fal fa-random"></i>
-        </button>
-        <button class="control-btn">
-          <i class="fal fa-step-backward"></i>
-        </button>
-        <button class="control-btn">
-          <i class="fas fa-pause"></i>
-        </button>
-        <button class="control-btn">
-          <i class="fal fa-step-forward"></i>
-        </button>
-        <button class="control-btn">
-          <i class="fal fa-repeat"></i>
-        </button>
-        <button class="control-btn">
-          <i class="fal fa-volume"></i>
-        </button>
-      </div>
-    </div>
-  </div>
 </template>
 
 <script>
+import MusicApi from '../mixins/MusicApi';
+import {mapGetters} from 'vuex';
+import GetArtists from '../mixins/GetArtists';
+import getImage from '../mixins/getImage';
+
 export default {
-  name: "ThePlayer"
-}
+    name: 'ThePlayer',
+    mixins: [MusicApi, GetArtists, getImage],
+    data() {
+        return {
+            player: null,
+            time: 0,
+            duration: 0,
+            buffered: 0,
+            playing: false,
+            volume: 0,
+            loaded: false,
+            src: null,
+        };
+    },
+    computed: {
+        getSliderWidth() {
+            return `${(this.time / this.duration) * 100}%`;
+        },
+        ...mapGetters([
+            'currentTrack',
+        ])
+    },
+    watch: {
+        playing(value) {
+            if (value)
+                return this.player.play();
+
+            this.player.pause();
+        },
+        volume() {
+            this.player.volume = this.volume / 100;
+        },
+        '$store.state.track.queue': {
+            deep: true,
+            async handler() {
+                if (!this.currentTrack)
+                    return;
+
+                await this.player.pause();
+                this.player.current = 0;
+                this.player.src = await this.getTrackDirectLink(this.currentTrack.id);
+                await this.player.play();
+            }
+        },
+        async time(value) {
+            if (value >= this.duration)
+                await this.next();
+        }
+    },
+    mounted() {
+        this.player = this.$refs.audioFile;
+    },
+    methods: {
+        play() {
+            this.player.play();
+        },
+        pause() {
+            this.player.pause();
+        },
+        next() {
+            this.player.pause();
+            this.$store.dispatch('addToPlayed', this.currentTrack);
+            this.$store.dispatch('removeFromQueue', this.currentTrack);
+        },
+        update() {
+            this.time = this.player.currentTime;
+            this.buffered = this.player.buffered.length ? this.player.buffered.end(0) : 0;
+        },
+        load() {
+            if (this.player.readyState >= 2) {
+                this.loaded = true;
+                this.duration = parseInt(this.player.duration);
+                return this.playing;
+            }
+            throw new Error('Failed to load sound file.');
+        },
+        convertToTime(value) {
+            const time = new Date(value * 1000).toISOString().substr(11, 8);
+            return time.indexOf('00:') === 0 ? time.substr(3) : time;
+        },
+        setPlayingState(value = null) {
+            this.playing = value === null ? !this.playing : value;
+        },
+        seek(e) {
+            if (!this.loaded)
+                return;
+
+            const el = e.target.getBoundingClientRect();
+            const seekPos = (e.clientX - el.left) / el.width;
+            this.player.currentTime = (this.player.duration * seekPos);
+        },
+    }
+};
 </script>
 
 <style scoped>
 .player-container {
-  background: #242833;
-  display: flex;
-  flex-direction: column;
-  padding: 8px;
-  border-radius: 6px;
-  overflow: hidden;
-  position: fixed;
-  left: 68px;
-  bottom: 8px;
-  width: calc(100% - 76px);
+    background: #242833;
+    display: flex;
+    flex-direction: column;
+    padding: 8px;
+    border-radius: 6px;
+    overflow: hidden;
+    position: fixed;
+    left: 68px;
+    bottom: 8px;
+    width: calc(100% - 76px);
+    -webkit-app-region: no-drag;
 }
 
 .player-seek-slider {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  margin-top: 8px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-top: 8px;
 }
 
 .start-time, .end-time {
-  font-weight: 400;
-  font-size: 10px;
-  line-height: 16px;
-  color: #D8DBE4;
+    font-weight: 400;
+    font-size: 10px;
+    line-height: 16px;
+    color: #D8DBE4;
+    width: 30px;
 }
 
 .player-seek-slider-body {
-  background: #9FA0A2;
-  border-radius: 42px;
-  flex: 1;
-  height: 6px;
-  margin: 0 14px;
-  display: flex;
-  flex-direction: row;
+    background: #9FA0A2;
+    border-radius: 42px;
+    flex: 1;
+    height: 6px;
+    margin: 0 14px;
+    display: flex;
+    flex-direction: row;
+    position: relative;
 }
 
 .seek-slider-selected {
-  width: 60%;
-  background: var(--main-color);
-  border-radius: 42px;
-  position: relative;
+    background: var(--main-color);
+    border-radius: 42px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    transition: width 0.2s linear, left 0.2s linear;
 }
 
 .seek-slider-circle {
-  width: 20px;
-  height: 20px;
-  background: #434343;
-  position: absolute;
-  right: -10px;
-  top: 50%;
-  transform: translateY(-50%);
-  border-radius: 50px;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
+    width: 20px;
+    height: 20px;
+    background: #434343;
+    position: absolute;
+    right: -10px;
+    top: 50%;
+    transform: translateY(-50%);
+    border-radius: 50px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
 }
 
 .seek-slider-circle-inside {
-  background: var(--main-color);
-  border-radius: 50px;
-  width: 14px;
-  height: 14px;
-  margin: auto;
+    background: var(--main-color);
+    border-radius: 50px;
+    width: 14px;
+    height: 14px;
+    margin: auto;
 }
 
 
 .player-body {
-  display: flex;
-  flex-direction: row;
-  margin-top: 16px;
+    display: flex;
+    flex-direction: row;
+    margin-top: 16px;
 }
 
 .control-btn {
-  color: #C4C4C4;
-  background: none;
+    color: #C4C4C4;
+    background: none;
 }
 
 .player-track-image {
-  width: 42px;
-  height: 42px;
-  border-radius: 4px;
-  margin-right: 10px;
+    width: 42px;
+    height: 42px;
+    border-radius: 4px;
+    margin-right: 10px;
 }
 
 .player-track-info {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  margin-right: 17px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-right: 17px;
 }
 
 .player-track-info h5 {
-  font-weight: 500;
-  font-size: 14px;
-  line-height: 16px;
-  margin: 0;
-  color: white;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 16px;
+    margin: 0;
+    color: white;
 }
 
 .player-track-info h5 span {
-  font-weight: 400;
-  font-size: 12px;
-  line-height: 16px;
-  color: #8E919A;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 16px;
+    color: #8E919A;
 }
 
 .player-body-controls {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 35px;
-  margin: 0 auto;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 35px;
+    margin: 0 auto;
+}
+
+.seek-container {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
 }
 
 </style>

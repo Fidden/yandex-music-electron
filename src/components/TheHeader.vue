@@ -1,22 +1,40 @@
 <template>
     <header class="header">
         <div class="header-logo">
-            <img src="../assets/img/logo.svg" alt="logo">
+            <img
+src="../assets/img/logo.svg"
+alt="logo">
             <p>Яндекс.Музыка</p>
         </div>
 
         <div class="search-bar">
-            <input type="text" placeholder="Поиск">
+            <input
+type="text"
+placeholder="Поиск">
         </div>
 
-        <RouterLink to="/" class="account">
+        <RouterLink
+to="/"
+class="account">
             A
         </RouterLink>
 
         <div class="controls">
-            <button @click="minimize"><img src="../assets/img/minimize.svg" alt="min"></button>
-            <button @click="maximize"><img src="../assets/img/maxsimize.svg" alt="min"></button>
-            <button @click="close"><img src="../assets/img/close.svg" alt="min"></button>
+            <button @click="minimize">
+<img
+src="../assets/img/minimize.svg"
+alt="min">
+</button>
+            <button @click="maximize">
+<img
+src="../assets/img/maxsimize.svg"
+alt="min">
+</button>
+            <button @click="close">
+<img
+src="../assets/img/close.svg"
+alt="min">
+</button>
         </div>
     </header>
 </template>
@@ -24,7 +42,7 @@
 <script>
 const {ipcRenderer} = require('electron');
 export default {
-    name: "TheHeader",
+    name: 'TheHeader',
     methods: {
         minimize() {
             ipcRenderer.send('minimize');
@@ -36,7 +54,7 @@ export default {
             ipcRenderer.send('close');
         }
     }
-}
+};
 </script>
 
 <style scoped>

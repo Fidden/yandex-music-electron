@@ -1,11 +1,10 @@
-import {createStore} from "vuex";
+import {createStore} from 'vuex';
 
 export default createStore({
 	state() {
 		return {
 			user: null,
 			track: {
-				current: null,
 				queue: [],
 				played: [],
 			},
@@ -14,12 +13,16 @@ export default createStore({
 				last_played: [],
 			},
 			new_releases: [],
-		}
+			player: {
+				playing: false,
+				volume: 10,
+				time: 0,
+				duration: 0,
+				buffered: 0,
+			}
+		};
 	},
 	mutations: {
-		SET_CURRENT_TRACK(state, track) {
-			state.track.current = track;
-		},
 		SET_USER(state, user) {
 			state.user = user;
 		},
@@ -34,12 +37,22 @@ export default createStore({
 		},
 		SET_NEW_RELEASES(state, releases) {
 			state.new_releases = releases;
+		},
+		SET_QUEUE(state, queue) {
+			state.track.queue = queue;
+		},
+		REMOVE_FROM_QUEUE(state, q_item) {
+			let index = state.track.queue.findIndex(item => item === q_item);
+			if (index === -1)
+				return;
+			
+			state.track.queue.splice(index, 1);
+		},
+		ADD_TO_PLAYED(state, q_item) {
+			state.track.played.push(q_item);
 		}
 	},
 	actions: {
-		setCurrentTrack({commit}, track) {
-			commit('SET_CURRENT_TRACK', track);
-		},
 		setUser({commit}, user) {
 			commit('SET_USER', user);
 		},
@@ -50,10 +63,19 @@ export default createStore({
 			commit('SET_USER_PLAYLISTS', playlists);
 		},
 		setLastPlayedPlaylist({commit}, playlists) {
-			commit('SET_LAST_PLAYED_PLAYLISTS', playlists)
+			commit('SET_LAST_PLAYED_PLAYLISTS', playlists);
 		},
 		setNewReleases({commit}, releases) {
-			commit('SET_NEW_RELEASES', releases)
+			commit('SET_NEW_RELEASES', releases);
+		},
+		setQueue({commit}, queue) {
+			commit('SET_QUEUE', queue);
+		},
+		removeFromQueue({commit}, q_item) {
+			commit('REMOVE_FROM_QUEUE', q_item);
+		},
+		addToPlayed({commit}, q_item) {
+			commit('ADD_TO_PLAYED', q_item);
 		}
 	},
 	getters: {
@@ -62,6 +84,9 @@ export default createStore({
 		},
 		firstReleases(state) {
 			return state.new_releases.slice(0, 5);
+		},
+		currentTrack(state) {
+			return state.track.queue[0];
 		}
 	}
-})
+});

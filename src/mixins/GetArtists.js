@@ -4,4 +4,4 @@ export default {
             return artists.map(item => item.name).toString().replace(',', ', ');
         }
     }
-}
+};
