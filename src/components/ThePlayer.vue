@@ -54,10 +54,16 @@
             </button>
 
             <div class="player-body-controls">
-                <button class="control-btn">
-                    <i class="fal fa-random"/>
+                <button
+                    class="control-btn"
+                    @click="shuffleTracks">
+                    <i
+                        class="fal fa-random"
+                        :class="{'active': shuffle}"/>
                 </button>
-                <button class="control-btn">
+                <button
+                    class="control-btn"
+                    @click="prev">
                     <i class="fal fa-step-backward"/>
                 </button>
                 <button
@@ -80,9 +86,19 @@
                 <button class="control-btn">
                     <i class="fal fa-repeat"/>
                 </button>
-                <button class="control-btn">
-                    <i class="fal fa-volume"/>
-                </button>
+                <div class="volume-container">
+                    <button class="control-btn">
+                        <i class="fal fa-volume"/>
+                    </button>
+
+                    <div class="volume-slider">
+                        <div class="volume-slider-selected" :style="{width: getVolumeSliderWidth}">
+                            <div class="volume-slider-selected-circle">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -90,7 +106,6 @@
 
 <script>
 import MusicApi from '../mixins/MusicApi';
-import {mapGetters} from 'vuex';
 import GetArtists from '../mixins/GetArtists';
 import getImage from '../mixins/getImage';
 
@@ -113,9 +128,17 @@ export default {
         getSliderWidth() {
             return `${(this.time / this.duration) * 100}%`;
         },
-        ...mapGetters([
-            'currentTrack',
-        ])
+        getVolumeSliderWidth() {
+            return `${this.volume / 10}%`;
+        },
+        currentTrack() {
+            return this.$store.state.track.queue[this.shuffle
+                ? Math.round(Math.random() * this.$store.state.track.queue.length - 1)
+                : 0];
+        },
+        shuffle() {
+            return this.$store.state.player.shuffle;
+        }
     },
     watch: {
         playing(value) {
@@ -150,14 +173,27 @@ export default {
     methods: {
         play() {
             this.player.play();
+            this.playing = true;
         },
         pause() {
             this.player.pause();
+            this.playing = false;
         },
         next() {
-            this.player.pause();
+            this.pause();
             this.$store.dispatch('addToPlayed', this.currentTrack);
             this.$store.dispatch('removeFromQueue', this.currentTrack);
+        },
+        prev() {
+            if (this.time > 3) {
+                this.player.currentTime = 0;
+            } else {
+                this.player.pause();
+                this.$store.dispatch('unshiftToQueue', this.$store.state.track.played.pop());
+            }
+        },
+        shuffleTracks() {
+            this.$store.dispatch('setShuffle', !this.shuffle);
         },
         update() {
             this.time = this.player.currentTime;
@@ -319,6 +355,34 @@ export default {
     top: 0;
     height: 100%;
     width: 100%;
+}
+
+.active {
+    color: var(--main-color);
+}
+
+.volume-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.volume-slider {
+    width: 100px;
+    height: 6px;
+    background: #9FA0A2;
+    border-radius: 42px;
+    position: relative;
+}
+
+.volume-slider-selected {
+    background: var(--main-color);
+    border-radius: 42px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    transition: width 0.2s linear, left 0.2s linear;
 }
 
 </style>

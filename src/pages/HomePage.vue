@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import {mapGetters, mapState} from 'vuex';
+import {mapGetters} from 'vuex';
 import PlaylistCardSmall from '../components/PlaylistCardSmall';
 import AlbumCard from '../components/AlbumCard';
 //https://api.music.yandex.net/landing3?blocks=personalplaylists%2Cpromotions%2Cnew-releases%2Cnew-playlists%2Cmixes%2Cchart%2Ccharts%2Cartists%2Calbums%2Cplaylists%2Cplay_contexts%2Cpodcasts
@@ -37,10 +37,6 @@ export default {
     name: 'HomePage',
     components: {AlbumCard, PlaylistCardSmall},
     computed: {
-        ...mapState([
-            'playlists',
-            'new_releases'
-        ]),
         ...mapGetters([
             'lastPlayedPlaylists',
             'firstReleases'

@@ -92,6 +92,13 @@ button, a {
     color: white;
 }
 
+.btn {
+    background: var(--main-color);
+    color: black;
+    border-radius: 999px;
+    padding: 5px 15px;
+}
+
 *::-webkit-scrollbar {
     background: none;
     width: 4px;
