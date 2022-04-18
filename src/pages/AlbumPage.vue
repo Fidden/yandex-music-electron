@@ -3,47 +3,51 @@
         <div class="item-head">
             <img
                 v-if="album.ogImage"
-                :src="getImage(album.ogImage, '200x200')"
+                :src="GetImage(album.ogImage, '200x200')"
                 alt="">
             <div class="item-info">
                 <h2>{{ album.title }}</h2>
                 <h3 v-if="album.artists">
                     {{ getArtist(album.artists) }}
                 </h3>
-                <h4>{{ album.year }} - {{ album.type }}</h4>
+                <div class="item-info-additional">
+                    <p v-if="album.year">
+                        {{ album.year }}
+                    </p>
+                    <p v-if="album.type">
+                        - {{ album.type }}
+                    </p>
+                </div>
+
                 <div class="item-controls">
-                    <button>Слушать</button>
-                    <button>Нравится</button>
-                    <button>Скачать</button>
+                    <button
+                        class="btn"
+                        @click="playShuffle">
+                        Перемешать
+                    </button>
                 </div>
             </div>
         </div>
-        <div
+        <TheTracksTable
             v-if="album.volumes"
-            class="item-body">
-            <div
-                v-for="(volume, index) in album.volumes[0]"
-                :key="volume.id"
-                class="item-body-block">
-                {{ index + 1 }}
-                {{ volume.title }}
-
-                <span v-if="volume.version">({{ volume.version }})</span>
-                <span>{{ ConvertDuration(volume.durationMs) }}</span>
-            </div>
-        </div>
+            :tracks="album.volumes[0]"
+            :without-image="true"
+        />
     </main>
 </template>
 
 <script>
-import MusicApi from '../mixins/MusicApi';
-import getImage from '../mixins/getImage';
-import GetArtists from '../mixins/GetArtists';
-import ConvertDuration from '../mixins/ConvertDuration';
+import MusicApi from '../mixins/MusicApi.js';
+import TheTracksTable from '../components/TheTracksTable.vue';
+import GetImage from '../mixins/GetImage.js';
+import ConvertDuration from '../mixins/ConvertDuration.js';
+import GetArtists from '../mixins/GetArtists.js';
+
 
 export default {
     name: 'AlbumPage',
-    mixins: [MusicApi, getImage, GetArtists, ConvertDuration],
+    components: {TheTracksTable},
+    mixins: [MusicApi, GetImage, ConvertDuration, GetArtists],
     data() {
         return {
             album: {},
@@ -51,10 +55,52 @@ export default {
     },
     async mounted() {
         this.album = await this.getAlbumData(this.$route.params.id);
+    },
+    methods: {
+        playShuffle() {
+            this.$store.dispatch('setShuffle', true);
+            this.$store.dispatch('setQueue', this.album.volumes[0]);
+        },
     }
 };
 </script>
 
 <style scoped>
+
+.item-head {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 40px;
+}
+
+.item-head img {
+    width: 220px;
+    height: 220px;
+    margin-right: 20px;
+    border-radius: 6px;
+}
+
+.item-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.item-controls {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+}
+
+.item-info-additional {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.item-info-additional p:first-child {
+    margin-right: 5px;
+}
 
 </style>

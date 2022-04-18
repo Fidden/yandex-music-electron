@@ -8,21 +8,37 @@ export default {
 			let res = await this.$request.get(`users/${this.$store.state.user.account.uid}/playlists/list/`);
 			return res.data.result;
 		},
-		async getPlaylistData(kind) {
-			let res = await this.$request.get(`/users/${this.$store.state.user.account.uid}/playlists/${kind}`);
+		async getPlaylistData(kind, uid = null) {
+			if (uid == null)
+				uid = this.$store.state.user.account.uid;
+			
+			let res = await this.$request.get(`/users/${uid}/playlists/${kind}`);
 			return res.data.result;
 		},
 		async getNewReleases() {
 			let res = await this.$request.get('/landing3/new-releases');
 			return res.data.result.newReleases;
 		},
-		
+		async getHitsPlaylists() {
+			let res = await this.$request.get('/landing3/new-playlists');
+			return res.data.result.newPlaylists;
+		},
 		async getAlbum(id) {
 			let res = await this.$request.get(`/albums/${id}`);
 			return res.data.result;
 		},
 		async getAlbumData(id) {
 			let res = await this.$request.get(`/albums/${id}/with-tracks`);
+			let album = res.data.result;
+			
+			album.volumes[0].forEach((item, index) => {
+				album.volumes[0][index] = {track: item};
+			});
+			
+			return album;
+		},
+		async getHomepageData() {
+			let res = await this.$request.get('https://api.music.yandex.net/landing3?blocks=personalplaylists%2Cpromotions%2Cnew-releases%2Cnew-playlists%2Cmixes%2Cchart%2Ccharts%2Cartists%2Calbums%2Cplaylists%2Cplay_contexts%2Cpodcasts');
 			return res.data.result;
 		},
 		async getTrackDirectLink(track_id) {

@@ -23,6 +23,7 @@ export default {
         this.$store.dispatch('setUser', await this.getAccountInfo());
         this.$store.dispatch('setPlaylists', await this.getPlaylists());
         this.$store.dispatch('setNewReleases', await this.getNewReleases());
+        this.$store.dispatch('setHitsPlaylists', await this.getHitsPlaylists());
     }
 };
 </script>
@@ -93,10 +94,19 @@ button, a {
 }
 
 .btn {
+    color: var(--main-color);
+    border-radius: 999px;
+    padding: 7px 25px;
+    background: none;
+    border: 2px solid var(--main-color);
+    font-size: 14px;
+    transition: 0.2s;
+}
+
+.btn:hover {
     background: var(--main-color);
     color: black;
-    border-radius: 999px;
-    padding: 5px 15px;
+    transition: 0.2s;
 }
 
 *::-webkit-scrollbar {

@@ -3,18 +3,18 @@
         :to="{name: 'playlist', params: {kind: playlist.kind}}"
         class="playlist-block">
         <img
-            :src="getImage(playlist.ogImage)"
+            :src="GetImage(playlist.ogImage)"
             :alt="playlist.title">
         <h4>{{ playlist.title }}</h4>
     </RouterLink>
 </template>
 
 <script>
-import getImage from '../mixins/getImage';
+import GetImage from '../mixins/GetImage.js';
 
 export default {
     name: 'PlaylistCardSmall',
-    mixins: [getImage],
+    mixins: [GetImage],
     props: {
         playlist: {
             required: true,

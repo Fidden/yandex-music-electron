@@ -1,29 +1,29 @@
 <template>
     <div
-        v-if="album"
-        class="album-card"
+        v-if="playlist"
+        class="playlist-card"
         @click="redirect">
-        <div class="album-card-image">
+        <div class="playlist-card-image">
             <img
-                v-if="album.ogImage"
-                :src="GetImage(album.ogImage, '150x150')"
-                :alt="album.title">
+                v-if="playlist.ogImage"
+                :src="GetImage(playlist.ogImage, '200x200')"
+                :alt="playlist.title">
         </div>
 
         <h3 class="title">
-            {{ album.title }}
+            {{ playlist.title }}
         </h3>
         <p
-            v-if="album.artists"
+            v-if="playlist.artists"
             class="author">
-            {{ getArtist(album.artists) }}
+            {{ getArtist(playlist.artists) }}
         </p>
 
         <p class="type">
-            {{ album.type }}
+            {{ playlist.type }}
         </p>
         <p class="year">
-            {{ album.year }}
+            {{ playlist.year }}
         </p>
     </div>
 </template>
@@ -34,25 +34,33 @@ import MusicApi from '../mixins/MusicApi';
 import GetArtists from '../mixins/GetArtists';
 
 export default {
-    name: 'AlbumCard',
+    name: 'PlaylistCard',
     mixins: [GetImage, MusicApi, GetArtists],
     props: {
-        id: {
+        kind: {
             type: Number,
             required: true,
         },
+        uid: {
+            type: Number,
+            default() {
+                return -1;
+            }
+        }
     },
     data() {
         return {
-            album: {}
+            playlist: {}
         };
     },
     async mounted() {
-        this.album = await this.getAlbum(this.id);
+        this.playlist = this.uid !== -1 ?
+            await this.getPlaylistData(this.kind, this.uid)
+            : await this.getPlaylistData(this.kind);
     },
     methods: {
         redirect() {
-            this.$router.replace({name: 'album', params: {id: this.id}});
+            this.$router.replace({name: 'playlist', params: {kind: this.kind, uid: this.uid}});
         }
     }
 };
