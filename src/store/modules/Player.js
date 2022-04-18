@@ -19,11 +19,11 @@ export default {
 		setShuffle({commit}, value) {
 			commit('SET_SHUFFLE', value);
 		},
-		setOriginalIndex({commit}, index) {
-			commit('SET_ORIGINAL_INDEX', index);
-		},
 		setTrackIndex({commit}, value) {
 			commit('SET_TRACK_INDEX', value);
+		},
+		setPlaying({commit}, value) {
+			commit('SET_PLAYING', value);
 		}
 	}
 };

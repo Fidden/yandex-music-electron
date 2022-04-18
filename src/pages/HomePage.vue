@@ -39,6 +39,7 @@
                 />
             </div>
         </div>
+        <TheChart/>
     </main>
 </template>
 
@@ -48,10 +49,11 @@ import {mapGetters} from 'vuex';
 import PlaylistCardSmall from '../components/PlaylistCardSmall';
 import AlbumCard from '../components/AlbumCard';
 import PlaylistCard from '../components/PlaylistCard';
+import TheChart from '../components/TheChart';
 
 export default {
     name: 'HomePage',
-    components: {PlaylistCard, AlbumCard, PlaylistCardSmall},
+    components: {TheChart, PlaylistCard, AlbumCard, PlaylistCardSmall},
     computed: {
         ...mapGetters([
             'lastPlayedPlaylists',

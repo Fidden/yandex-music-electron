@@ -24,6 +24,7 @@ export default {
         this.$store.dispatch('setPlaylists', await this.getPlaylists());
         this.$store.dispatch('setNewReleases', await this.getNewReleases());
         this.$store.dispatch('setHitsPlaylists', await this.getHitsPlaylists());
+        this.$store.dispatch('setChart', await this.getChart());
     }
 };
 </script>
@@ -85,12 +86,13 @@ button, a {
 
 .main {
     padding: 45px 54px 180px 54px;
-    background: var(--main-color-transperent);
+    background: rgba(30, 34, 45, 0.7);
     width: 100%;
     height: 100%;
     overflow-y: scroll;
     -webkit-app-region: no-drag;
     color: white;
+    border-radius: 8px 0px;
 }
 
 .btn {

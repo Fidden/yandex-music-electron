@@ -5,7 +5,7 @@
                 v-model.trim="search.title"
                 placeholder="Поиск"
                 type="text">
-            <select v-model="search.filter">
+            <select v-model.number="search.filter">
                 <option value="0">
                     По стандарту
                 </option>
@@ -50,7 +50,7 @@
                         <div
                             v-if="track.id === $store.state.player.track_index"
                             class="black-bar">
-                            <PlayingIcon/>
+                            <PlayingIcon :stop="!$store.state.player.playing"/>
                         </div>
                         <button
                             v-else
@@ -114,9 +114,27 @@ export default {
     computed: {
         filteredTracks() {
             let out = this.tracks;
+
             if (this.search.title.length > 0) {
-                let searchResult = this.tracks.filter(item => item.track.title.toLowerCase().indexOf(this.search.title.toLowerCase()) !== -1);
-                out = searchResult.concat(this.tracks.filter(item => !searchResult.includes(item)));
+                let searchResult = out
+                    .filter(item => {
+                        return item.track.title.toLowerCase().indexOf(this.search.title.toLowerCase()) !== -1
+                            || item.track.artists.findIndex(item => item.name.toLowerCase().indexOf(this.search.title.toLowerCase()) !== -1) !== -1;
+                    });
+
+                out = searchResult.concat(out.filter(item => !searchResult.includes(item)));
+            }
+
+            switch (this.search.filter) {
+                case 1:
+                    out = out.sort(this.compareName);
+                    break;
+                case 2:
+                    out = out.sort(this.compareArtists);
+                    break;
+                case 3:
+                    out = out.sort(this.compareDuration);
+                    break;
             }
 
             return out;
@@ -126,6 +144,36 @@ export default {
         playCurrent(track) {
             this.$store.dispatch('setShuffle', false);
             this.$store.dispatch('unshiftToQueue', track);
+        },
+        getArtistMappingName(artists) {
+            return artists.map(item => item.name[0]).toString();
+        },
+        compareName(a, b) {
+            if (a.track.title > b.track.title)
+                return 1;
+
+            if (a.track.title < b.track.title)
+                return -1;
+
+            return 0;
+        },
+        compareArtists(a, b) {
+            if (this.getArtistMappingName(a.track.artists) > this.getArtistMappingName(b.track.artists))
+                return 1;
+
+            if (this.getArtistMappingName(a.track.artists) < this.getArtistMappingName(b.track.artists))
+                return -1;
+
+            return 0;
+        },
+        compareDuration(a, b) {
+            if (a.track.durationMs > b.track.durationMs)
+                return 1;
+
+            if (a.track.durationMs < b.track.durationMs)
+                return -1;
+
+            return 0;
         }
     }
 };

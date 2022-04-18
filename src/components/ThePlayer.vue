@@ -174,6 +174,8 @@ export default {
     },
     watch: {
         playing(value) {
+            this.$store.dispatch('setPlaying', value);
+
             if (value)
                 return this.play();
 

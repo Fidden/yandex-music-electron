@@ -66,6 +66,7 @@ export default {
     display: flex;
     flex-direction: column;
     position: relative;
+    cursor: pointer;
 }
 
 .album-card img {

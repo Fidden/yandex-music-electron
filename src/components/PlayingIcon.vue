@@ -1,14 +1,28 @@
 <template>
     <div class="playing">
-        <span class="playing__bar playing__bar1"/>
-        <span class="playing__bar playing__bar2"/>
-        <span class="playing__bar playing__bar3"/>
+        <span
+            :class="{'stop': stop}"
+            class="playing__bar playing__bar1"/>
+        <span
+            :class="{'stop': stop}"
+            class="playing__bar playing__bar2"/>
+        <span
+            :class="{'stop': stop}"
+            class="playing__bar playing__bar3"/>
     </div>
 </template>
 
 <script>
 export default {
-    name: 'PlayngIcon'
+    name: 'PlayingIcon',
+    props: {
+        stop: {
+            type: Boolean,
+            default() {
+                return false;
+            }
+        }
+    }
 };
 </script>
 
@@ -26,6 +40,11 @@ export default {
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
+}
+
+.stop {
+    animation: none !important;
+    animation-fill-mode: forwards !important;
 }
 
 .playing__bar {

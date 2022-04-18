@@ -67,16 +67,17 @@ export default {
 </script>
 
 <style scoped>
-.album-card {
+.playlist-card {
     background: #292C3B;
     border-radius: 6px;
     padding: 10px;
     display: flex;
     flex-direction: column;
     position: relative;
+    cursor: pointer;
 }
 
-.album-card img {
+.playlist-card img {
     margin-bottom: 12px;
 }
 
@@ -114,32 +115,13 @@ export default {
     color: #8E929C;
 }
 
-.album-card-image {
+.playlist-card-image {
     position: relative;
 }
 
-.album-card-image img {
+.playlist-card-image img {
     width: 100%;
     object-fit: cover;
-}
-
-.album-card-image button {
-    opacity: 0;
-    transition: 0.2s;
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    background: var(--main-color);
-    width: 45px;
-    height: 45px;
-    border-radius: 999px;
-    z-index: 1000;
-}
-
-.album-card:hover .album-card-image button {
-    opacity: 1;
-    transition: 0.2s;
 }
 
 </style>
