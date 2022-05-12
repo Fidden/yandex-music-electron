@@ -11,6 +11,7 @@ app.config.globalProperties.$request = axios.create({
 	headers: {
 		'Authorization': 'OAuth AQAAAABevSUfAAG8Xrt2CZAbxEvSnyBU4FXXcSY',
 		'Accept-Language': 'ru',
+		'Content-Type': 'application/json;charset=utf-8',
 	},
 });
 

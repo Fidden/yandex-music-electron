@@ -1,25 +1,86 @@
 <template>
-    <div class="template">
-        <TheHeader/>
-        <div class="content">
-            <TheBar/>
-            <router-view/>
-            <ThePlayer/>
-        </div>
-    </div>
+<!--    <LoginWindow v-if="pageIndex === 0"/>-->
+<!--    <LoadingWindow v-else-if="pageIndex === 1"/>-->
+    <MainWindow/>
+<!--    <div v-else>-->
+<!--        Что то пошло не так-->
+<!--    </div>-->
 </template>
 
 <script>
-import TheHeader from './components/TheHeader';
-import TheBar from './components/TheBar';
-import ThePlayer from './components/ThePlayer';
 import MusicApi from './mixins/MusicApi';
+import { registerRoute } from 'workbox-routing';
+import { CacheFirst } from 'workbox-strategies';
+import { ExpirationPlugin } from 'workbox-expiration';
+import MainWindow from './windows/MainWindow.vue';
+// import LoadingWindow from './windows/LoadingWindow.vue';
+import { mapGetters } from 'vuex';
+// import LoginWindow from './windows/LoginWindow.vue';
+import axios from 'axios';
 
+
+const {ipcRenderer} = require('electron');
 export default {
     name: 'App',
-    components: {TheBar, TheHeader, ThePlayer},
+    components: {MainWindow},
     mixins: [MusicApi],
+    data() {
+        return {
+            isLoaded: false,
+        };
+    },
+    computed: {
+        ...mapGetters(['pageIndex']),
+    },
+    watch: {
+        '$store.state.chart': {
+            deep: true,
+            handler(value) {
+                if (Object.keys(value.all).length)
+                    this.$store.dispatch('setLoaded', true);
+            }
+        },
+        '$store.state.page.loaded': {
+            deep: true,
+            handler(value) {
+                if (value)
+                    ipcRenderer.send('loaded');
+                else
+                    ipcRenderer.send('loading');
+            }
+        },
+        '$store.state.page.authorized': {
+            handler(value) {
+                if (value)
+                    this.$axios = axios.create({
+                        baseURL: 'https://api.music.yandex.net',
+                        headers: {
+                            'Authorization': 'OAuth AQAAAABevSUfAAG8Xrt2CZAbxEvSnyBU4FXXcSY',
+                            'Accept-Language': 'ru',
+                            'Content-Type': 'application/json;charset=utf-8',
+                        },
+                    });
+            }
+        }
+    },
     async mounted() {
+        ipcRenderer.send('loading');
+        registerRoute(
+            // Cache image files.
+            /\.(?:png|jpg|jpeg|svg|gif)$/,
+            // Use the cache if it's available.
+            new CacheFirst({
+                // Use a custom cache name.
+                cacheName: 'image-cache',
+                plugins: [
+                    new ExpirationPlugin({
+                        maxEntries: 100,
+                        maxAgeSeconds: 24 * 60 * 60,
+                    })
+                ],
+            })
+        );
+
         this.$store.dispatch('setUser', await this.getAccountInfo());
         this.$store.dispatch('setPlaylists', await this.getPlaylists());
         this.$store.dispatch('setNewReleases', await this.getNewReleases());
@@ -37,6 +98,7 @@ export default {
     --background: #151a22;
     --main-color: #F7F096;
     --main-color-transperent: rgba(247, 240, 150, 0.03);
+    --volume-width: 0px;
 }
 
 * {
@@ -93,6 +155,26 @@ button, a {
     -webkit-app-region: no-drag;
     color: white;
     border-radius: 8px 0px;
+}
+
+.main-container {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 45px;
+}
+
+.main-container-title {
+    font-weight: 500;
+    font-size: 25px;
+    margin-bottom: 20px;
+    line-height: 20px;
+}
+
+.main-container-subtitle {
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 16px;
+    color: #8E929C;
 }
 
 .btn {

@@ -22,6 +22,9 @@ export default {
 		},
 		ADD_TO_PLAYED(state, q_item) {
 			state.played.push(q_item);
+		},
+		CLEAR_PLAYED_LIST(state) {
+			state.played = [];
 		}
 	},
 	actions: {
@@ -39,6 +42,9 @@ export default {
 		},
 		addToPlayed({commit}, q_item) {
 			commit('ADD_TO_PLAYED', q_item);
+		},
+		clearPlayed({commit}) {
+			commit('CLEAR_PLAYED_LIST');
 		}
 	}
 };

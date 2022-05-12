@@ -13,7 +13,10 @@ export default {
 		},
 		SET_HITS_PLAYLISTS(state, playlists) {
 			state.hits = playlists;
-		}
+		},
+		SET_HIT_DATA(state, data) {
+			state.hits[state.hits.findIndex(item => item.uid === data.uid && item.kind === data.kind)] = data;
+		},
 	},
 	actions: {
 		setPlaylists({commit}, playlists) {
@@ -25,6 +28,9 @@ export default {
 		setLastPlayedPlaylist({commit}, playlists) {
 			commit('SET_LAST_PLAYED_PLAYLISTS', playlists);
 		},
+		setHitData({commit}, data) {
+			commit('SET_HIT_DATA', data);
+		}
 	},
 	getters: {
 		lastPlayedPlaylists(state) {

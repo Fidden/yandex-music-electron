@@ -2,39 +2,39 @@
     <header class="header">
         <div class="header-logo">
             <img
-src="../assets/img/logo.svg"
-alt="logo">
+                alt="logo"
+                src="../assets/img/logo.svg">
             <p>Яндекс.Музыка</p>
         </div>
 
         <div class="search-bar">
             <input
-type="text"
-placeholder="Поиск">
+                placeholder="Поиск"
+                type="text">
         </div>
 
         <RouterLink
-to="/"
-class="account">
+            class="account"
+            to="/">
             A
         </RouterLink>
 
         <div class="controls">
             <button @click="minimize">
-<img
-src="../assets/img/minimize.svg"
-alt="min">
-</button>
+                <img
+                    alt="min"
+                    src="../assets/img/minimize.svg">
+            </button>
             <button @click="maximize">
-<img
-src="../assets/img/maxsimize.svg"
-alt="min">
-</button>
+                <img
+                    alt="min"
+                    src="../assets/img/maxsimize.svg">
+            </button>
             <button @click="close">
-<img
-src="../assets/img/close.svg"
-alt="min">
-</button>
+                <img
+                    alt="min"
+                    src="../assets/img/close.svg">
+            </button>
         </div>
     </header>
 </template>

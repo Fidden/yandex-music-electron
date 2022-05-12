@@ -20,8 +20,9 @@
             <div class="album-container">
                 <AlbumCard
                     v-for="release in firstReleases"
-                    :id="release"
-                    :key="release"
+                    :key="release.id"
+                    :item="release"
+                    @data-loaded="dispatchNewRelease"
                 />
             </div>
         </div>
@@ -34,8 +35,8 @@
                 <PlaylistCard
                     v-for="hit in firstHits"
                     :key="hit.uid + hit.kind"
-                    :kind="hit.kind"
-                    :uid="hit.uid"
+                    :item="hit"
+                    @data-loaded="dispatchHits"
                 />
             </div>
         </div>
@@ -45,7 +46,7 @@
 
 <script>
 //https://api.music.yandex.net/landing3?blocks=personalplaylists,promotions,new-releases,new-playlists,mixes,chart,charts,artists,albums,playlists,play_contexts,podcasts
-import {mapGetters} from 'vuex';
+import { mapGetters } from 'vuex';
 import PlaylistCardSmall from '../components/PlaylistCardSmall';
 import AlbumCard from '../components/AlbumCard';
 import PlaylistCard from '../components/PlaylistCard';
@@ -61,6 +62,14 @@ export default {
             'firstHits'
         ]),
     },
+    methods: {
+        dispatchNewRelease(value) {
+            this.$store.dispatch('setNewReleaseData', value);
+        },
+        dispatchHits(value) {
+            this.$store.dispatch('setHitData', value);
+        }
+    }
 };
 </script>
 
@@ -70,26 +79,6 @@ export default {
     grid-template-rows: repeat(2, 1fr);
     grid-template-columns: repeat(3, 1fr);
     gap: 7px;
-}
-
-.main-container {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 45px;
-}
-
-.main-container-title {
-    font-weight: 500;
-    font-size: 25px;
-    margin-bottom: 20px;
-    line-height: 20px;
-}
-
-.main-container-subtitle {
-    font-weight: 400;
-    font-size: 14px;
-    line-height: 16px;
-    color: #8E929C;
 }
 
 .album-container {

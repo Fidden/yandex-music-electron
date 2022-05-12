@@ -6,8 +6,8 @@
         <div class="playlist-card-image">
             <img
                 v-if="playlist.ogImage"
-                :src="GetImage(playlist.ogImage, '200x200')"
-                :alt="playlist.title">
+                :alt="playlist.title"
+                :src="GetImage(playlist.ogImage, '200x200')">
         </div>
 
         <h3 class="title">
@@ -19,10 +19,14 @@
             {{ getArtist(playlist.artists) }}
         </p>
 
-        <p class="type">
+        <p
+            v-if="playlist.type"
+            class="type">
             {{ playlist.type }}
         </p>
-        <p class="year">
+        <p
+            v-if="playlist.year"
+            class="year">
             {{ playlist.year }}
         </p>
     </div>
@@ -37,30 +41,30 @@ export default {
     name: 'PlaylistCard',
     mixins: [GetImage, MusicApi, GetArtists],
     props: {
-        kind: {
-            type: Number,
+        item: {
+            type: Object,
             required: true,
-        },
-        uid: {
-            type: Number,
-            default() {
-                return -1;
-            }
         }
     },
+    emits: ['data-loaded'],
     data() {
         return {
             playlist: {}
         };
     },
+    watch: {
+        playlist(value) {
+            this.$emit('data-loaded', value);
+        }
+    },
     async mounted() {
-        this.playlist = this.uid !== -1 ?
-            await this.getPlaylistData(this.kind, this.uid)
-            : await this.getPlaylistData(this.kind);
+        this.playlist = Object.keys(this.item).length > 2 ?
+            this.item :
+            await this.getPlaylistData(this.item.kind, this.item.uid || null);
     },
     methods: {
         redirect() {
-            this.$router.replace({name: 'playlist', params: {kind: this.kind, uid: this.uid}});
+            this.$router.replace({name: 'playlist', params: {kind: this.item.kind, uid: this.item.uid}});
         }
     }
 };
@@ -75,6 +79,10 @@ export default {
     flex-direction: column;
     position: relative;
     cursor: pointer;
+    width: 100%;
+    height: 100%;
+    max-height: 220px;
+    max-width: 165px;
 }
 
 .playlist-card img {

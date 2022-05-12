@@ -7,18 +7,11 @@
                 {{ convertToTime(time) }}
             </p>
 
-            <div class="player-seek-slider-body">
-                <div
-                    :style="{width: getSliderWidth}"
-                    class="seek-slider-selected">
-                    <div class="seek-slider-circle">
-                        <div class="seek-slider-circle-inside"/>
-                    </div>
-                </div>
-                <div
-                    class="seek-container"
-                    @click="seek"/>
-            </div>
+            <RangeSlider
+                :max-value="duration"
+                :step="0.01"
+                :value="time"
+                @change="setTime"/>
 
             <p class="end-time">
                 {{ convertToTime(duration) }}
@@ -27,6 +20,8 @@
         <div class="player-body">
             <audio
                 ref="audioFile"
+                autoplay
+                crossorigin
                 preload="auto"
                 style="display: none"
                 @buffered="update"
@@ -46,10 +41,14 @@
                 <div class="player-track-text">
                     <a
                         class="player-track-title"
-                        href="#">{{ currentTrack.track.title }}</a>
+                        href="#">
+                        {{ currentTrack.track.title }}
+                    </a>
                     <a
                         class="player-track-artist"
-                        href="#">{{ getArtist(currentTrack.track.artists) }}</a>
+                        href="#">
+                        {{ getArtist(currentTrack.track.artists) }}
+                    </a>
                 </div>
             </div>
 
@@ -70,18 +69,22 @@
                     @click="prev">
                     <i class="fal fa-step-backward"/>
                 </button>
-                <button
-                    v-if="playing"
-                    class="control-btn"
-                    @click="pause">
-                    <i class="fas fa-pause"/>
-                </button>
-                <button
-                    v-else
-                    class="control-btn"
-                    @click="play">
-                    <i class="fas fa-play"/>
-                </button>
+                <LoadingSpinner v-if="!loaded"/>
+                <div v-else>
+                    <button
+                        v-if="playing"
+                        class="control-btn"
+                        @click="pause">
+                        <i class="fas fa-pause"/>
+                    </button>
+                    <button
+                        v-else
+                        class="control-btn"
+                        @click="play">
+                        <i class="fas fa-play"/>
+                    </button>
+                </div>
+
                 <button
                     class="control-btn"
                     @click="next">
@@ -105,20 +108,11 @@
                     <i class="fal fa-volume-mute"/>
                 </button>
 
-
-                <div class="volume-slider">
-                    <div
-                        :style="{width: getVolumeSliderWidth}"
-                        class="volume-slider-selected">
-                        <div class="volume-slider-selected-circle">
-                            <div class="volume-slider-circle-inside"/>
-                        </div>
-                    </div>
-                    <div
-                        class="seek-container"
-                        @click="seekVolume"
-                    />
-                </div>
+                <RangeSlider
+                    :max-value="100"
+                    :value="volume"
+                    @change="setVolume"
+                />
             </div>
         </div>
     </div>
@@ -128,9 +122,12 @@
 import MusicApi from '../mixins/MusicApi';
 import GetArtists from '../mixins/GetArtists';
 import GetImage from '../mixins/GetImage.js';
+import RangeSlider from './RangeSlider.vue';
+import LoadingSpinner from './LoadingSpinner.vue';
 
 export default {
     name: 'ThePlayer',
+    components: {LoadingSpinner, RangeSlider},
     mixins: [MusicApi, GetArtists, GetImage],
     data() {
         return {
@@ -141,18 +138,11 @@ export default {
             playing: false,
             volume: 20,
             loaded: false,
-            src: null,
             playPromise: undefined,
             volumeBackup: 0,
         };
     },
     computed: {
-        getSliderWidth() {
-            return `${(this.time / this.duration) * 100}%`;
-        },
-        getVolumeSliderWidth() {
-            return `${this.volume}%`;
-        },
         currentTrack() {
             if (!this.$store.state.track.queue.length)
                 return null;
@@ -164,7 +154,7 @@ export default {
                 ? randIndex
                 : 0];
 
-            this.$store.dispatch('setTrackIndex', track.id);
+            this.$store.dispatch('setTrackIndex', track.track.id);
 
             return track;
         },
@@ -190,15 +180,20 @@ export default {
                 if (!this.currentTrack)
                     return;
 
-                await this.player.load();
-                this.player.current = 0;
-                this.player.src = await this.getTrackDirectLink(this.currentTrack.id || this.currentTrack.track.id);
-                await this.play();
+                await this.player.pause();
+                {
+                    this.player.currentTime = 0;
+                    this.loaded = false;
+                    this.player.src = await this.getTrackDirectLink(this.currentTrack.id || this.currentTrack.track.id);
+                    await this.player.load();
+                }
+                await this.player.play();
             }
         },
         async time(value) {
-            if (value >= this.duration)
-                await this.next();
+            if (value >= this.duration) {
+                await this.next(false);
+            }
         }
     },
     mounted() {
@@ -217,10 +212,27 @@ export default {
                 });
             }
         },
-        next() {
+        async next(skip = true) {
             this.pause();
             this.$store.dispatch('addToPlayed', this.currentTrack);
             this.$store.dispatch('removeFromQueue', this.currentTrack);
+
+            if (this.$store.state.stations.isPlaying) {
+                await this.sendStationFeedback(skip ? 'skip' : 'trackFinished',
+                    this.player.currentTime,
+                    this.$store.state.stations.current.batch_id,
+                    `${this.currentTrack.track.id}:${this.currentTrack.track.albums[0].id}`,
+                );
+
+                await this.loadNewStationTracks();
+
+                await this.sendStationFeedback('trackStarted',
+                    null,
+                    this.$store.state.stations.current.batch_id,
+                    `${this.currentTrack.track.id}:${this.currentTrack.track.albums[0].id}`,
+                );
+            }
+
         },
         prev() {
             if (this.time > 3) {
@@ -259,21 +271,16 @@ export default {
         setPlayingState(value = null) {
             this.playing = value === null ? !this.playing : value;
         },
-        seek(e) {
-            if (!this.loaded)
-                return;
-
-            const el = e.target.getBoundingClientRect();
-            const seekPos = (e.clientX - el.left) / el.width;
-            this.player.currentTime = (this.player.duration * seekPos);
+        setVolume(volume) {
+            this.volume = volume;
         },
-        seekVolume(e) {
-            if (!this.loaded)
-                return;
-
-            const el = e.target.getBoundingClientRect();
-            const seekPos = (e.clientX - el.left) / el.width;
-            this.volume = 100 * seekPos;
+        setTime(time) {
+            this.player.currentTime = time;
+        },
+        async loadNewStationTracks() {
+            this.$store.dispatch('setQueue', []);
+            let tracks = await this.getStationTracks(false, this.$store.state.track.played[this.$store.state.track.played.length - 1]);
+            this.$store.dispatch('setQueue', tracks);
         }
     }
 };
@@ -309,50 +316,13 @@ export default {
     width: 30px;
 }
 
-.player-seek-slider-body {
-    background: #9FA0A2;
-    border-radius: 42px;
-    flex: 1;
-    height: 6px;
-    margin: 0 14px;
-    display: flex;
-    flex-direction: row;
-    position: relative;
+.start-time {
+    margin-right: 5px;
 }
 
-.seek-slider-selected {
-    background: var(--main-color);
-    border-radius: 42px;
-    position: absolute;
-    left: 0;
-    top: 0;
-    height: 100%;
-    transition: width 0.2s linear, left 0.2s linear;
+.end-time {
+    margin-left: 5px;
 }
-
-.seek-slider-circle {
-    width: 20px;
-    height: 20px;
-    background: #434343;
-    position: absolute;
-    right: -10px;
-    top: 50%;
-    transform: translateY(-50%);
-    border-radius: 50px;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-}
-
-.seek-slider-circle-inside {
-    background: var(--main-color);
-    border-radius: 50px;
-    width: 14px;
-    height: 14px;
-    margin: auto;
-}
-
 
 .player-body {
     display: flex;
@@ -370,6 +340,7 @@ export default {
     height: 42px;
     border-radius: 4px;
     margin-right: 10px;
+    z-index: 100;
 }
 
 .player-track-info {
@@ -384,7 +355,6 @@ export default {
 .player-track-text {
     display: flex;
     flex-direction: column;
-    overflow: hidden;
 }
 
 .player-track-title {
@@ -394,12 +364,9 @@ export default {
     margin: 0;
     color: white;
     white-space: nowrap;
-    transition: 4s;
-}
-
-.player-track-title:hover {
-    transition: 4s;
-    transform: translateX(-50%);
+    text-overflow: ellipsis;
+    word-break: normal;
+    overflow: hidden;
 }
 
 .player-track-artist {
@@ -407,6 +374,10 @@ export default {
     font-size: 12px;
     line-height: 16px;
     color: #8E919A;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    word-break: normal;
+    overflow: hidden;
 }
 
 .player-body-controls {
@@ -440,45 +411,4 @@ export default {
     margin-left: auto;
 }
 
-.volume-slider {
-    width: 100px;
-    height: 6px;
-    background: #9FA0A2;
-    border-radius: 42px;
-    position: relative;
-    margin-left: 5px;
-}
-
-.volume-slider-selected {
-    background: var(--main-color);
-    border-radius: 42px;
-    position: absolute;
-    left: 0;
-    top: 0;
-    height: 100%;
-    transition: width 0.2s linear, left 0.2s linear;
-}
-
-.volume-slider-selected-circle {
-    width: 20px;
-    height: 20px;
-    background: #434343;
-    position: absolute;
-    right: -10px;
-    top: 50%;
-    transform: translateY(-50%);
-    border-radius: 50px;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-}
-
-.volume-slider-circle-inside {
-    background: var(--main-color);
-    border-radius: 50px;
-    width: 14px;
-    height: 14px;
-    margin: auto;
-}
 </style>

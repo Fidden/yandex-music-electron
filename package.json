@@ -32,7 +32,13 @@
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-vue": "^7.20.0",
     "prettier": "2.6.2",
-    "vue-cli-plugin-electron-builder": "~2.1.1"
+    "vue-cli-plugin-electron-builder": "~2.1.1",
+    "workbox-strategies": "^6.5.3",
+    "vue-flickity": "^1.2.1",
+    "workbox-cacheable-response": "^6.5.3",
+    "workbox-expiration": "^6.5.3",
+    "workbox-range-requests": "^6.5.3",
+    "workbox-routing": "^6.5.3"
   },
   "eslintConfig": {
     "root": true,

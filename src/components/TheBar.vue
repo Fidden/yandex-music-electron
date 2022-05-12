@@ -1,16 +1,29 @@
 <template>
     <div class="bar">
         <RouterLink
-            :to="{name: 'home'}"
-            class="bar-button active">
-            <i class="fas fa-home-alt"/>
+            v-for="route in routes"
+            :key="route.id"
+            :class="{'active': $route.name === route.name}"
+            :to="{name: route.name}"
+            class="bar-button">
+            <i :class="route.icon"/>
         </RouterLink>
     </div>
 </template>
 
 <script>
 export default {
-    name: 'TheBar'
+    name: 'TheBar',
+    data() {
+        return {
+            routes: [
+                {id: 0, name: 'home', icon: 'fas fa-home-alt'},
+                {id: 1, name: 'station', icon: 'fal fa-broadcast-tower'},
+                {id: 2, name: 'tracks', icon: 'fal fa-music'},
+                {id: 3, name: 'artists', icon: 'fal fa-user-music'},
+            ]
+        };
+    }
 };
 </script>
 

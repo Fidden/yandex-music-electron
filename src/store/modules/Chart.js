@@ -13,8 +13,8 @@ export default {
 		}
 	},
 	getters: {
-		firstChart(state) {
-			return state.all.slice(0, 10);
+		firstChartTracks(state) {
+			return state.all.chart.tracks.slice(0, 10);
 		}
 	}
 };

@@ -1,6 +1,8 @@
 <template>
     <div>
-        <div class="table-filter">
+        <div
+            v-if="filterBar"
+            class="table-filter">
             <input
                 v-model.trim="search.title"
                 placeholder="Поиск"
@@ -48,7 +50,7 @@
                             :alt="track.track.title"
                             :src="GetImage(track.track.ogImage)">
                         <div
-                            v-if="track.id === $store.state.player.track_index"
+                            v-if="track.track.id === $store.state.player.track_index"
                             class="black-bar">
                             <PlayingIcon :stop="!$store.state.player.playing"/>
                         </div>
@@ -101,6 +103,12 @@ export default {
             default() {
                 return false;
             }
+        },
+        filterBar: {
+            type: Boolean,
+            default() {
+                return true;
+            }
         }
     },
     data() {
@@ -144,6 +152,7 @@ export default {
         playCurrent(track) {
             this.$store.dispatch('setShuffle', false);
             this.$store.dispatch('unshiftToQueue', track);
+            this.$store.dispatch('setIsPlaying', false);
         },
         getArtistMappingName(artists) {
             return artists.map(item => item.name[0]).toString();
@@ -192,6 +201,12 @@ thead {
 
 thead th {
     font-weight: 400;
+    color: #8E929C;
+    text-transform: uppercase;
+}
+
+thead tr:hover {
+    background: none;
 }
 
 tr {
@@ -225,6 +240,9 @@ tr:hover {
 .title {
     font-weight: 400;
     font-size: 14px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
 }
 
 .index {
@@ -294,7 +312,26 @@ tr:hover .like, tr:hover .table-row-play {
     display: flex;
     flex-direction: row;
     align-items: stretch;
-    justify-content: flex-end;
+    margin-bottom: 17px;
+}
+
+.table-filter input[type="text"] {
+    background: rgba(44, 53, 77, 0.57);
+    border-radius: 4px;
+    color: white;
+    padding: 0 12px;
+}
+
+.table-filter select {
+    background: none;
+    margin-left: 20px;
+    border: none;
+    outline: none;
+    color: white;
+}
+
+.table-filter option {
+    background: rgba(44, 53, 77, 0.57);
 }
 
 </style>

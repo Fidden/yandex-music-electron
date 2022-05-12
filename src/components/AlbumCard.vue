@@ -6,8 +6,8 @@
         <div class="album-card-image">
             <img
                 v-if="album.ogImage"
-                :src="GetImage(album.ogImage, '150x150')"
-                :alt="album.title">
+                :alt="album.title"
+                :src="GetImage(album.ogImage, '150x150')">
         </div>
 
         <h3 class="title">
@@ -19,10 +19,14 @@
             {{ getArtist(album.artists) }}
         </p>
 
-        <p class="type">
+        <p
+            v-if="album.type"
+            class="type">
             {{ album.type }}
         </p>
-        <p class="year">
+        <p
+            v-if="album.year"
+            class="year">
             {{ album.year }}
         </p>
     </div>
@@ -37,22 +41,30 @@ export default {
     name: 'AlbumCard',
     mixins: [GetImage, MusicApi, GetArtists],
     props: {
-        id: {
-            type: Number,
+        item: {
+            type: Object,
             required: true,
         },
     },
+    emits: ['data-loaded'],
     data() {
         return {
             album: {}
         };
     },
+    watch: {
+        album(value) {
+            this.$emit('data-loaded', value);
+        }
+    },
     async mounted() {
-        this.album = await this.getAlbum(this.id);
+        this.album = Object.keys(this.item).length > 1 ?
+            this.item :
+            await this.getAlbum(this.item.id);
     },
     methods: {
         redirect() {
-            this.$router.replace({name: 'album', params: {id: this.id}});
+            this.$router.replace({name: 'album', params: {id: this.item.id}});
         }
     }
 };
@@ -67,6 +79,10 @@ export default {
     flex-direction: column;
     position: relative;
     cursor: pointer;
+    width: 100%;
+    height: 100%;
+    max-height: 220px;
+    max-width: 165px;
 }
 
 .album-card img {

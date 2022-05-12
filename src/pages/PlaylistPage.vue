@@ -55,6 +55,7 @@ export default {
         playShuffle() {
             this.$store.dispatch('setShuffle', true);
             this.$store.dispatch('setQueue', this.playlist.tracks);
+            this.$store.dispatch('setIsPlaying', false);
         },
     }
 };

@@ -1,8 +1,8 @@
 'use strict';
 
-import {app, protocol, BrowserWindow, ipcMain} from 'electron';
-import {createProtocol} from 'vue-cli-plugin-electron-builder/lib';
-import installExtension, {VUEJS3_DEVTOOLS} from 'electron-devtools-installer';
+import { app, BrowserWindow, ipcMain, protocol } from 'electron';
+import { createProtocol } from 'vue-cli-plugin-electron-builder/lib';
+import installExtension, { VUEJS3_DEVTOOLS } from 'electron-devtools-installer';
 
 const isDevelopment = process.env.NODE_ENV !== 'production';
 
@@ -24,7 +24,7 @@ async function createWindow() {
 			nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION,
 			contextIsolation: !process.env.ELECTRON_NODE_INTEGRATION,
 			webSecurity: false
-		}
+		},
 	});
 	
 	ipcMain.on('minimize', () => {
@@ -34,6 +34,16 @@ async function createWindow() {
 	
 	ipcMain.on('maximize', () => {
 		win.isMaximized() ? win.restore() : win.maximize();
+	});
+	
+	ipcMain.on('loading', () => {
+		win.setSize(340, 440);
+		win.center();
+	});
+	
+	ipcMain.on('loaded', () => {
+		win.setSize(1000, 730);
+		win.center();
 	});
 	
 	ipcMain.on('close', () => {

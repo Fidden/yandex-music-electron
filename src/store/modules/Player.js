@@ -13,7 +13,7 @@ export default {
 		},
 		SET_PLAYING(state, value) {
 			state.playing = value;
-		}
+		},
 	},
 	actions: {
 		setShuffle({commit}, value) {
@@ -24,6 +24,6 @@ export default {
 		},
 		setPlaying({commit}, value) {
 			commit('SET_PLAYING', value);
-		}
+		},
 	}
 };

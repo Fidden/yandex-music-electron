@@ -60,6 +60,7 @@ export default {
         playShuffle() {
             this.$store.dispatch('setShuffle', true);
             this.$store.dispatch('setQueue', this.album.volumes[0]);
+            this.$store.dispatch('setIsPlaying', false);
         },
     }
 };
