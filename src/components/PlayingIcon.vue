@@ -1,45 +1,54 @@
 <template>
-    <div class="playing">
+    <div class="background">
+        <div class="playing">
         <span
             :class="{'stop': stop}"
             class="playing__bar playing__bar1"/>
-        <span
-            :class="{'stop': stop}"
-            class="playing__bar playing__bar2"/>
-        <span
-            :class="{'stop': stop}"
-            class="playing__bar playing__bar3"/>
+            <span
+                :class="{'stop': stop}"
+                class="playing__bar playing__bar2"/>
+            <span
+                :class="{'stop': stop}"
+                class="playing__bar playing__bar3"/>
+        </div>
     </div>
 </template>
 
-<script>
-export default {
-    name: 'PlayingIcon',
-    props: {
-        stop: {
-            type: Boolean,
-            default() {
-                return false;
-            }
+<script setup>
+import { defineProps } from 'vue';
+
+defineProps({
+    stop: {
+        type: Boolean,
+        default() {
+            return false;
         }
     }
-};
+});
 </script>
 
 <style scoped>
+.background {
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    position: absolute;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+}
+
 .playing {
-    width: 2rem;
-    height: 2rem;
+    width: 32px;
+    height: 32px;
     border-radius: .3rem;
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
     padding: .5rem;
     box-sizing: border-box;
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
 }
 
 .stop {
@@ -50,7 +59,7 @@ export default {
 .playing__bar {
     display: inline-block;
     background: var(--main-color);
-    width: 30%;
+    width: 4px;
     height: 100%;
     animation: up-and-down 1.3s ease infinite alternate;
 }

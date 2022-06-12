@@ -1,6 +1,7 @@
 export default {
 	state: {
 		shuffle: false,
+		repeat: 0,
 		track_index: -1,
 		playing: false,
 	},
@@ -14,6 +15,12 @@ export default {
 		SET_PLAYING(state, value) {
 			state.playing = value;
 		},
+		SET_REPEAT(state, value) {
+			state.repeat = value;
+		},
+		INCREMENT_REPEAT(state) {
+			state.repeat++;
+		}
 	},
 	actions: {
 		setShuffle({commit}, value) {
@@ -25,5 +32,11 @@ export default {
 		setPlaying({commit}, value) {
 			commit('SET_PLAYING', value);
 		},
+		setRepeat({commit}, value) {
+			commit('SET_REPEAT', value);
+		},
+		incrementRepeat({commit}) {
+			commit('INCREMENT_REPEAT');
+		}
 	}
 };

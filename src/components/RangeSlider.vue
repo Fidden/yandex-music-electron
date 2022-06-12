@@ -16,54 +16,48 @@
     </div>
 </template>
 
-<script>
-export default {
-    name: 'RangeSlider',
-    props: {
-        value: {
-            type: Number,
-            required: true,
-        },
-        maxValue: {
-            type: Number,
-            required: true,
-        },
-        step: {
-            type: Number,
-            default() {
-                return 1;
-            }
-        }
+<script setup>
+
+import { computed, defineEmits, defineProps, ref, watch } from 'vue';
+
+const emits = defineEmits(['change']);
+
+const props = defineProps({
+    value: {
+        type: Number,
+        required: true,
     },
-    emits: ['change'],
-    data() {
-        return {
-            currentValue: this.value,
-        };
+    maxValue: {
+        type: Number,
+        required: true,
     },
-    computed: {
-        getWidth() {
-            //fixme
-            let divide = (this.currentValue / this.maxValue) * 100;
-            if (isNaN(divide))
-                return '0%';
-            else if (divide < 50)
-                return `${divide + 1}%`;
-            else
-                return `${divide - 1}%`;
-        },
-    },
-    watch: {
-        value(value) {
-            this.currentValue = value;
-        }
-    },
-    methods: {
-        onInput() {
-            this.$emit('change', this.currentValue);
+    step: {
+        type: Number,
+        default() {
+            return 1;
         }
     }
-};
+});
+
+const currentValue = ref(props.value);
+
+watch(props, (value) => {
+    currentValue.value = value.value;
+});
+
+const getWidth = computed(() => {
+    let divide = (currentValue.value / props.maxValue) * 100;
+    if (isNaN(divide))
+        return '0%';
+    else if (divide < 50)
+        return `calc(${divide}% + 5px)`;
+    else
+        return `calc(${divide}% - 5px)`;
+});
+
+function onInput() {
+    emits('change', currentValue.value);
+}
 </script>
 
 <style scoped>

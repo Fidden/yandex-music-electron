@@ -1,10 +1,11 @@
 <template>
     <RouterLink
         :to="{name: 'artist', params: {id: artist.id}}"
-        class="artist-card">
+        class="artist-card"
+    >
         <img
+            v-lazy="useImage(artist, '200x200')"
             :alt="artist.name"
-            :src="GetImage(artist.cover.uri, '200x200')"
             class="card-image">
         <h4>{{ artist.name }}</h4>
         <p class="tracks-count">
@@ -13,19 +14,17 @@
     </RouterLink>
 </template>
 
-<script>
-import GetImage from '../mixins/GetImage.js';
+<script setup>
+import { defineProps } from 'vue';
+import useImage from '../composables/useImage.js';
 
-export default {
-    name: 'ArtistCard',
-    mixins: [GetImage],
-    props: {
-        artist: {
-            type: Object,
-            required: true,
-        }
-    },
-};
+defineProps({
+    artist: {
+        type: Object,
+        required: true,
+    }
+});
+
 </script>
 
 <style scoped>
@@ -34,17 +33,24 @@ export default {
     flex-direction: column;
     align-items: center;
     text-align: center;
-    gap: 7px 0;
 }
 
 .card-image {
     border-radius: 50%;
     object-fit: cover;
+    margin-bottom: 20px;
 }
 
 .tracks-count {
     font-weight: 400;
     font-size: 12px;
+}
+
+h4 {
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 16px;
+    margin-bottom: 7px;
 }
 
 </style>

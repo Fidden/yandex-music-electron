@@ -33,11 +33,11 @@ export default {
 		}
 	},
 	getters: {
-		lastPlayedPlaylists(state) {
-			return state.last_played.concat(state.all.slice(0, 6 - state.last_played.length));
+		playLists(state) {
+			return state.all.slice(0, 12);
 		},
 		firstHits(state) {
-			return state.hits.slice(0, 5);
+			return state.hits.slice(0, 20);
 		}
 	}
 };

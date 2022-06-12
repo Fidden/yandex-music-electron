@@ -8,8 +8,25 @@ import Chart from './modules/Chart';
 import Stations from './modules/Stations.js';
 import Artists from './modules/Artists.js';
 import Page from './modules/Page.js';
+import Search from './modules/Search.js';
+import Rpc from './modules/Rpc.js';
 
 export default new createStore({
+	state: {
+		app: {
+			state: 0,
+		}
+	},
+	mutations: {
+		SET_APP_STATE(state, app_state) {
+			state.app.state = app_state;
+		},
+	},
+	actions: {
+		setAppState({commit}, app_state) {
+			commit('SET_APP_STATE', app_state);
+		},
+	},
 	modules: {
 		user: User,
 		player: Player,
@@ -20,5 +37,7 @@ export default new createStore({
 		stations: Stations,
 		artists: Artists,
 		page: Page,
+		search: Search,
+		rpc: Rpc,
 	}
 });

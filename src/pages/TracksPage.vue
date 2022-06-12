@@ -4,7 +4,9 @@
             <h2 class="main-container-title">
                 Треки
             </h2>
-            <TheTracksTable :tracks="tracks"/>
+            <TheTracksTable
+                v-if="tracks.length"
+                :tracks="tracks"/>
         </div>
     </main>
 </template>
@@ -23,12 +25,10 @@ export default {
         }
     },
     async mounted() {
-        //todo: переделать эту хуйню, подумать своей тупой головой над пагинацией и как лучше разбивать данные
         if (!this.tracks.length) {
             let playlists = await this.getPlaylists();
             let kinds = playlists.map(item => item.kind);
             let playlistWithTracks = await this.getUserPlaylistsData(kinds);
-
 
             let ids = [];
             playlistWithTracks.forEach(item => {
@@ -36,7 +36,8 @@ export default {
             });
 
             let tracks = await this.getTracksByIds(ids);
-            tracks = tracks.filter(item => item.available === true).map(item => ({track: item}));
+            tracks = tracks.filter(item => item.available).map(item => ({track: item}));
+
             this.$store.dispatch('setUserTracks', tracks);
         }
     }

@@ -1,80 +1,64 @@
 <template>
     <div>
-        <div
+        <TheFilter
             v-if="filterBar"
-            class="table-filter">
-            <input
-                v-model.trim="search.title"
-                placeholder="Поиск"
-                type="text">
-            <select v-model.number="search.filter">
-                <option value="0">
-                    По стандарту
-                </option>
-                <option value="1">
-                    Название
-                </option>
-                <option value="2">
-                    Артист
-                </option>
-                <option value="3">
-                    Длительность
-                </option>
-            </select>
-        </div>
-        <table v-if="tracks.length > 0">
+            :data="tracks"
+            :filter-func="filterFunc"
+            @filtered="onFiltered"
+        />
+        <table
+            v-if="filteredTracks.length > 0"
+            :class="{'with-out-image': withoutImage}">
             <thead>
             <tr>
                 <th>№</th>
-                <th>Название</th>
+                <th v-if="!withoutImage"/>
+                <th style="margin-left: 14px;">
+                    Название
+                </th>
                 <th>Артист</th>
-                <th class="clock">
+                <th style="margin-right: 5px;">
                     <i class="fal fa-clock fa-sm"/>
                 </th>
             </tr>
             </thead>
             <tbody>
+            <!--fixme: при клике на артиста трек включается заного (сделать через релатив tr и накинуть сверху блок (z-index))-->
             <tr
                 v-for="(track, index) in filteredTracks"
                 :key="track.id"
-                @click="playCurrent(track)"
+                :class="{'playing': store.state.player.track_index === track.track.id}"
             >
-                <td class="index">
-                    {{ index + 1 }}
+                <td
+                    class="index"
+                    @click="playCurrent(track, index)">
+                    <span>{{ index + 1 }}</span>
+                    <i class="fas fa-play"/>
                 </td>
-                <td class="table-row">
-                    <div
-                        v-if="withoutImage === false"
-                        class="table-row-image">
-                        <img
-                            :alt="track.track.title"
-                            :src="GetImage(track.track.ogImage)">
-                        <div
-                            v-if="track.track.id === $store.state.player.track_index"
-                            class="black-bar">
-                            <PlayingIcon :stop="!$store.state.player.playing"/>
-                        </div>
-                        <button
-                            v-else
-                            class="table-row-play">
-                            <i class="fas fa-play fa-xs"/>
-                        </button>
-                    </div>
+                <td
+                    v-if="!withoutImage"
+                    class="image"
+                    @click="playCurrent(track, index)">
+                    <img
+                        v-lazy="useImage(track.track)"
+                        :alt="track.track.title">
 
-                    <p class="title">
-                        {{ track.track.title }}
-                        <span
-                            v-if="track.track.version"
-                            class="sub-title">
-                            ({{ track.track.version }})
-                        </span>
-                    </p>
+                    <PlayingIcon
+                        v-if="store.state.player.track_index === track.track.id"
+                        :stop="!store.state.player.playing"/>
                 </td>
-                <td class="artists">
-                    {{ getArtist(track.track.artists) }}
+                <td
+                    class="title"
+                    @click="playCurrent(track, index)">
+                    {{ track.track.title }}
                 </td>
-                <td class="duration">
-                    {{ ConvertDuration(track.track.durationMs) }}
+                <td>
+                    <ArtistsLinks :artists="track.track.artists"/>
+                </td>
+                <td
+                    class="duration"
+                    @click="playCurrent(track, index)">
+                    {{ useConvertDuration(track.track.durationMs) }}
                 </td>
             </tr>
             </tbody>
@@ -82,256 +66,248 @@
     </div>
 </template>
 
-<script>
+<script setup>
+import ArtistsLinks from '../components/ArtistsLinks.vue';
+import useConvertDuration from '../composables/useConvertDuration.js';
+import useImage from '../composables/useImage.js';
+import { defineProps, onMounted, reactive, ref, watch } from 'vue';
+import { useStore } from 'vuex';
 import PlayingIcon from './PlayingIcon.vue';
-import MusicApi from '../mixins/MusicApi.js';
-import GetArtists from '../mixins/GetArtists.js';
-import GetImage from '../mixins/GetImage.js';
-import ConvertDuration from '../mixins/ConvertDuration.js';
+import TheFilter from './TheFilter.vue';
 
-export default {
-    name: 'TheTracksTable',
-    components: {PlayingIcon},
-    mixins: [MusicApi, GetArtists, GetImage, ConvertDuration],
-    props: {
-        tracks: {
-            type: Array,
-            required: true,
-        },
-        withoutImage: {
-            type: Boolean,
-            default() {
-                return false;
-            }
-        },
-        filterBar: {
-            type: Boolean,
-            default() {
-                return true;
-            }
+const props = defineProps({
+    tracks: {
+        type: Array,
+        required: true,
+    },
+    withoutImage: {
+        type: Boolean,
+        default() {
+            return false;
         }
     },
-    data() {
-        return {
-            search: {
-                title: '',
-                filter: 0,
-            }
-        };
-    },
-    computed: {
-        filteredTracks() {
-            let out = this.tracks;
-
-            if (this.search.title.length > 0) {
-                let searchResult = out
-                    .filter(item => {
-                        return item.track.title.toLowerCase().indexOf(this.search.title.toLowerCase()) !== -1
-                            || item.track.artists.findIndex(item => item.name.toLowerCase().indexOf(this.search.title.toLowerCase()) !== -1) !== -1;
-                    });
-
-                out = searchResult.concat(out.filter(item => !searchResult.includes(item)));
-            }
-
-            switch (this.search.filter) {
-                case 1:
-                    out = out.sort(this.compareName);
-                    break;
-                case 2:
-                    out = out.sort(this.compareArtists);
-                    break;
-                case 3:
-                    out = out.sort(this.compareDuration);
-                    break;
-            }
-
-            return out;
-        }
-    },
-    methods: {
-        playCurrent(track) {
-            this.$store.dispatch('setShuffle', false);
-            this.$store.dispatch('unshiftToQueue', track);
-            this.$store.dispatch('setIsPlaying', false);
-        },
-        getArtistMappingName(artists) {
-            return artists.map(item => item.name[0]).toString();
-        },
-        compareName(a, b) {
-            if (a.track.title > b.track.title)
-                return 1;
-
-            if (a.track.title < b.track.title)
-                return -1;
-
-            return 0;
-        },
-        compareArtists(a, b) {
-            if (this.getArtistMappingName(a.track.artists) > this.getArtistMappingName(b.track.artists))
-                return 1;
-
-            if (this.getArtistMappingName(a.track.artists) < this.getArtistMappingName(b.track.artists))
-                return -1;
-
-            return 0;
-        },
-        compareDuration(a, b) {
-            if (a.track.durationMs > b.track.durationMs)
-                return 1;
-
-            if (a.track.durationMs < b.track.durationMs)
-                return -1;
-
-            return 0;
+    filterBar: {
+        type: Boolean,
+        default() {
+            return true;
         }
     }
-};
+});
+
+const store = useStore();
+
+const filterFunc = reactive([
+    compareName,
+    compareArtists,
+    compareDuration,
+]);
+
+const filteredTracks = ref([]);
+
+onMounted(() => {
+    filteredTracks.value = props.tracks;
+});
+
+watch(props, (value) => {
+    filteredTracks.value = value.tracks;
+}, {deep: true});
+
+function playCurrent(track, index = -1) {
+    store.dispatch('setShuffle', false);
+    if (index === -1) {
+        store.dispatch('unshiftToQueue', track);
+    } else {
+        //add tracks after index
+        let newQueue = props.tracks.slice(index, props.tracks.length);
+        //add to the end tracks before index
+        newQueue = newQueue.concat(props.tracks.slice(0, index));
+
+        store.dispatch('setQueue', newQueue);
+    }
+    store.dispatch('setIsPlaying', false);
+}
+
+function getArtistMappingName(artists) {
+    return artists.map(item => item.name[0]).toString();
+}
+
+function compareName(a, b) {
+    if (a.track.title > b.track.title)
+        return 1;
+
+    if (a.track.title < b.track.title)
+        return -1;
+
+    return 0;
+}
+
+function compareArtists(a, b) {
+    if (getArtistMappingName(a.track.artists) > getArtistMappingName(b.track.artists))
+        return 1;
+
+    if (getArtistMappingName(a.track.artists) < getArtistMappingName(b.track.artists))
+        return -1;
+
+    return 0;
+}
+
+function compareDuration(a, b) {
+    if (a.track.durationMs > b.track.durationMs)
+        return 1;
+
+    if (a.track.durationMs < b.track.durationMs)
+        return -1;
+
+    return 0;
+}
+
+function onFiltered(data) {
+    filteredTracks.value = data;
+}
+
 </script>
 
 <style scoped>
+
 table {
-    margin: 0;
-    width: 100%;
-    border-spacing: 0 10px;
+    display: grid;
+    border-collapse: collapse;
+    min-width: 100%;
+    grid-template-columns: min-content 40px 2fr 1fr min-content;
+    gap: 10px 0;
+    margin-top: 20px;
 }
 
-thead {
-    text-align: left;
+.with-out-image {
+    grid-template-columns: min-content 2fr 1fr min-content;
+    gap: 0;
 }
 
-thead th {
-    font-weight: 400;
-    color: #8E929C;
-    text-transform: uppercase;
-}
-
-thead tr:hover {
-    background: none;
+.with-out-image td {
+    padding: 10px 0;
 }
 
 tr {
+    border-radius: 8px;
+    transition: 0.2s;
+    cursor: pointer;
+}
+
+tr:hover td {
+    transition: 0.2s;
+    background: #1E222D;
+}
+
+thead,
+tbody,
+tr {
+    display: contents;
+}
+
+th,
+td {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+thead {
+    margin-bottom: 20px;
+}
+
+th {
+    font-weight: 400;
     font-size: 14px;
-    transition: background-color 0.2s;
+    line-height: 16px;
+    text-transform: uppercase;
+    color: #8E929C;
+    text-align: left;
 }
 
-tr:hover {
-    transition: background-color 0.2s;
-    background-color: #1E222D;
+th:last-child {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
 }
 
-.table-row {
+td {
     display: flex;
     flex-direction: row;
     align-items: center;
-}
-
-.table-row img {
-    width: 41px;
-    height: 41px;
-    border-radius: 4px;
-}
-
-.table-row .like {
-    margin-left: 10px;
-    color: #AFB8C1;
-    cursor: pointer;
-}
-
-.title {
     font-weight: 400;
     font-size: 14px;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    overflow: hidden;
+    line-height: 16px;
+    padding: 0;
+    height: 40px;
+}
+
+td:first-child {
+    border-radius: 8px 0 0 8px;
+    padding-inline: 5px;
+}
+
+td:last-child {
+    border-radius: 0 8px 8px 0;
+    padding-right: 5px;
 }
 
 .index {
+    min-width: 25px;
+}
+
+.image {
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: row;
+    flex-shrink: 0;
+}
+
+.image img {
+    border-radius: 4px;
+}
+
+.title {
+    padding-left: 14px;
+    font-weight: 400;
     font-size: 14px;
-    font-weight: 300;
-    width: 30px;
+    line-height: 16px;
 }
-
-.like {
-    opacity: 0;
-    transition: opacity 0.2s;
-    cursor: pointer;
-}
-
-tr:hover .like, tr:hover .table-row-play {
-    opacity: 1;
-    transition: opacity 0.2s;
-}
-
 
 .duration {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    font-weight: 400;
     font-size: 12px;
-    text-align: center;
+    line-height: 16px;
+    align-items: center;
 }
 
-.table-row-image {
-    position: relative;
-    margin-right: 12px;
+tr .index i {
+    display: none;
+    font-size: 10px;
 }
 
-.table-row-play {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    background: var(--main-color);
-    border-radius: 999px;
-    width: 25px;
-    height: 25px;
-    opacity: 0;
-    transition: opacity 0.2s;
+tr .index span {
+    display: block;
 }
 
-.table-row-play i {
-    transform: translate(0, -1px);
+tr:hover .index i {
+    display: block;
 }
 
-.clock {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    transform: translateX(-2px);
+tr:hover .index span {
+    display: none;
 }
 
-.black-bar {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    border-radius: 4px;
+.playing {
+    transition: 0.2s;
 }
 
-.table-filter {
-    height: 35px;
-    display: flex;
-    flex-direction: row;
-    align-items: stretch;
-    margin-bottom: 17px;
+.playing .index, .playing .title {
+    color: var(--main-color)
 }
 
-.table-filter input[type="text"] {
-    background: rgba(44, 53, 77, 0.57);
-    border-radius: 4px;
-    color: white;
-    padding: 0 12px;
-}
-
-.table-filter select {
-    background: none;
-    margin-left: 20px;
-    border: none;
-    outline: none;
-    color: white;
-}
-
-.table-filter option {
-    background: rgba(44, 53, 77, 0.57);
-}
 
 </style>

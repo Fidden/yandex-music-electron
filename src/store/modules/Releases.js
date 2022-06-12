@@ -22,7 +22,7 @@ export default {
 	},
 	getters: {
 		firstReleases(state) {
-			return state.new.slice(0, 5);
+			return state.new.slice(0, 20);
 		}
 	}
 };

@@ -2,10 +2,11 @@
     <main
         v-if="Object.keys(artist).length"
         class="main">
+        <TheNavigation/>
         <div class="artist-head">
             <img
+                v-lazy="useImage(artist.artist, '150x150')"
                 :alt="artist.artist.name"
-                :src="GetImage(artist.artist.ogImage, '150x150')"
                 class="artist-image"
             >
             <div class="artist-head-info">
@@ -14,25 +15,43 @@
             </div>
         </div>
         <div class="artist-body">
-            <div class="artist-body-block">
+            <div class="artist-body-title">
                 <h2>Популярные треки</h2>
+                <RouterLink
+                    :to="{name: 'artist-tracks', params: {id: route.params.id, artist_name: artist.artist.name}}">
+                    Посмотреть все
+                </RouterLink>
+            </div>
+            <div
+                v-if="popularTracks.length"
+                class="artist-body-block">
                 <TheTracksTable
                     :filter-bar="false"
                     :tracks="popularTracks"/>
             </div>
 
             <div class="artist-body-block">
-                <h2>Популярные альбомы</h2>
-                <div class="artist-body-block-body">
-                    <AlbumCard
+                <div class="artist-body-title">
+                    <h2>Популярные альбомы</h2>
+                </div>
+                <Flickity
+                    v-if="popularAlbums.length"
+                    ref="flickity"
+                    :options="useFlickityOptionsDefault">
+                    <div
                         v-for="album in popularAlbums"
                         :key="album.id"
-                        :item="album"/>
-                </div>
+                        class="carousel-cell"
+                    >
+                        <AlbumCard :item="album"/>
+                    </div>
+                </Flickity>
             </div>
 
             <div class="artist-body-block">
-                <h2>Похожие артисты</h2>
+                <div class="artist-body-title">
+                    <h2>Похожие артисты</h2>
+                </div>
                 <div class="artist-body-block-body">
                     <ArtistCard
                         v-for="similarArtist in similarArtists"
@@ -44,39 +63,42 @@
     </main>
 </template>
 
-<script>
-import MusicApi from '../mixins/MusicApi.js';
-import GetImage from '../mixins/GetImage.js';
+<script setup>
+import useFlickityOptionsDefault from '../composables/useFlickityOptionsDefault.js';
 import TheTracksTable from '../components/TheTracksTable.vue';
 import AlbumCard from '../components/AlbumCard.vue';
 import ArtistCard from '../components/ArtistCard.vue';
+import useImage from '../composables/useImage.js';
+import useArtistBriefInfo from '../composables/useArtistBriefInfo.js';
+import { computed, inject, nextTick, onMounted, ref, watch } from 'vue';
+import { useRoute } from 'vue-router';
+import TheNavigation from '../components/TheNavigation.vue';
+import Flickity from 'vue-flickity';
 
-export default {
-    name: 'ArtistPage',
-    components: {ArtistCard, AlbumCard, TheTracksTable},
-    mixins: [MusicApi, GetImage],
-    data() {
-        return {
-            artist: {}
-        };
-    },
-    computed: {
-        popularTracks() {
-            return this.artist.popularTracks.map(item => ({track: item}));
-        },
-        popularAlbums() {
-            let albums = this.artist.albums;
-            return albums.splice(0, 5);
-        },
-        similarArtists() {
-            let artists = this.artist.similarArtists;
-            return artists.splice(0, 5);
-        }
-    },
-    async mounted() {
-        this.artist = await this.getArtistBriefInfo(this.$route.params.id);
+const route = useRoute();
+const request = inject('$request');
+
+const artist = ref({});
+
+onMounted(async () => {
+    artist.value = await useArtistBriefInfo(route.params.id, request);
+});
+
+const popularTracks = computed(() => artist.value.popularTracks?.map(item => ({track: item})));
+
+const popularAlbums = computed(() => artist.value.albums.concat(artist.value.alsoAlbums));
+
+const similarArtists = computed(() => artist.value.similarArtists.slice(0, 5));
+
+watch(route, async (value) => {
+    //todo: подумать над красивым решением проблемы
+    if (value.params.id) {
+        artist.value = {};
+        await nextTick();
+        artist.value = await useArtistBriefInfo(route.params.id, request);
     }
-};
+});
+
 </script>
 
 <style scoped>
@@ -89,6 +111,25 @@ export default {
 .artist-image {
     border-radius: 50%;
     margin-right: 40px;
+}
+
+.artist-body-title {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin: 20px 0;
+}
+
+#app > div > div > main > div.artist-body > div.artist-body-title:first-child {
+    margin-bottom: 0;
+}
+
+.artist-body-title a {
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 16px;
+    color: var(--main-color);
+    margin-left: auto;
 }
 
 /*fixme: сделать 1 классом */

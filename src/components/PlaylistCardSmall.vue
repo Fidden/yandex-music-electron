@@ -3,25 +3,22 @@
         :to="{name: 'playlist', params: {kind: playlist.kind}}"
         class="playlist-block">
         <img
-            :src="GetImage(playlist.ogImage)"
+            v-lazy="useImage(playlist)"
             :alt="playlist.title">
         <h4>{{ playlist.title }}</h4>
     </RouterLink>
 </template>
 
-<script>
-import GetImage from '../mixins/GetImage.js';
+<script setup>
+import useImage from '../composables/useImage.js';
+import { defineProps } from 'vue';
 
-export default {
-    name: 'PlaylistCardSmall',
-    mixins: [GetImage],
-    props: {
-        playlist: {
-            required: true,
-            type: Object,
-        }
-    },
-};
+defineProps({
+    playlist: {
+        required: true,
+        type: Object,
+    }
+});
 </script>
 
 <style scoped>

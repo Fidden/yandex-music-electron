@@ -14,7 +14,7 @@ export default {
 	},
 	getters: {
 		firstChartTracks(state) {
-			return state.all.chart.tracks.slice(0, 10);
+			return state.all.chart?.tracks.slice(0, 10);
 		}
 	}
 };

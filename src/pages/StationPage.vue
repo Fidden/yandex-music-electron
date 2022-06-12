@@ -5,23 +5,13 @@
                 Радио
             </h2>
             <div
-                v-if="Object.keys(stations).length"
+                v-if="stations?.stations"
                 class="my-wave-container">
                 <div
                     v-for="item in stations.stations"
                     :key="item.station.idFroFrom"
                     class="my-wave-block">
-                    <div
-                        :style="{background:item.station.icon.backgroundColor }"
-                        class="my-wave-block-image"
-                        @click="playStation(item.station.id)">
-                        <img
-                            v-if="item.station.icon.imageUrl"
-                            :alt="item.station.name"
-                            :src="GetImage(item.station.icon.imageUrl)">
-                    </div>
-
-                    <p>{{ item.station.name }}</p>
+                    <StationCard :item="item"/>
                 </div>
             </div>
         </div>
@@ -34,61 +24,48 @@
                     v-for="item in stationsAll"
                     :key="item.station.id.tag"
                     class="genre-block">
-                    <div
-                        :style="{background: item.station.icon.backgroundColor}"
-                        class="genre-block-image">
-                        <img
-                            v-if="item.station.icon.imageUrl"
-                            :alt="item.station.name "
-                            :src="GetImage(item.station.icon.imageUrl)">
-                    </div>
-
-                    <p>{{ item.station.name }}</p>
+                   <StationCardSmall :item="item"/>
                 </div>
             </div>
         </div>
     </main>
 </template>
 
-<script>
-import GetImage from '../mixins/GetImage.js';
-import MusicApi from '../mixins/MusicApi.js';
+<script setup>
+import { computed, inject, onMounted } from 'vue';
+import { useStore } from 'vuex';
+import StationCard from '../components/StationCard.vue';
+import StationCardSmall from '../components/StationCardSmall.vue';
 
-export default {
-    name: 'StationPage',
-    mixins: [GetImage, MusicApi],
-    computed: {
-        stations() {
-            return this.$store.state.stations.dashboard;
-        },
-        stationsAll() {
-            return this.$store.state.stations.list;
-        }
-    },
-    async mounted() {
-        if (!this.$store.state.stations.dashboard.length)
-            this.$store.dispatch('setStationsDashboard', await this.getStationsDashboard());
+const store = useStore();
+const request = inject('$request');
 
-        if (!this.$store.state.stations.list.length)
-            this.$store.dispatch('setStationsList', await this.getStationsList());
-    },
-    methods: {
-        async playStation(station_id) {
-            //reset queue and reset played list
-            this.$store.dispatch('setQueue', []);
-            this.$store.dispatch('clearPlayed');
-            this.$store.dispatch('setIsPlaying', true);
+const stations = computed(() => {
+    return store.state.stations.dashboard;
+});
 
-            this.$store.dispatch('setCurrentStation',
-                `${station_id.type}:${station_id.tag}`);
+const stationsAll = computed(() => {
+    return store.state.stations.list;
+});
 
-            await this.sendStationFeedback('radioStarted');
+onMounted(async () => {
+    if (!stations.value.length)
+        await store.dispatch('setStationsDashboard', await getStationDashboard());
 
-            this.$store.dispatch('setQueue',
-                await this.getStationTracks(this.$store.state.stations.current));
-        }
-    }
-};
+    if (!stationsAll.value.length)
+        await store.dispatch('setStationsList', await getStationsList());
+});
+
+async function getStationDashboard() {
+    let res = await request.get('/rotor/stations/dashboard');
+    return res.data.result;
+}
+
+async function getStationsList() {
+    let res = await request.get('/rotor/stations/list');
+    return res.data.result;
+}
+
 </script>
 
 <style scoped>
@@ -101,28 +78,6 @@ export default {
     gap: 10px;
 }
 
-.my-wave-block {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-}
-
-.my-wave-block-image {
-    width: 100%;
-    aspect-ratio: 1 / 1;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    border-radius: 4px;
-    margin-bottom: 10px;
-}
-
-.my-wave-block-image img {
-    width: 50%;
-    height: 50%;
-}
 
 .genres-container {
     display: grid;
@@ -132,26 +87,6 @@ export default {
     width: 100%;
     grid-auto-flow: row;
     justify-content: space-between;
-}
-
-.genre-block {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-}
-
-.genre-block-image {
-    width: 50px;
-    height: 50px;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    border-radius: 4px;
-    padding: 5px;
-    margin-right: 10px;
-    flex-grow: 0;
-    flex-shrink: 0;
 }
 
 </style>

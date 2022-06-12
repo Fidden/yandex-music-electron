@@ -10,12 +10,6 @@
     </svg>
 </template>
 
-<script>
-export default {
-    name: 'LoadingSpinner'
-};
-</script>
-
 <style scoped>
 
 svg {

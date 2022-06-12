@@ -2,10 +2,14 @@ export default {
 	state: {
 		queue: [],
 		played: [],
+		recent: [],
 	},
 	mutations: {
 		ADD_TRACK_TO_QUEUE(state, track) {
 			state.queue.push(track);
+		},
+		ADD_TRACKS_TO_QUEUE(state, tracks) {
+			state.queue = state.queue.concat(tracks);
 		},
 		SET_QUEUE(state, queue) {
 			state.queue = queue;
@@ -25,11 +29,17 @@ export default {
 		},
 		CLEAR_PLAYED_LIST(state) {
 			state.played = [];
+		},
+		SET_RECENT(state, recent) {
+			state.recent = recent;
 		}
 	},
 	actions: {
 		addTrackToQueue({commit}, track) {
 			commit('ADD_TRACK_TO_QUEUE', track);
+		},
+		addTracksToQueue({commit}, tracks) {
+			commit('ADD_TRACKS_TO_QUEUE', tracks);
 		},
 		setQueue({commit}, queue) {
 			commit('SET_QUEUE', [].concat(queue));
@@ -45,6 +55,9 @@ export default {
 		},
 		clearPlayed({commit}) {
 			commit('CLEAR_PLAYED_LIST');
+		},
+		setRecent({commit}, recent) {
+			commit('SET_RECENT', recent);
 		}
 	}
 };

@@ -3,21 +3,17 @@
         <div class="header-logo">
             <img
                 alt="logo"
-                src="../assets/img/logo.svg">
+                src="@/assets/img/logo.svg">
             <p>Яндекс.Музыка</p>
         </div>
 
-        <div class="search-bar">
-            <input
-                placeholder="Поиск"
-                type="text">
-        </div>
+        <TheSearch/>
 
-        <RouterLink
-            class="account"
-            to="/">
-            A
-        </RouterLink>
+<!--        <RouterLink-->
+<!--            class="account"-->
+<!--            to="/">-->
+<!--            A-->
+<!--        </RouterLink>-->
 
         <div class="controls">
             <button @click="minimize">
@@ -39,26 +35,26 @@
     </header>
 </template>
 
-<script>
+<script setup>
+import TheSearch from './TheSearch.vue';
+
 const {ipcRenderer} = require('electron');
-export default {
-    name: 'TheHeader',
-    methods: {
-        minimize() {
-            ipcRenderer.send('minimize');
-        },
-        maximize() {
-            ipcRenderer.send('maximize');
-        },
-        close() {
-            ipcRenderer.send('close');
-        }
-    }
-};
+
+function minimize() {
+    ipcRenderer.send('minimize');
+}
+
+function maximize() {
+    ipcRenderer.send('maximize');
+}
+
+function close() {
+    ipcRenderer.send('close');
+}
 </script>
 
 <style scoped>
-.header, .search-bar, .controls, .header-logo {
+.header, .controls, .header-logo {
     display: flex;
     flex-direction: row;
 }
@@ -80,29 +76,6 @@ export default {
 .header-logo {
     font-size: 12px;
     font-weight: 400;
-}
-
-.search-bar {
-    flex: 1;
-    margin: 0 80px;
-    align-self: stretch;
-    overflow: hidden;
-    border-radius: 5px;
-    background: #222939;
-    border: 1px solid rgba(255, 255, 255, 0.04);
-    -webkit-app-region: no-drag;
-    height: 100%;
-}
-
-.search-bar input {
-    width: 100%;
-    height: 100%;
-    padding: 0 10px;
-    font-size: 14px;
-    background: none;
-    outline: none;
-    border: none;
-    color: white;
 }
 
 .controls {

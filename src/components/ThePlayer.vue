@@ -2,6 +2,7 @@
     <div
         v-show="currentTrack"
         class="player-container">
+        <TheStationSettings/>
         <div class="player-seek-slider">
             <p class="start-time">
                 {{ convertToTime(time) }}
@@ -35,7 +36,7 @@
                 v-if="currentTrack"
                 class="player-track-info">
                 <img
-                    :src="GetImage(currentTrack.track.ogImage)"
+                    v-lazy="useImage(currentTrack.track)"
                     alt="img"
                     class="player-track-image">
                 <div class="player-track-text">
@@ -44,20 +45,33 @@
                         href="#">
                         {{ currentTrack.track.title }}
                     </a>
-                    <a
+                    <div
                         class="player-track-artist"
-                        href="#">
-                        {{ getArtist(currentTrack.track.artists) }}
-                    </a>
+                    >
+                        <RouterLink
+                            v-for="(artist, index) in currentTrack.track.artists"
+                            :key="artist.id"
+                            :to="{name: 'artist', params: {id: artist.id}}">
+                            {{ useArtistName(artist, index, currentTrack.track.artists.length) }}
+                        </RouterLink>
+                    </div>
                 </div>
             </div>
 
-            <button class="like control-btn">
-                <i class="fal fa-heart"/>
+            <button
+                class="like control-btn"
+                @click="handleLike">
+                <i
+                    v-if="currentTrack?.liked"
+                    class="fas fa-heart"/>
+                <i
+                    v-else
+                    class="fal fa-heart"/>
             </button>
 
             <div class="player-body-controls">
                 <button
+                    v-if="!isStationPlaying"
                     class="control-btn"
                     @click="shuffleTracks">
                     <i
@@ -65,6 +79,13 @@
                         class="fal fa-random"/>
                 </button>
                 <button
+                    v-else
+                    class="control-btn">
+                    <i class="far fa-sliders-h"/>
+                </button>
+
+                <button
+                    v-if="!isStationPlaying"
                     class="control-btn"
                     @click="prev">
                     <i class="fal fa-step-backward"/>
@@ -90,8 +111,13 @@
                     @click="next">
                     <i class="fal fa-step-forward"/>
                 </button>
-                <button class="control-btn">
-                    <i class="fal fa-repeat"/>
+                <button
+                    class="control-btn"
+                    @click="repeat"
+                >
+                    <i
+                        :class="repeatIcon"
+                        class="fal"/>
                 </button>
             </div>
             <div class="volume-container">
@@ -99,7 +125,9 @@
                     v-if="volume > 0"
                     class="control-btn"
                     @click="mute">
-                    <i class="fal fa-volume"/>
+                    <i
+                        :class="volumeIcon"
+                        class="fal"/>
                 </button>
                 <button
                     v-else
@@ -119,16 +147,24 @@
 </template>
 
 <script>
+import useImage from '../composables/useImage.js';
 import MusicApi from '../mixins/MusicApi';
-import GetArtists from '../mixins/GetArtists';
-import GetImage from '../mixins/GetImage.js';
 import RangeSlider from './RangeSlider.vue';
 import LoadingSpinner from './LoadingSpinner.vue';
+import TheStationSettings from './TheStationSettings.vue';
+import useLikeAction from '../composables/useLikeAction.js';
+import useArtistName from '../composables/useArtistName.js';
 
 export default {
     name: 'ThePlayer',
-    components: {LoadingSpinner, RangeSlider},
-    mixins: [MusicApi, GetArtists, GetImage],
+    components: {TheStationSettings, LoadingSpinner, RangeSlider},
+    mixins: [MusicApi],
+    setup() {
+        return {
+            useArtistName,
+            useImage,
+        };
+    },
     data() {
         return {
             player: null,
@@ -138,11 +174,14 @@ export default {
             playing: false,
             volume: 20,
             loaded: false,
-            playPromise: undefined,
             volumeBackup: 0,
+            currentTrackLiked: false,
         };
     },
     computed: {
+        shuffle() {
+            return this.$store.state.player.shuffle;
+        },
         currentTrack() {
             if (!this.$store.state.track.queue.length)
                 return null;
@@ -155,11 +194,30 @@ export default {
                 : 0];
 
             this.$store.dispatch('setTrackIndex', track.track.id);
+            this.$store.dispatch('setRpc', track.track.title);
 
             return track;
         },
-        shuffle() {
-            return this.$store.state.player.shuffle;
+        volumeIcon() {
+            if (this.volume === 0)
+                return 'fa-volume-off';
+            else if (this.volume <= 25)
+                return 'fa-volume-down';
+            else if (this.volume >= 75)
+                return 'fa-volume-up';
+            else
+                return 'fa-volume';
+        },
+        repeatIcon() {
+            if (this.$store.state.player.repeat === 1)
+                return 'fa-repeat active';
+            else if (this.$store.state.player.repeat === 2)
+                return 'fa-repeat-1 active';
+            else
+                return 'fa-repeat';
+        },
+        isStationPlaying() {
+            return this.$store.state.stations.isPlaying;
         }
     },
     watch: {
@@ -174,21 +232,20 @@ export default {
         volume(value) {
             this.player.volume = value * 0.01;
         },
-        '$store.state.track.queue': {
-            deep: true,
-            async handler() {
-                if (!this.currentTrack)
-                    return;
+        async currentTrack(value) {
+            if (!value)
+                return;
 
-                await this.player.pause();
-                {
-                    this.player.currentTime = 0;
-                    this.loaded = false;
-                    this.player.src = await this.getTrackDirectLink(this.currentTrack.id || this.currentTrack.track.id);
-                    await this.player.load();
-                }
-                await this.player.play();
+            this.currentTrackLiked = value?.liked;
+
+            await this.player.pause();
+            {
+                this.player.currentTime = 0;
+                this.loaded = false;
+                this.player.src = await this.getTrackDirectLink(value.id || value.track.id);
+                await this.player.load();
             }
+            await this.player.play();
         },
         async time(value) {
             if (value >= this.duration) {
@@ -202,17 +259,21 @@ export default {
     },
     methods: {
         play() {
-            //https://developer.chrome.com/blog/play-request-was-interrupted/
-            this.playPromise = this.player.play();
+            this.player.play();
         },
         pause() {
-            if (this.playPromise !== undefined) {
-                this.playPromise.then(() => {
-                    this.player.pause();
-                });
-            }
+            this.player.pause();
         },
         async next(skip = true) {
+            //if repeat is set
+            if (this.$store.state.player.repeat > 0) {
+                //repeat once
+                if (this.$store.state.player.repeat === 1)
+                    this.$store.dispatch('setRepeat', 0);
+
+                return this.player.currentTime = 0;
+            }
+
             this.pause();
             this.$store.dispatch('addToPlayed', this.currentTrack);
             this.$store.dispatch('removeFromQueue', this.currentTrack);
@@ -264,6 +325,12 @@ export default {
         unmute() {
             this.volume = this.volumeBackup;
         },
+        repeat() {
+            if (this.$store.state.player.repeat < 2) {
+                this.$store.dispatch('incrementRepeat');
+            } else
+                this.$store.dispatch('setRepeat', 0);
+        },
         convertToTime(value) {
             const time = new Date(value * 1000).toISOString().substr(11, 8);
             return time.indexOf('00:') === 0 ? time.substr(3) : time;
@@ -278,9 +345,25 @@ export default {
             this.player.currentTime = time;
         },
         async loadNewStationTracks() {
-            this.$store.dispatch('setQueue', []);
-            let tracks = await this.getStationTracks(false, this.$store.state.track.played[this.$store.state.track.played.length - 1]);
-            this.$store.dispatch('setQueue', tracks);
+            let newQueue = this.$store.state.track.queue[0];
+            await this.$store.dispatch('setQueue', newQueue);
+
+            let tracks = await this.getStationTracks(false,
+                this.$store.state.track.played[this.$store.state.track.played.length - 1]);
+
+            tracks = tracks.filter(item => item.track.id !== newQueue.track.id);
+
+            await this.$store.dispatch('addTracksToQueue', tracks);
+        },
+        async handleLike() {
+            let result = await useLikeAction(this.$request,
+                this.$store,
+                'track',
+                `${this.currentTrack.track.id}:${this.currentTrack.track.albums[0].id}`,
+                this.currentTrack?.liked);
+
+            if (Object.hasOwn(this.currentTrack, 'liked'))
+                this.currentTrack.liked = result;
         }
     }
 };
@@ -293,7 +376,6 @@ export default {
     flex-direction: column;
     padding: 8px;
     border-radius: 6px;
-    overflow: hidden;
     position: fixed;
     left: 68px;
     bottom: 8px;
@@ -380,6 +462,14 @@ export default {
     overflow: hidden;
 }
 
+.player-track-artist a {
+    cursor: pointer;
+}
+
+.player-track-artist a:hover {
+    text-decoration: underline;
+}
+
 .player-body-controls {
     display: flex;
     flex-direction: row;
@@ -390,14 +480,6 @@ export default {
     left: 50%;
     top: 69%;
     transform: translate(-50%, -50%);
-}
-
-.seek-container {
-    position: absolute;
-    left: 0;
-    top: 0;
-    height: 100%;
-    width: 100%;
 }
 
 .active {

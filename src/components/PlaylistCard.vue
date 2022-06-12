@@ -1,73 +1,52 @@
 <template>
-    <div
+    <RouterLink
         v-if="playlist"
+        :to="{name: 'playlist', params: {kind: props.item.kind, uid: props.item.uid}}"
         class="playlist-card"
-        @click="redirect">
+    >
         <div class="playlist-card-image">
             <img
-                v-if="playlist.ogImage"
-                :alt="playlist.title"
-                :src="GetImage(playlist.ogImage, '200x200')">
+                :src="useImage(playlist, '200x200')"
+                :alt="playlist.title">
         </div>
 
         <h3 class="title">
             {{ playlist.title }}
         </h3>
         <p
-            v-if="playlist.artists"
-            class="author">
-            {{ getArtist(playlist.artists) }}
+            v-if="tracksCount"
+            class="track-count">
+            {{ playlist.trackCount }} Треков
         </p>
-
-        <p
-            v-if="playlist.type"
-            class="type">
-            {{ playlist.type }}
-        </p>
-        <p
-            v-if="playlist.year"
-            class="year">
-            {{ playlist.year }}
-        </p>
-    </div>
+    </RouterLink>
 </template>
 
-<script>
-import GetImage from '../mixins/GetImage.js';
-import MusicApi from '../mixins/MusicApi';
-import GetArtists from '../mixins/GetArtists';
+<script setup>
+import useImage from '../composables/useImage.js';
+import { defineProps, onMounted, ref } from 'vue';
+import usePlaylist from '../composables/usePlaylist.js';
 
-export default {
-    name: 'PlaylistCard',
-    mixins: [GetImage, MusicApi, GetArtists],
-    props: {
-        item: {
-            type: Object,
-            required: true,
+const props = defineProps({
+    item: {
+        type: Object,
+        required: true,
+    },
+    tracksCount: {
+        type: Boolean,
+        default() {
+            return false;
         }
     },
-    emits: ['data-loaded'],
-    data() {
-        return {
-            playlist: {}
-        };
-    },
-    watch: {
-        playlist(value) {
-            this.$emit('data-loaded', value);
-        }
-    },
-    async mounted() {
-        this.playlist = Object.keys(this.item).length > 2 ?
-            this.item :
-            await this.getPlaylistData(this.item.kind, this.item.uid || null);
-    },
-    methods: {
-        redirect() {
-            this.$router.replace({name: 'playlist', params: {kind: this.item.kind, uid: this.item.uid}});
-        }
-    }
-};
+});
+
+const playlist = ref({});
+
+onMounted(async () => {
+    playlist.value = Object.keys(props.item).length > 2 ?
+        props.item :
+        await usePlaylist(props.item.kind, props.item.uid || null);
+});
+
 </script>
 
 <style scoped>
@@ -79,10 +58,9 @@ export default {
     flex-direction: column;
     position: relative;
     cursor: pointer;
+    max-width: 160px;
     width: 100%;
     height: 100%;
-    max-height: 220px;
-    max-width: 165px;
 }
 
 .playlist-card img {
@@ -95,34 +73,6 @@ export default {
     line-height: 16px;
 }
 
-.author {
-    font-weight: 400;
-    font-size: 12px;
-    line-height: 16px;
-    color: #8E929C;
-    margin-bottom: 20px;
-}
-
-.type {
-    position: absolute;
-    left: 10px;
-    bottom: 10px;
-    font-weight: 400;
-    font-size: 12px;
-    line-height: 16px;
-    color: #8E929C;
-}
-
-.year {
-    right: 10px;
-    bottom: 10px;
-    position: absolute;
-    font-weight: 400;
-    font-size: 12px;
-    line-height: 16px;
-    color: #8E929C;
-}
-
 .playlist-card-image {
     position: relative;
 }
@@ -130,6 +80,13 @@ export default {
 .playlist-card-image img {
     width: 100%;
     object-fit: cover;
+}
+
+.track-count {
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 16px;
+    color: #8E929C;
 }
 
 </style>

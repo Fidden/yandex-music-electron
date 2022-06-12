@@ -1,4 +1,3 @@
-//todo: вынести нахуй эту залупу в отделный класс
 export default {
 	methods: {
 		async getAccountInfo() {
@@ -100,7 +99,11 @@ export default {
 		},
 		async getTrackDirectLink(track_id) {
 			//получение листа возможных битрейтов и типов трека
-			let res = await this.$request.get(`tracks/${track_id}/download-info`);
+			let res = await this.$request.get(`tracks/${track_id}/download-info`, {
+				headers: {
+					'Authorization': `OAuth ${localStorage.getItem('token')}`,
+				}
+			});
 			
 			//загрузка данных xml
 			let storage = await this.$request.get(`${res.data.result[0].downloadInfoUrl}&format=json`);
