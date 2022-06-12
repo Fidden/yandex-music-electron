@@ -4,7 +4,7 @@
     <img src="https://cachev2-mskm906.cdn.yandex.net/download.cdn.yandex.net/support/com/music/files/logo_semantic_horizontal_white-en.png" alt="Logo" height="80">
   </a>
   <p align="center">
-    Не официальное приложение Яндекс.Музыки
+    Неофициальное приложение Яндекс.Музыки
     <br/>
     <br/>
   </p>
