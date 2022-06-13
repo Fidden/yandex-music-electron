@@ -1,21 +1,22 @@
 <template>
-    <main class="main">
-        <h2 class="artists-title">
+    <LayoutItems>
+        <template #title>
             Исполнители
-        </h2>
-        <div class="artists-container">
+        </template>
+        <template #body>
             <ArtistCard
                 v-for="artist in artists"
                 :key="artist.id"
                 :artist="artist"/>
-        </div>
-    </main>
+        </template>
+    </LayoutItems>
 </template>
 
 <script setup>
 import ArtistCard from '../components/ArtistCard.vue';
 import { computed, inject, onMounted } from 'vue';
 import { useStore } from 'vuex';
+import LayoutItems from '../layouts/LayoutItems.vue';
 
 const store = useStore();
 const request = inject('$request');
@@ -37,13 +38,4 @@ async function getUserArtists() {
 
 <style scoped>
 
-.artists-title {
-    margin-bottom: 20px;
-}
-
-.artists-container {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 40px;
-}
 </style>

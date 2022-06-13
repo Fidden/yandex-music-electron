@@ -36,29 +36,16 @@ const routes = ref([
     {id: 3, name: 'podcasts', icon: 'fal fa-podcast'},
     {id: 4, name: 'artists', icon: 'fal fa-user-music'},
     {id: 5, name: 'albums', icon: 'fal fa-album'},
+    {id: 6, name: 'playlists', icon: 'fal fa-list-music'},
 ]);
 
 const routesFirstPart = computed(() => routes.value.slice(0, 3));
 const routesSecondPart = computed(() => routes.value.slice(3));
 
-// todo: автоматизировать чтоб руками не писать )
 const getLineTopPos = computed(() => {
-    switch (route.name) {
-        case 'home':
-            return '25px';
-        case 'station':
-            return '75px';
-        case 'tracks':
-            return '125px';
-        case 'podcasts':
-            return '186px'; //cuz separator-line
-        case 'artists':
-            return '235px';
-        case 'albums':
-            return '285px';
-        default:
-            return '25px';
-    }
+    let route_id = routes.value.find(item => item.name === route.name)?.id;
+    let additional = route_id >= 3 ? 11 : 0;
+    return `${route_id * 50 + 25 + additional}px`;
 });
 
 </script>

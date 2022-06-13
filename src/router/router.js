@@ -14,6 +14,7 @@ import ChartPage from '../pages/ChartPage.vue';
 import ArtistTracksPage from '../pages/ArtistTracksPage.vue';
 import RecentlyPlayedPage from '../pages/RecentlyPlayedPage.vue';
 import SearchPage from '../pages/SearchPage.vue';
+import PlaylistsPage from '../pages/PlaylistsPage.vue';
 
 const router = createRouter({
 	history: createWebHistory('/'),
@@ -67,6 +68,11 @@ const router = createRouter({
 			path: '/albums',
 			component: AlbumsPage,
 			name: 'albums',
+		},
+		{
+			path: '/playlists',
+			component: PlaylistsPage,
+			name: 'playlists',
 		},
 		{
 			path: '/new-releases',

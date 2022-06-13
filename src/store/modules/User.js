@@ -19,5 +19,10 @@ export default {
 		setUserTracks({commit}, tracks) {
 			commit('SET_USER_TRACKS', tracks);
 		}
+	},
+	getters: {
+		userId(state) {
+			return state.account.uid;
+		}
 	}
 };
