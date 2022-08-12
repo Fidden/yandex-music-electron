@@ -1,5 +1,7 @@
 {
-  "name": "electron-test",
+  "name": "yandex-music",
+  "author": "Alexander Lisenkov",
+  "description": "Unofficial Yandex.Music app written in electron.",
   "version": "0.1.0",
   "private": true,
   "scripts": {

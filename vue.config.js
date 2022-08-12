@@ -3,7 +3,7 @@ module.exports = {
         electronBuilder: {
             nodeIntegration: true,
             builderOptions: {
-                appId: 'Electron.App',
+                appId: 'Yandex.Music',
                 win: {
                     icon: 'src/assets/icons/win/icon.ico'
                 },
