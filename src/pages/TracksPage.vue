@@ -40,5 +40,11 @@ onMounted(async () => {
 </script>
 
 <style scoped>
+.main-container-scroller {
+    height: calc(100% + 70px);
+}
 
+.main {
+    overflow-y: hidden;
+}
 </style>

@@ -35,6 +35,8 @@ async function createWindow() {
         }
     });
 
+    win.setTitle('Yandex.Music');
+
     ipcMain.on('minimize', () => {
         win.isMinimized() ? win.restore() : win.minimize();
     });

@@ -1,11 +1,11 @@
 import { defineStore } from 'pinia';
 
 interface State {
-    shuffle: number,
-    repeat: number,
-    trackIndex: number,
-    playing: boolean,
-    isStation: boolean
+    shuffle: number;
+    repeat: number;
+    trackIndex: number;
+    playing: boolean;
+    isStation: boolean;
 }
 
 export const usePlayerStore = defineStore('player', {
@@ -43,6 +43,14 @@ export const usePlayerStore = defineStore('player', {
         },
         resetRepeat() {
             this.repeat = 0;
+        },
+        setVolume(payload: number) {
+            localStorage.setItem('volume', payload.toString());
+        }
+    },
+    getters: {
+        getVolume(): number {
+            return Number(localStorage.getItem('volume')) || 20;
         }
     }
 });

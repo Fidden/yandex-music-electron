@@ -35,12 +35,11 @@ const playlistStore = usePlaylistStore();
 const releasesStore = useReleaseStore();
 const chartStore = useChartStore();
 const recentStore = useRecentStore();
-const request = useRequest();
+let request = useRequest();
 
 onMounted(async () => {
     if (localStorage.getItem('token')) {
         mainStore.setAppState(AppStateEnum.LOADING);
-        await setStoreData();
     } else {
         return mainStore.setAppState(AppStateEnum.LOGIN);
     }
@@ -51,9 +50,10 @@ onMounted(async () => {
 
 watch(mainStore, async (value) => {
     if (value.appState === AppStateEnum.LOADING) {
+        request = useRequest();
         await setStoreData();
     }
-});
+}, { deep: true });
 
 async function setStoreData() {
     userStore.setAccount(await getAccountStatus());
@@ -196,7 +196,7 @@ button, a {
 }
 
 .main-container-scroller {
-    height: inherit;
+    height: 100%;
     margin-bottom: 0;
 }
 

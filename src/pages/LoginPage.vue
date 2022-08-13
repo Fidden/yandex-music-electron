@@ -24,7 +24,6 @@ const token = ref('');
 
 function handleClick() {
     localStorage.setItem('token', token.value);
-    store.setUserToken(token.value);
     store.setAppState(AppStateEnum.LOADING);
 }
 

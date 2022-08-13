@@ -175,7 +175,7 @@ const player = ref({
     duration: 0,
     buffered: 0,
     playing: false,
-    volume: 20,
+    volume: playerStore.getVolume,
     loaded: false,
     volumeBackup: 0
 });
@@ -198,6 +198,8 @@ const currentTrack = computed(() => {
         image: useImage(track.ogImage, 200, 200)
     });
 
+    setMediaData(track);
+
     if (playerStore.shuffle === 1) {
         playerStore.incrementShuffle();
     } else if (playerStore.shuffle >= 3) {
@@ -211,6 +213,14 @@ onMounted(() => {
     if (audio.value) {
         audio.value.volume = player.value.volume * 0.01;
     }
+
+    navigator.mediaSession.setActionHandler('previoustrack', () => {
+        prev();
+    });
+
+    navigator.mediaSession.setActionHandler('nexttrack', () => {
+        next();
+    });
 });
 
 watch(currentTrack, async (value) => {
@@ -236,12 +246,13 @@ watch(player, async (value) => {
 
     // Устанавливаем громкость
     audio.value.volume = value.volume * 0.01;
+    playerStore.setVolume(value.volume);
 
     // Переключаем трек если время пришло
     if (value.time >= value.duration && (value.time !== 0 && value.duration !== 0)) {
         player.value.time = 0;
         player.value.duration = 0;
-        await next(); // skip: false
+        await next(false);
     }
 }, { deep: true });
 
@@ -433,6 +444,21 @@ const repeatIcon = computed(() => {
     }
 });
 
+function setMediaData(track: TrackInterface) {
+    // eslint-disable-next-line no-undef
+    navigator.mediaSession.metadata = new MediaMetadata({
+        title: track.title,
+        artist: track.artists.map(item => item.name).toString(),
+        album: track.albums.map(item => item.title).toString(),
+        artwork: [
+            {
+                src: useImage(track.ogImage, 200, 200),
+                sizes: '200x200',
+                type: 'image/png'
+            }
+        ]
+    });
+}
 </script>
 
 <style scoped>

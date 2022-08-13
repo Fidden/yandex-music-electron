@@ -53,7 +53,7 @@
                             <BaseMenuItem @click="usePlayShuffle(playlistTracks)">
                                 Перемешать
                             </BaseMenuItem>
-                            <BaseMenuItem>
+                            <BaseMenuItem @click="() => handleRecommended()">
                                 Поток по плейлисту
                             </BaseMenuItem>
                             <BaseMenuItem @click="handleShare">
@@ -93,10 +93,12 @@ import BaseLikeButton from '@/components/BaseLikeButton.vue';
 import BaseMenu from '@/components/BaseMenu.vue';
 import BaseMenuItem from '@/components/BaseMenuItem.vue';
 import { useNotificationsStore } from '@/store/notifications';
+import useRequest from '@/composables/useRequest';
 
 const userStore = useUserStore();
 const notificationStore = useNotificationsStore();
 const route = useRoute();
+const request = useRequest();
 const playlist: Ref<PlaylistInterface> = ref({} as PlaylistInterface);
 
 onMounted(async () => {
@@ -134,6 +136,11 @@ async function handleLike() {
 function handleShare() {
     navigator.clipboard.writeText(`https://music.yandex.ru/users/${playlist.value.owner.name}/playlists/${playlist.value.kind}`);
     notificationStore.pushNotification('Ссылка скопирована');
+}
+
+async function handleRecommended() {
+    const res = await request.get(`users/${playlist.value.uid}/playlists/${playlist.value.kind}/recommendations`);
+    console.log(res.data.result);
 }
 
 </script>
