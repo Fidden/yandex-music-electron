@@ -13,11 +13,14 @@
             key-field="id"
         >
             <template #before>
-                <div class="scroller-before">
+                <div
+                    class="scroller-before"
+                    :class="{'withOutImage': withoutImage}"
+                >
                     <p class="scroller-before-number">
                         #
                     </p>
-                    <p/>
+                    <p class="image-th"/>
                     <p class="scroller-before-name">
                         Название
                     </p>
@@ -29,6 +32,7 @@
             <template #default="{ item, index }">
                 <div
                     class="track"
+                    :class="{'withOutImage': withoutImage}"
                     @click="playCurrent(item, index)">
                     <div class="index">
                         <span>{{ index + 1 }}</span>
@@ -202,6 +206,10 @@ async function handleLike(track: TrackInterface) {
     grid-template-columns: 40px 40px 40fr 16fr 45px 45px;
 }
 
+.withOutImage.track, .withOutImage.scroller-before {
+    grid-template-columns: 40px 40fr 16fr 45px 45px;
+}
+
 .scroller-before {
     font-weight: 400;
     font-size: 14px;
@@ -209,6 +217,10 @@ async function handleLike(track: TrackInterface) {
     text-transform: uppercase;
     color: #8E929C;
     text-align: left;
+}
+
+.withOutImage > .image-th, .withOutImage > .image{
+    display: none;
 }
 
 .scroller-before-number {
