@@ -79,6 +79,7 @@
 
                     <button
                         v-if="!playerStore.isStation"
+                        :disabled="!queueStore.played.length"
                         class="control-btn"
                         @click="prev"
                     >
@@ -177,7 +178,8 @@ const player = ref({
     playing: false,
     volume: playerStore.getVolume,
     loaded: false,
-    volumeBackup: 0
+    volumeBackup: 0,
+    previousTrack: false
 });
 
 const currentTrack = computed(() => {
@@ -187,7 +189,8 @@ const currentTrack = computed(() => {
 
     const randIndex = Math.floor(Math.random() * (queueStore.queue.length - 1));
 
-    const track = queueStore.queue[playerStore.shuffle >= 2 ? randIndex : 0];
+    const track = queueStore.queue[playerStore.shuffle >= 2 && !player.value.previousTrack ? randIndex : 0];
+
     playerStore.setTrackIndex(Number(track.id));
 
     track.liked = userStore.likes.tracks.findIndex(item => item.id === track.id) !== -1;
@@ -336,9 +339,11 @@ async function loadNewStationTracks() {
 }
 
 async function prev() {
-    if (!audio.value) {
+    if (!audio.value || !queueStore.played.length) {
         return;
     }
+
+    player.value.previousTrack = true;
 
     if (player.value.time > 3) {
         audio.value.currentTime = 0;
@@ -508,6 +513,11 @@ function setMediaData(track: TrackInterface) {
 .control-btn {
     color: #C4C4C4;
     background: none;
+}
+
+.control-btn:disabled {
+    opacity: 0.5;
+    cursor: default;
 }
 
 .player-track-image {
