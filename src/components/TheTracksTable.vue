@@ -51,11 +51,11 @@
                             v-if="playerStore.trackIndex === Number(item.id)"
                         />
                     </div>
-                    <div class="title">
-                        <p class="title-text">
+                    <p class="title">
+                        <span class="title-text">
                             {{ item.title }}
-                        </p>
-                        <div class="title-body">
+                        </span>
+                        <span class="title-body">
                             <ContentWarning
                                 v-if="item.contentWarning"
                                 :content-warning="item.contentWarning"
@@ -64,8 +64,8 @@
                                 class="title-artists"
                                 :artists="item.artists"
                             />
-                        </div>
-                    </div>
+                        </span>
+                    </p>
                     <AlbumLinks
                         class="albums"
                         :albums="item.albums"
@@ -309,11 +309,11 @@ async function handleLike(track: TrackInterface) {
     text-align: right;
 }
 
-.track:hover i {
+.track:hover .index i {
     display: block;
 }
 
-.track:hover span {
+.track:hover .index span {
     display: none;
 }
 
@@ -336,6 +336,8 @@ async function handleLike(track: TrackInterface) {
     flex-direction: column;
     justify-content: center;
     margin-left: 20px;
+    overflow: hidden;
+    padding-right: 10px;
 }
 
 .title-body {
@@ -349,6 +351,10 @@ async function handleLike(track: TrackInterface) {
     line-height: 15px;
     width: max-content;
     z-index: 20;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
 }
 
 .title-artists {
