@@ -53,9 +53,6 @@
                             <BaseMenuItem @click="usePlayShuffle(playlistTracks)">
                                 Перемешать
                             </BaseMenuItem>
-                            <BaseMenuItem @click="() => handleRecommended()">
-                                Поток по плейлисту
-                            </BaseMenuItem>
                             <BaseMenuItem @click="handleShare">
                                 Поделится
                             </BaseMenuItem>

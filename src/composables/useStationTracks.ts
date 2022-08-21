@@ -2,10 +2,19 @@ import { useStationStore } from '@/store/station';
 import useRequest from '@/composables/useRequest';
 import StationTracksInterface from '@/interfaces/StationTracksInterface';
 
-export default async function useStationTrack(settings = true, trackIdBefore = -1) {
+interface Params {
+    settings2?: boolean;
+    queue?: number;
+}
+
+export default async function useStationTracks(settings = true, trackIdBefore = -1) {
     const stationStore = useStationStore();
     const currentStation = stationStore.current;
-    const params = trackIdBefore ? { queue: trackIdBefore } : (settings ? { settings: true } : false);
+    const params: Params = {};
+
+    if (settings) { params.settings2 = true; }
+    if (trackIdBefore) { params.queue = trackIdBefore; }
+
     const res = await useRequest().get(`rotor/station/${currentStation.id.type}:${currentStation.id.tag}/tracks`, {
         data: params
     });

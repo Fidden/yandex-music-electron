@@ -40,7 +40,7 @@
                 <div v-if="artist.popularTracks.length">
                     <div class="artist-body-title">
                         <h2>Популярные треки</h2>
-                        <RouterLink to="/">
+                        <RouterLink :to="{name: 'artist-tracks'}">
                             Посмотреть все
                         </RouterLink>
                     </div>

@@ -7,6 +7,7 @@ import NewReleasesPage from '@/pages/NewReleasesPage.vue';
 import StationsPage from '@/pages/StationsPage.vue';
 import TracksPage from '@/pages/TracksPage.vue';
 import ArtistsPage from '@/pages/ArtistsPage.vue';
+import ArtistTracksPage from '@/pages/ArtistTracksPage.vue';
 import AlbumsPage from '@/pages/AlbumsPage.vue';
 import PlaylistsPage from '@/pages/PlaylistsPage.vue';
 import HitsPage from '@/pages/HitsPage.vue';
@@ -53,6 +54,11 @@ const routes: Array<RouteRecordRaw> = [
         path: '/artist/:id',
         name: 'artist',
         component: ArtistPage
+    },
+    {
+        path: '/artist/:id/tracks',
+        name: 'artist-tracks',
+        component: ArtistTracksPage
     },
     {
         path: '/album/:id',

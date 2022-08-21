@@ -28,6 +28,8 @@ import { useRecentStore } from '@/store/recent';
 import useDiscord from '@/composables/useDiscord';
 import useGetLikes from '@/composables/useGetLikes';
 import { LikesObjectTypesEnum } from '@/enums/LikesObjectTypesEnum';
+import { useRouter } from 'vue-router';
+import PersonalPlaylistInterface from '@/interfaces/PersonalPlaylistsInterface';
 
 const mainStore = useMainStore();
 const userStore = useUserStore();
@@ -35,11 +37,14 @@ const playlistStore = usePlaylistStore();
 const releasesStore = useReleaseStore();
 const chartStore = useChartStore();
 const recentStore = useRecentStore();
+const router = useRouter();
 let request = useRequest();
 
 onMounted(async () => {
     if (localStorage.getItem('token')) {
-        mainStore.setAppState(AppStateEnum.LOADING);
+        await setStoreData();
+        await router.push('/');
+        mainStore.setAppState(AppStateEnum.LOADED);
     } else {
         return mainStore.setAppState(AppStateEnum.LOGIN);
     }
@@ -59,7 +64,13 @@ async function setStoreData() {
     userStore.setAccount(await getAccountStatus());
     const [playlists, landing, likesTracks, likesPlaylists, likesArtists] = await Promise.all([
         getPlaylists(),
-        getLandingBlocks([LandingBlocksEnum.NEW_PLAYLISTS, LandingBlocksEnum.NEW_RELEASES, LandingBlocksEnum.CHART, LandingBlocksEnum.PLAY_CONTEXTS]),
+        getLandingBlocks([
+            LandingBlocksEnum.NEW_PLAYLISTS,
+            LandingBlocksEnum.NEW_RELEASES,
+            LandingBlocksEnum.CHART,
+            LandingBlocksEnum.PLAY_CONTEXTS,
+            LandingBlocksEnum.PERSONAL_PLAYLISTS
+        ]),
         useGetLikes(LikesObjectTypesEnum.TRACK),
         useGetLikes(LikesObjectTypesEnum.PLAYLIST),
         useGetLikes(LikesObjectTypesEnum.ARTIST)
@@ -67,10 +78,11 @@ async function setStoreData() {
 
     await Promise.all([
         playlistStore.setPlaylists(playlists),
-        playlistStore.setHits(landing.blocks[0].entities),
-        releasesStore.setReleases(landing.blocks[1].entities),
-        chartStore.setChart(landing.blocks[2].entities),
-        recentStore.setRecent(landing.blocks[3].entities),
+        playlistStore.setPersonal(landing.blocks[0].entities),
+        playlistStore.setHits(landing.blocks[1].entities),
+        releasesStore.setReleases(landing.blocks[2].entities),
+        chartStore.setChart(landing.blocks[3].entities),
+        recentStore.setRecent(landing.blocks[4].entities),
         userStore.setLikesTracks(likesTracks),
         userStore.setLikesPlaylist(likesPlaylists),
         userStore.setLikesArtists(likesArtists)

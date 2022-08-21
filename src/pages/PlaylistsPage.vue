@@ -14,7 +14,9 @@
                 :playlist-uid="playlist.uid"
             />
         </div>
-        <h2 class="title title-margin">
+        <h2
+            v-if="userStore.likes.playlists.length > 0"
+            class="title title-margin">
             Вам так же понравились эти плейлисты
         </h2>
         <div

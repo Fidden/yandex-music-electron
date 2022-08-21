@@ -29,7 +29,6 @@ defineProps<{
     white-space: nowrap;
     text-overflow: ellipsis;
     max-width: 100%;
-    margin: auto 0;
 }
 
 a {

@@ -156,7 +156,7 @@ import useTrackDirectLink from '@/composables/useTrackDirectLink';
 import { useRpcStore } from '@/store/rpc';
 import useSendStationFeedback from '@/composables/useSendStationFeedback';
 import { StationFeedbackTypeEnum } from '@/enums/StationFeedbackTypeEnum';
-import useStationTrack from '@/composables/useStationTracks';
+import useStationTracks from '@/composables/useStationTracks';
 import TrackInterface from '@/interfaces/TrackInterface';
 import { useUserStore } from '@/store/user';
 import useLikeAction from '@/composables/useLikeAction';
@@ -328,7 +328,7 @@ async function loadNewStationTracks() {
         queueStore.setQueue([newQueue]);
     }
 
-    let tracks = await useStationTrack(true,
+    let tracks = await useStationTracks(true,
         Number(queueStore.played[queueStore.played.length - 1].id));
 
     if (queueStore.queue.length) {

@@ -1,6 +1,6 @@
 import useSendStationFeedback from '@/composables/useSendStationFeedback';
 import { StationFeedbackTypeEnum } from '@/enums/StationFeedbackTypeEnum';
-import useStationTrack from '@/composables/useStationTracks';
+import useStationTracks from '@/composables/useStationTracks';
 import { useQueueStore } from '@/store/queue';
 import { usePlayerStore } from '@/store/player';
 import { useStationStore } from '@/store/station';
@@ -15,5 +15,5 @@ export default async function usePlayStation(station: Station2) {
 
     await useSendStationFeedback(StationFeedbackTypeEnum.RADIO_STARTED);
 
-    queueStore.setQueue(await useStationTrack());
+    queueStore.setQueue(await useStationTracks());
 }

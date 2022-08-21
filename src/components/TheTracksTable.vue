@@ -24,7 +24,7 @@
                     <p class="scroller-before-name">
                         Название
                     </p>
-                    <p>Артист</p>
+                    <p>Альбом</p>
                     <p/>
                     <i class="fal fa-clock fa-sm"/>
                 </div>
@@ -33,7 +33,11 @@
                 <div
                     class="track"
                     :class="{'withOutImage': withoutImage}"
-                    @click="playCurrent(item, index)">
+                >
+                    <div
+                        class="track-back"
+                        @click="playCurrent(item, index)"
+                    />
                     <div class="index">
                         <span>{{ index + 1 }}</span>
                         <i class="fas fa-play"/>
@@ -47,10 +51,25 @@
                             v-if="playerStore.trackIndex === Number(item.id)"
                         />
                     </div>
-                    <p class="title">
-                        {{ item.title }}
-                    </p>
-                    <ArtistsLinks :artists="item.artists"/>
+                    <div class="title">
+                        <p class="title-text">
+                            {{ item.title }}
+                        </p>
+                        <div class="title-body">
+                            <ContentWarning
+                                v-if="item.contentWarning"
+                                :content-warning="item.contentWarning"
+                            />
+                            <ArtistsLinks
+                                class="title-artists"
+                                :artists="item.artists"
+                            />
+                        </div>
+                    </div>
+                    <AlbumLinks
+                        class="albums"
+                        :albums="item.albums"
+                    />
                     <BaseLikeButton
                         class="like"
                         :liked="item.liked"
@@ -86,6 +105,8 @@ import { useUserStore } from '@/store/user';
 import useLikeAction from '@/composables/useLikeAction';
 import { LikesObjectTypesEnum } from '@/enums/LikesObjectTypesEnum';
 import TrackLikeInterface from '@/interfaces/TrackLikeInterface';
+import AlbumLinks from '@/components/AlbumLinks.vue';
+import ContentWarning from '@/components/ContentWarning.vue';
 
 const playerStore = usePlayerStore();
 const queueStore = useQueueStore();
@@ -210,6 +231,19 @@ async function handleLike(track: TrackInterface) {
     grid-template-columns: 40px 40fr 16fr 45px 45px;
 }
 
+.track {
+    position: relative;
+}
+
+.track-back {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+}
+
 .scroller-before {
     font-weight: 400;
     font-size: 14px;
@@ -217,9 +251,10 @@ async function handleLike(track: TrackInterface) {
     text-transform: uppercase;
     color: #8E929C;
     text-align: left;
+    margin-bottom: 15px;
 }
 
-.withOutImage > .image-th, .withOutImage > .image{
+.withOutImage > .image-th, .withOutImage > .image {
     display: none;
 }
 
@@ -293,14 +328,45 @@ async function handleLike(track: TrackInterface) {
     display: flex;
     flex-direction: row;
     flex-shrink: 0;
+    z-index: 20;
 }
 
 .title {
     display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-left: 20px;
+}
+
+.title-body {
+    display: flex;
     flex-direction: row;
     align-items: center;
-    margin-left: 20px;
+}
+
+.title-text {
     font-size: 15px;
+    line-height: 15px;
+    width: max-content;
+    z-index: 20;
+}
+
+.title-artists {
+    font-size: 12px;
+    color: #8E929C;
+    width: max-content;
+    z-index: 20;
+}
+
+.albums {
+    transition: 0.2s;
+    color: #8E929C;
+    z-index: 20;
+}
+
+.track:hover .albums {
+    transition: 0.2s;
+    color: white;
 }
 
 .duration {
@@ -313,6 +379,7 @@ async function handleLike(track: TrackInterface) {
     flex-direction: row;
     align-items: center;
     justify-content: center;
+    z-index: 20;
 }
 
 </style>
