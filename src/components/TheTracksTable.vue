@@ -54,6 +54,9 @@
                     <p class="title">
                         <span class="title-text">
                             {{ item.title }}
+                            <span v-if="item.version">
+                                ({{ item.version }})
+                            </span>
                         </span>
                         <span class="title-body">
                             <ContentWarning
