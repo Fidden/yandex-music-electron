@@ -5,9 +5,9 @@ import useRequest from '@/composables/useRequest';
 export default async function useSendStationFeedback(type: StationFeedbackTypeEnum, batchId?: boolean, totalPlayedSeconds?: number | null, trackId?: number): Promise<boolean> {
     const stationStore = useStationStore();
     const currentStation = stationStore.current;
-    let url = `rotor/station/${currentStation.id.type}:${currentStation.id.tag}/feedback?`;
+    let url = `rotor/station/${currentStation.type}:${currentStation.tag}/feedback?`;
     if (batchId) {
-        url += `batchId=${stationStore.currentBatchId}`;
+        url += `batchId=${currentStation?.batchId}`;
     }
 
     const data = {

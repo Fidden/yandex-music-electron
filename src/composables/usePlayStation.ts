@@ -4,14 +4,21 @@ import useStationTracks from '@/composables/useStationTracks';
 import { useQueueStore } from '@/store/queue';
 import { usePlayerStore } from '@/store/player';
 import { useStationStore } from '@/store/station';
-import { Station2 } from '@/interfaces/StationDashboardInterface';
+import useRequest from '@/composables/useRequest';
 
-export default async function usePlayStation(station: Station2) {
+export default async function usePlayStation(tag: string, type: string) {
     const queueStore = useQueueStore();
+    const stationStore = useStationStore();
 
     queueStore.clearQueue();
     usePlayerStore().setIsStation(true);
-    useStationStore().setCurrent(station);
+    stationStore.setCurrent({
+        tag,
+        type
+    });
+
+    const res = await useRequest().get(`rotor/station/${type}:${tag}/info`);
+    stationStore.setCurrentInfo(res.data.result[0]);
 
     await useSendStationFeedback(StationFeedbackTypeEnum.RADIO_STARTED);
 

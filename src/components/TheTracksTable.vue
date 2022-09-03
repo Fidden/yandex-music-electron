@@ -353,7 +353,6 @@ async function handleLike(track: TrackInterface) {
     font-size: 15px;
     line-height: 15px;
     width: max-content;
-    z-index: 20;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;

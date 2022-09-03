@@ -3,6 +3,10 @@
         <div
             v-show="currentTrack"
             class="player-container">
+            <TheStationSettings
+                v-if="stationSettingsOpen && playerStore.isStation"
+                @updateSettings="updateSettings"
+            />
             <div class="player-seek-slider">
                 <p class="start-time">
                     {{ convertTime(player.time) }}
@@ -36,7 +40,8 @@
                     <img
                         v-lazy="useImage(currentTrack.ogImage || currentTrack.coverUri, 100, 100)"
                         alt="img"
-                        class="player-track-image">
+                        class="player-track-image"
+                    >
                     <div class="player-track-text">
                         <p
                             class="player-track-title"
@@ -73,6 +78,7 @@
                     <button
                         v-else
                         class="control-btn"
+                        @click="stationSettingsOpen = !stationSettingsOpen"
                     >
                         <i class="far fa-sliders-h"/>
                     </button>
@@ -163,6 +169,8 @@ import useLikeAction from '@/composables/useLikeAction';
 import { LikesObjectTypesEnum } from '@/enums/LikesObjectTypesEnum';
 import TrackLikeInterface from '@/interfaces/TrackLikeInterface';
 import BaseLikeButton from '@/components/BaseLikeButton.vue';
+import TheStationSettings from '@/components/TheStationSettings.vue';
+import useStationSettings from '@/composables/useStationSettings';
 
 const queueStore = useQueueStore();
 const playerStore = usePlayerStore();
@@ -170,6 +178,7 @@ const rpcStore = useRpcStore();
 const userStore = useUserStore();
 
 const audio: Ref<HTMLAudioElement | null> = ref(null);
+const stationSettingsOpen = ref(true);
 const player = ref({
     player: null,
     time: 0,
@@ -198,7 +207,7 @@ const currentTrack = computed(() => {
     rpcStore.setRpc({
         name: track.title,
         artists: track.artists.map(item => item.name).toString(),
-        image: useImage(track.ogImage, 200, 200)
+        image: useImage(track.ogImage || track.coverUri, 200, 200)
     });
 
     setMediaData(track);
@@ -328,8 +337,9 @@ async function loadNewStationTracks() {
         queueStore.setQueue([newQueue]);
     }
 
-    let tracks = await useStationTracks(true,
-        Number(queueStore.played[queueStore.played.length - 1].id));
+    const prevTrackId = queueStore.played[queueStore.played.length - 1]?.id;
+
+    let tracks = await useStationTracks(true, prevTrackId ? Number(prevTrackId) : -1);
 
     if (queueStore.queue.length) {
         tracks = tracks.filter(item => item.id !== newQueue.id);
@@ -457,12 +467,21 @@ function setMediaData(track: TrackInterface) {
         album: track.albums.map(item => item.title).toString(),
         artwork: [
             {
-                src: useImage(track.ogImage, 200, 200),
-                sizes: '200x200',
-                type: 'image/png'
+                src: useImage(track.ogImage || track.coverUri, 200, 200),
+                sizes: '200x200'
             }
         ]
     });
+}
+
+async function updateSettings(settings: { [key: string]: string }) {
+    await useStationSettings(
+        settings.diversity,
+        settings.language,
+        settings.moodEnergy
+    );
+
+    await loadNewStationTracks();
 }
 </script>
 

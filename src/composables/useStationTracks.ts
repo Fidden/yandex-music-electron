@@ -15,7 +15,7 @@ export default async function useStationTracks(settings = true, trackIdBefore = 
     if (settings) { params.settings2 = true; }
     if (trackIdBefore) { params.queue = trackIdBefore; }
 
-    const res = await useRequest().get(`rotor/station/${currentStation.id.type}:${currentStation.id.tag}/tracks`, {
+    const res = await useRequest().get(`rotor/station/${currentStation.type}:${currentStation.tag}/tracks`, {
         data: params
     });
 

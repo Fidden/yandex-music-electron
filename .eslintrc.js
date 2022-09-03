@@ -34,6 +34,7 @@ module.exports = {
         'vue/html-closing-bracket-newline': 'off',
         '@typescript-eslint/no-explicit-any': 'off',
         '@typescript-eslint/explicit-module-boundary-types': 'off',
-        '@typescript-eslint/no-extra-semi': 'off'
+        '@typescript-eslint/no-extra-semi': 'off',
+        'func-call-spacing': 'off',
     }
 };

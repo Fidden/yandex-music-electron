@@ -34,7 +34,7 @@
                             class="info-circle"
                             src="../assets/img/circle-white.svg">
                         <p class="info-tracks-duration">
-                            {{ useConvertDuration(playlist.durationMs) }}
+                            {{ useConvertDuration(playlist.durationMs, true) }}
                         </p>
                     </div>
 
@@ -90,12 +90,10 @@ import BaseLikeButton from '@/components/BaseLikeButton.vue';
 import BaseMenu from '@/components/BaseMenu.vue';
 import BaseMenuItem from '@/components/BaseMenuItem.vue';
 import { useNotificationsStore } from '@/store/notifications';
-import useRequest from '@/composables/useRequest';
 
 const userStore = useUserStore();
 const notificationStore = useNotificationsStore();
 const route = useRoute();
-const request = useRequest();
 const playlist: Ref<PlaylistInterface> = ref({} as PlaylistInterface);
 
 onMounted(async () => {
@@ -135,10 +133,10 @@ function handleShare() {
     notificationStore.pushNotification('Ссылка скопирована');
 }
 
-async function handleRecommended() {
-    const res = await request.get(`users/${playlist.value.uid}/playlists/${playlist.value.kind}/recommendations`);
-    console.log(res.data.result);
-}
+// async function handleRecommended() {
+//     const res = await request.get(`users/${playlist.value.uid}/playlists/${playlist.value.kind}/recommendations`);
+//     console.log(res.data.result);
+// }
 
 </script>
 

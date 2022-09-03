@@ -35,7 +35,7 @@
             </div>
         </div>
         <div
-            v-if="response.artists?.results?.length > 0"
+            v-if="response.artists?.results?.length"
             class="result-container">
             <h2 class="result-container-title">
                 Исполнители
@@ -52,7 +52,7 @@
             </BaseFlickity>
         </div>
         <div
-            v-if="response.albums?.results?.length > 0"
+            v-if="response.albums?.results?.length"
             class="result-container">
             <h2 class="result-container-title">
                 Альбомы
@@ -72,7 +72,7 @@
             </BaseFlickity>
         </div>
         <div
-            v-if="response.playlists?.results?.length > 0"
+            v-if="response.playlists?.results?.length"
             class="result-container">
             <h2 class="result-container-title">
                 Плейлисты

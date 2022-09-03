@@ -1,14 +1,20 @@
 import { defineStore } from 'pinia';
 import StationListInterface from '@/interfaces/StationListInterface';
-import StationDashboardInterface, { Station2 } from '@/interfaces/StationDashboardInterface';
+import StationDashboardInterface, { Station } from '@/interfaces/StationDashboardInterface';
 import StationListMapInterface from '@/interfaces/StationListMapInterface';
+
+export interface StationCurrentInterface {
+    tag: string;
+    type: string;
+    batchId?: number;
+}
 
 interface State {
     dashboard: StationDashboardInterface;
     listKeys: Array<string>;
     list: StationListMapInterface;
-    current: Station2;
-    currentBatchId: number | null,
+    current: StationCurrentInterface;
+    currentInfo: Station;
 }
 
 export const useStationStore = defineStore('station', {
@@ -16,8 +22,8 @@ export const useStationStore = defineStore('station', {
         dashboard: {} as StationDashboardInterface,
         listKeys: [],
         list: {} as StationListMapInterface,
-        current: {} as Station2,
-        currentBatchId: null
+        current: {} as StationCurrentInterface,
+        currentInfo: {} as Station
     }),
     actions: {
         setList(list: Array<StationListInterface>) {
@@ -37,11 +43,14 @@ export const useStationStore = defineStore('station', {
         setDashboard(dashboard: StationDashboardInterface) {
             this.dashboard = dashboard;
         },
-        setCurrent(station: Station2) {
+        setCurrent(station: StationCurrentInterface) {
             this.current = station;
         },
         setCurrentBatchId(batchId: number) {
-            this.currentBatchId = batchId;
+            this.current.batchId = batchId;
+        },
+        setCurrentInfo(info: Station) {
+            this.currentInfo = info;
         }
     }
 });

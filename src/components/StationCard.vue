@@ -1,7 +1,7 @@
 <template>
     <div
         class="station-card"
-        @click="usePlayStation(station.station)"
+        @click="usePlayStation(station.station.id.tag, station.station.id.type)"
     >
         <div
             :style="{background: station.station.icon.backgroundColor }"
