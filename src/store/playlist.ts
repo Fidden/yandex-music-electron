@@ -22,8 +22,8 @@ export const usePlaylistStore = defineStore('playlist', {
         setHits(payload: Array<Entity>) {
             this.hits = payload;
         },
-        setPersonal(payload: Array<PersonalPlaylistInterface>) {
-            this.personal = payload;
+        setPersonal(payload: Array<Entity>) {
+            this.personal = payload as unknown as Array<PersonalPlaylistInterface>;
         }
     }
 });
