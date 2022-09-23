@@ -308,16 +308,17 @@ async function next(skip = true) {
         return;
     }
 
-    queueStore.addToPlayed(currentTrack.value);
-    queueStore.removeFromQueue(currentTrack.value);
-
     if (playerStore.isStation) {
         await useSendStationFeedback(
             skip ? StationFeedbackTypeEnum.SKIP : StationFeedbackTypeEnum.TRACK_FINISHED,
             true,
             player.value.time,
-            Number(currentTrack.value.id)
+            Number(currentTrack.value.id),
+            Number(currentTrack.value?.albums?.at(0)?.id)
         );
+
+        queueStore.addToPlayed(currentTrack.value);
+        queueStore.removeFromQueue(currentTrack.value);
 
         await loadNewStationTracks();
 
@@ -325,8 +326,12 @@ async function next(skip = true) {
             StationFeedbackTypeEnum.TRACK_STARTED,
             true,
             null,
-            Number(currentTrack.value.id)
+            Number(currentTrack.value.id),
+            Number(currentTrack.value?.albums?.at(0)?.id)
         );
+    } else {
+        queueStore.addToPlayed(currentTrack.value);
+        queueStore.removeFromQueue(currentTrack.value);
     }
 }
 

@@ -2,7 +2,13 @@ import { useStationStore } from '@/store/station';
 import { StationFeedbackTypeEnum } from '@/enums/StationFeedbackTypeEnum';
 import useRequest from '@/composables/useRequest';
 
-export default async function useSendStationFeedback(type: StationFeedbackTypeEnum, batchId?: boolean, totalPlayedSeconds?: number | null, trackId?: number): Promise<boolean> {
+export default async function useSendStationFeedback(
+    type: StationFeedbackTypeEnum,
+    batchId?: boolean,
+    totalPlayedSeconds?: number | null,
+    trackId?: number,
+    albumId?: number
+): Promise<boolean> {
     const stationStore = useStationStore();
     const currentStation = stationStore.current;
     let url = `rotor/station/${currentStation.type}:${currentStation.tag}/feedback?`;
@@ -13,8 +19,8 @@ export default async function useSendStationFeedback(type: StationFeedbackTypeEn
     const data = {
         type: type,
         timestamp: new Date().toISOString(),
-        trackId: trackId,
-        totalPlayedSeconds: totalPlayedSeconds
+        trackId: `${trackId}:${albumId}`,
+        totalPlayedSeconds: totalPlayedSeconds?.toFixed(2)
     };
 
     const dataFilled = Object.fromEntries(
