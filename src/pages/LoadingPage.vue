@@ -9,7 +9,7 @@
 
 <script lang="ts" setup>
 import LayoutSmall from '@/layouts/LayoutSmall.vue';
-import BaseLoadingSpinner from '@/components/BaseLoadingSpinner.vue';
+import BaseLoadingSpinner from '@/components/ui/BaseLoadingSpinner.vue';
 </script>
 
 <style scoped>

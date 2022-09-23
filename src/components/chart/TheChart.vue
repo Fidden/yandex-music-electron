@@ -26,7 +26,7 @@
 <script lang="ts" setup>
 import { onMounted, ref, Ref } from 'vue';
 import { useChartStore } from '@/store/chart';
-import ChartTrack from '@/components/ChartTrack.vue';
+import ChartTrack from '@/components/chart/ChartTrack.vue';
 import { Entity } from '@/interfaces/LandingBlocksInterface';
 
 const chartStore = useChartStore();

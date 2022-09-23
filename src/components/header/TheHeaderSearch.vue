@@ -13,7 +13,7 @@
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useSearchStore } from '@/store/search';
-import useRequest from '../composables/useRequest';
+import useRequest from '../../composables/useRequest';
 import SearchResultInterface from '@/interfaces/SearchResultInterface';
 
 const router = useRouter();

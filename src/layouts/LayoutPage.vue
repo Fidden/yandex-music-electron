@@ -17,8 +17,8 @@
 
 <script lang="ts" setup>
 import { defineProps } from 'vue';
-import BaseNavigation from '@/components/BaseNavigation.vue';
-import BaseLoading from '@/components/BaseLoading.vue';
+import BaseNavigation from '@/components/ui/BaseNavigation.vue';
+import BaseLoading from '@/components/ui/BaseLoading.vue';
 
 defineProps<{
     loaded: boolean;

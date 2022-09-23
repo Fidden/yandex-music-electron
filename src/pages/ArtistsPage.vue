@@ -13,7 +13,7 @@
 </template>
 
 <script lang="ts" setup>
-import ArtistCard from '@/components/ArtistCard.vue';
+import ArtistCard from '@/components/artist/ArtistCard.vue';
 import LayoutItems from '@/layouts/LayoutItems.vue';
 import { onMounted, ref, Ref } from 'vue';
 import ArtistInterface from '@/interfaces/ArtistInterface';

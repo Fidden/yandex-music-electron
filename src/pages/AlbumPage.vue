@@ -68,15 +68,15 @@
 </template>
 
 <script lang="ts" setup>
-import BaseNavigation from '@/components/BaseNavigation.vue';
-import ArtistsLinks from '@/components/ArtistsLinks.vue';
+import BaseNavigation from '@/components/ui/BaseNavigation.vue';
+import ArtistsLinks from '@/components/artist/ArtistsLinks.vue';
 import useTracksCount from '@/composables/useTracksCount';
 import useImage from '@/composables/useImage';
 import { useRoute } from 'vue-router';
 import useRequest from '@/composables/useRequest';
 import { onMounted, ref, Ref } from 'vue';
 import AlbumWithTracksInterface from '@/interfaces/AlbumWithTracksInterface';
-import TheTracksTable from '@/components/TheTracksTable.vue';
+import TheTracksTable from '@/components/track/TracksTable.vue';
 import usePlayShuffle from '@/composables/usePlayShuffle';
 
 const route = useRoute();

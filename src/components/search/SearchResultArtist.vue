@@ -19,7 +19,7 @@
 
 <script lang="ts" setup>
 import { defineProps } from 'vue';
-import useImage from '../composables/useImage';
+import useImage from '../../composables/useImage';
 
 defineProps<{
     artist: any;

@@ -36,8 +36,8 @@
 <script setup lang="ts">
 import { defineProps } from 'vue';
 import { SearchTrackInterface } from '@/interfaces/SearchTrackInterface';
-import ArtistsLinks from '@/components/ArtistsLinks.vue';
-import PlayingIcon from '@/components/PlayingIcon.vue';
+import ArtistsLinks from '@/components/artist/ArtistsLinks.vue';
+import PlayingIcon from '@/components/track/TrackPlayingIcon.vue';
 import useImage from '@/composables/useImage';
 import useConvertDuration from '@/composables/useConvertDuration';
 import { usePlayerStore } from '@/store/player';

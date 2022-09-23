@@ -39,8 +39,8 @@ import PlaylistInterface from '@/interfaces/PlaylistInterface';
 import useUserPlaylists from '@/composables/useUserPlaylists';
 import useUserFavoritePlaylist from '@/composables/useUserFavoritePlaylist';
 import PlaylistWithOutTracksInterface from '@/interfaces/PlaylistWithOutTracksInterface';
-import PlaylistCard from '@/components/PlaylistCard.vue';
-import BaseLoading from '@/components/BaseLoading.vue';
+import PlaylistCard from '@/components/playlist/PlaylistCard.vue';
+import BaseLoading from '@/components/ui/BaseLoading.vue';
 import { useUserStore } from '@/store/user';
 
 const userStore = useUserStore();

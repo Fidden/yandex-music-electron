@@ -25,10 +25,10 @@
 
 <script lang="ts" setup>
 import { computed } from 'vue';
-import BaseFlickity from '@/components/BaseFlickity.vue';
+import BaseFlickity from '@/components/ui/BaseFlickity.vue';
 import useFlickityDefaultOptions from '@/composables/useFlickityDefaultOptions';
 import { usePlaylistStore } from '@/store/playlist';
-import PersonalPlaylistCard from '@/components/PersonalPlaylistCard.vue';
+import PersonalPlaylistCard from '@/components/playlist/PlaylistPersonalCard.vue';
 
 const playlistStore = usePlaylistStore();
 

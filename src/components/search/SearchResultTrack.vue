@@ -27,7 +27,7 @@ import { defineProps } from 'vue';
 import { useQueueStore } from '@/store/queue';
 import useTrack from '@/composables/useTrack';
 import TrackInterface from '@/interfaces/TrackInterface';
-import ArtistsLinks from '@/components/ArtistsLinks.vue';
+import ArtistsLinks from '@/components/artist/ArtistsLinks.vue';
 import useImage from '@/composables/useImage';
 
 const queueStore = useQueueStore();

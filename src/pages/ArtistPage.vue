@@ -96,26 +96,26 @@
 </template>
 
 <script lang="ts" setup>
-import BaseLoading from '@/components/BaseLoading.vue';
-import BaseNavigation from '@/components/BaseNavigation.vue';
+import BaseLoading from '@/components/ui/BaseLoading.vue';
+import BaseNavigation from '@/components/ui/BaseNavigation.vue';
 import useFlickityDefaultOptions from '@/composables/useFlickityDefaultOptions';
-import BaseFlickity from '@/components/BaseFlickity.vue';
+import BaseFlickity from '@/components/ui/BaseFlickity.vue';
 import useImage from '@/composables/useImage';
 import { computed, nextTick, onMounted, ref, Ref, watch } from 'vue';
 import ArtistBriefInterface from '@/interfaces/ArtistBriefInterface';
 import { useRoute } from 'vue-router';
 import useRequest from '@/composables/useRequest';
-import ArtistCard from '@/components/ArtistCard.vue';
-import AlbumCard from '@/components/AlbumCard.vue';
-import TheTracksTable from '@/components/TheTracksTable.vue';
-import BaseLikeButton from '@/components/BaseLikeButton.vue';
+import ArtistCard from '@/components/artist/ArtistCard.vue';
+import AlbumCard from '@/components/album\'/AlbumCard.vue';
+import TheTracksTable from '@/components/track/TracksTable.vue';
+import BaseLikeButton from '@/components/ui/BaseLikeButton.vue';
 import { useUserStore } from '@/store/user';
 import { useNotificationsStore } from '@/store/notifications';
 import useLikeAction from '@/composables/useLikeAction';
 import { LikesObjectTypesEnum } from '@/enums/LikesObjectTypesEnum';
 import ArtistLikeInterface from '@/interfaces/ArtistLikeInterface';
-import BaseMenu from '@/components/BaseMenu.vue';
-import BaseMenuItem from '@/components/BaseMenuItem.vue';
+import BaseMenu from '@/components/ui/BaseMenu.vue';
+import BaseMenuItem from '@/components/ui/BaseMenuItem.vue';
 import usePlayShuffle from '@/composables/usePlayShuffle';
 
 const userStore = useUserStore();
@@ -216,9 +216,5 @@ function handleShare() {
     gap: 10px;
     align-items: center;
     margin-top: 5px;
-}
-
-.artist-head-controls .fa-heart {
-    cursor: pointer;
 }
 </style>

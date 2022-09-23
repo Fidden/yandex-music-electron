@@ -17,13 +17,13 @@
 
 <script lang="ts" setup>
 import { onMounted, ref, Ref } from 'vue';
-import TheTracksTable from '@/components/TheTracksTable.vue';
+import TheTracksTable from '@/components/track/TracksTable.vue';
 import usePlaylists from '@/composables/usePlaylists';
 import useUserPlaylists from '@/composables/useUserPlaylists';
 import TrackInterface from '@/interfaces/TrackInterface';
 import useTrack from '@/composables/useTrack';
 import { useUserStore } from '@/store/user';
-import BaseLoading from '@/components/BaseLoading.vue';
+import BaseLoading from '@/components/ui/BaseLoading.vue';
 
 const userStore = useUserStore();
 const tracks: Ref<Array<TrackInterface>> = ref([]);

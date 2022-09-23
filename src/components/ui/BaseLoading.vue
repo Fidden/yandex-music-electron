@@ -5,7 +5,7 @@
 </template>
 
 <script lang="ts" setup>
-import BaseLoadingSpinner from '@/components/BaseLoadingSpinner.vue';
+import BaseLoadingSpinner from '@/components/ui/BaseLoadingSpinner.vue';
 </script>
 
 <style scoped>

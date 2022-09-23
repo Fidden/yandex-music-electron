@@ -18,7 +18,7 @@
 <script lang="ts" setup>
 import { computed } from 'vue';
 import { usePlaylistStore } from '@/store/playlist';
-import PlaylistCardSmall from '@/components/PlaylistSmallCard.vue';
+import PlaylistCardSmall from '@/components/playlist/PlaylistSmallCard.vue';
 
 const playlistStore = usePlaylistStore();
 const playlists = computed(() => playlistStore.all);

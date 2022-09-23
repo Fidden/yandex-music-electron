@@ -13,17 +13,17 @@
             <button @click="minimize">
                 <img
                     alt="min"
-                    src="../assets/img/minimize.svg">
+                    src="../../assets/img/minimize.svg">
             </button>
             <button @click="maximize">
                 <img
                     alt="min"
-                    src="../assets/img/maxsimize.svg">
+                    src="../../assets/img/maxsimize.svg">
             </button>
             <button @click="close">
                 <img
                     alt="min"
-                    src="../assets/img/close.svg">
+                    src="../../assets/img/close.svg">
             </button>
         </div>
     </header>
@@ -31,7 +31,7 @@
 
 <script lang="ts" setup>
 import { ipcRenderer } from 'electron';
-import TheHeaderSearch from '@/components/TheHeaderSearch.vue';
+import TheHeaderSearch from '@/components/header/TheHeaderSearch.vue';
 
 function minimize() {
     ipcRenderer.send('minimize');

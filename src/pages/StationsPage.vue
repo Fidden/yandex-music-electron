@@ -46,12 +46,12 @@
 </template>
 
 <script lang="ts" setup>
-import BaseLoading from '@/components/BaseLoading.vue';
+import BaseLoading from '@/components/ui/BaseLoading.vue';
 import { useStationStore } from '@/store/station';
 import { computed, onMounted, ref, Ref } from 'vue';
 import useRequest from '@/composables/useRequest';
-import StationCard from '@/components/StationCard.vue';
-import StationCardSmall from '@/components/StationCardSmall.vue';
+import StationCard from '@/components/station/StationCard.vue';
+import StationCardSmall from '@/components/station/StationCardSmall.vue';
 
 const request = useRequest();
 const stationStore = useStationStore();

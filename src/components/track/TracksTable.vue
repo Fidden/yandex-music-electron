@@ -95,21 +95,21 @@
 <script lang="ts" setup>
 import TrackInterface from '@/interfaces/TrackInterface';
 import ArtistInterface from '@/interfaces/TrackArtistInterface';
-import TheFilter from '@/components/TheFilter.vue';
-import PlayingIcon from '@/components/PlayingIcon.vue';
-import ArtistsLinks from '@/components/ArtistsLinks.vue';
+import TheFilter from '@/components/ui/BaseFilter.vue';
+import PlayingIcon from '@/components/track/TrackPlayingIcon.vue';
+import ArtistsLinks from '@/components/artist/ArtistsLinks.vue';
 import useConvertDuration from '@/composables/useConvertDuration';
 import useImage from '@/composables/useImage';
 import { defineProps, onMounted, reactive, ref, Ref } from 'vue';
 import { usePlayerStore } from '@/store/player';
 import { useQueueStore } from '@/store/queue';
-import BaseLikeButton from '@/components/BaseLikeButton.vue';
+import BaseLikeButton from '@/components/ui/BaseLikeButton.vue';
 import { useUserStore } from '@/store/user';
 import useLikeAction from '@/composables/useLikeAction';
 import { LikesObjectTypesEnum } from '@/enums/LikesObjectTypesEnum';
 import TrackLikeInterface from '@/interfaces/TrackLikeInterface';
-import AlbumLinks from '@/components/AlbumLinks.vue';
-import ContentWarning from '@/components/ContentWarning.vue';
+import AlbumLinks from '@/components/album\'/AlbumLinks.vue';
+import ContentWarning from '@/components/ui/ContentWarning.vue';
 
 const playerStore = usePlayerStore();
 const queueStore = useQueueStore();

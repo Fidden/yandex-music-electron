@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain, protocol } from 'electron';
+import { app, BrowserWindow, ipcMain, protocol, globalShortcut } from 'electron';
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib';
 import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer';
 import 'v8-compile-cache';
@@ -49,6 +49,10 @@ async function createWindow() {
         win.close();
     });
 
+    globalShortcut.register('Alt+I', () => {
+        console.log('Alt+I');
+    });
+
     if (process.env.WEBPACK_DEV_SERVER_URL) {
         // Load the url of the dev server if in development mode
         await win.loadURL(process.env.WEBPACK_DEV_SERVER_URL as string);
@@ -75,6 +79,10 @@ app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) {
         createWindow();
     }
+});
+
+app.on('will-quit', () => {
+    globalShortcut.unregisterAll();
 });
 
 // This method will be called when Electron has finished

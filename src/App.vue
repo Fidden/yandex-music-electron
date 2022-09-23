@@ -29,7 +29,6 @@ import useDiscord from '@/composables/useDiscord';
 import useGetLikes from '@/composables/useGetLikes';
 import { LikesObjectTypesEnum } from '@/enums/LikesObjectTypesEnum';
 import { useRouter } from 'vue-router';
-import PersonalPlaylistInterface from '@/interfaces/PersonalPlaylistsInterface';
 
 const mainStore = useMainStore();
 const userStore = useUserStore();

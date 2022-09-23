@@ -10,7 +10,7 @@
             class="card-image">
         <img
             v-else
-            src="../assets/img/artist-placeholder.svg"
+            src="../../assets/img/artist-placeholder.svg"
             alt="placeholder"
             class="card-image"
         >

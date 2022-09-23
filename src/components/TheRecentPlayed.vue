@@ -38,11 +38,11 @@
 import { onMounted, ref, Ref } from 'vue';
 import { Entity } from '@/interfaces/LandingBlocksInterface';
 import { useRecentStore } from '@/store/recent';
-import BaseFlickity from '@/components/BaseFlickity.vue';
+import BaseFlickity from '@/components/ui/BaseFlickity.vue';
 import useFlickityDefaultOptions from '@/composables/useFlickityDefaultOptions';
-import AlbumCard from '@/components/AlbumCard.vue';
-import ArtistCard from '@/components/ArtistCard.vue';
-import PlaylistCardLanding from '@/components/PlaylistCardLanding.vue';
+import AlbumCard from '@/components/album\'/AlbumCard.vue';
+import ArtistCard from '@/components/artist/ArtistCard.vue';
+import PlaylistCardLanding from '@/components/playlist/PlaylistCardLanding.vue';
 
 const recentStore = useRecentStore();
 const recent: Ref<Array<Entity>> = ref([]);

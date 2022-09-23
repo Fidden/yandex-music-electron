@@ -45,9 +45,9 @@
 
 <script lang="ts" setup>
 import { defineProps } from 'vue';
-import ArtistsLinks from '@/components/ArtistsLinks.vue';
+import ArtistsLinks from '@/components/artist/ArtistsLinks.vue';
 import useConvertDuration from '@/composables/useConvertDuration';
-import PlayingIcon from '@/components/PlayingIcon.vue';
+import PlayingIcon from '@/components/track/TrackPlayingIcon.vue';
 import useImage from '@/composables/useImage';
 import { Data } from '@/interfaces/LandingBlocksInterface';
 import { useQueueStore } from '@/store/queue';

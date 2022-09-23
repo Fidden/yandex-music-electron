@@ -16,7 +16,7 @@
 
 <script lang="ts" setup>
 import LayoutPage from '@/layouts/LayoutPage.vue';
-import TheTracksTable from '@/components/TheTracksTable.vue';
+import TheTracksTable from '@/components/track/TracksTable.vue';
 import { onMounted, ref, Ref } from 'vue';
 import TrackInterface from '@/interfaces/TrackInterface';
 import useRequest from '@/composables/useRequest';

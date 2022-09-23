@@ -22,7 +22,7 @@
 
 <script lang="ts" setup>
 import LayoutPage from '@/layouts/LayoutPage.vue';
-import PlaylistCard from '@/components/PlaylistCard.vue';
+import PlaylistCard from '@/components/playlist/PlaylistCard.vue';
 import { onMounted, ref, Ref } from 'vue';
 import PlaylistInterface from '@/interfaces/PlaylistInterface';
 import useRequest from '@/composables/useRequest';

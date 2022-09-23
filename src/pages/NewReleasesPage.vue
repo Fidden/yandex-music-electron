@@ -24,7 +24,7 @@
 import { onMounted, Ref, ref } from 'vue';
 import useRequest from '@/composables/useRequest';
 import LayoutPage from '@/layouts/LayoutPage.vue';
-import AlbumCard from '@/components/AlbumCard.vue';
+import AlbumCard from '@/components/album\'/AlbumCard.vue';
 import useAlbums from '@/composables/useAlbums';
 import AlbumInterface from '@/interfaces/AlbumInterface';
 

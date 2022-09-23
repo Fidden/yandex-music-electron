@@ -96,16 +96,16 @@
 <script lang="ts" setup>
 import { computed } from 'vue';
 import { useSearchStore } from '@/store/search';
-import BaseNavigation from '@/components/BaseNavigation.vue';
-import SearchResultArtist from '@/components/SearchResultArtist.vue';
-import SearchResultTrack from '@/components/SearchResultTrack.vue';
-import SearchResultPlaylist from '@/components/SearchResultPlaylist.vue';
-import BaseFlickity from '@/components/BaseFlickity.vue';
-import AlbumCard from '@/components/AlbumCard.vue';
+import BaseNavigation from '@/components/ui/BaseNavigation.vue';
+import SearchResultArtist from '@/components/search/SearchResultArtist.vue';
+import SearchResultTrack from '@/components/search/SearchResultTrack.vue';
+import SearchResultPlaylist from '@/components/search/SearchResultPlaylist.vue';
+import BaseFlickity from '@/components/ui/BaseFlickity.vue';
+import AlbumCard from '@/components/album\'/AlbumCard.vue';
 import useFlickityDefaultOptions from '@/composables/useFlickityDefaultOptions';
-import SearchTracksTable from '@/components/SearchTracksTable.vue';
-import SearchPlaylistCard from '@/components/SearchPlaylistCard.vue';
-import SearchArtistCard from '@/components/SearchArtistCard.vue';
+import SearchTracksTable from '@/components/search/SearchTracksTable.vue';
+import SearchPlaylistCard from '@/components/search/SearchPlaylistCard.vue';
+import SearchArtistCard from '@/components/search/SearchArtistCard.vue';
 
 const searchStore = useSearchStore();
 

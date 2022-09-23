@@ -34,7 +34,7 @@
 import { computed, defineProps } from 'vue';
 import useImage from '@/composables/useImage';
 import { Data, Payload } from '@/interfaces/LandingBlocksInterface';
-import ArtistsLinks from '@/components/ArtistsLinks.vue';
+import ArtistsLinks from '@/components/artist/ArtistsLinks.vue';
 
 const props = defineProps<{
     album?: Data | Payload;

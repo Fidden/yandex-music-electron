@@ -32,9 +32,9 @@
 <script lang="ts" setup>
 import { computed } from 'vue';
 import { useReleaseStore } from '@/store/release';
-import BaseFlickity from '@/components/BaseFlickity.vue';
+import BaseFlickity from '@/components/ui/BaseFlickity.vue';
 import useFlickityDefaultOptions from '@/composables/useFlickityDefaultOptions';
-import PlaylistCardLanding from '@/components/PlaylistCardLanding.vue';
+import PlaylistCardLanding from '@/components/playlist/PlaylistCardLanding.vue';
 
 const releaseStore = useReleaseStore();
 const newReleases = computed(() => releaseStore.releases);

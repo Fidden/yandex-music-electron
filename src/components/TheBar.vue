@@ -11,15 +11,6 @@
             class="bar-button">
             <i :class="item.icon"/>
         </RouterLink>
-        <!--        <div class="separator-line"/>-->
-        <!--        <RouterLink-->
-        <!--            v-for="item in routesSecondPart"-->
-        <!--            :key="item.id"-->
-        <!--            :class="{'active': $route.name === item.name}"-->
-        <!--            :to="{name: item.name}"-->
-        <!--            class="bar-button">-->
-        <!--            <i :class="item.icon"/>-->
-        <!--        </RouterLink>-->
     </div>
 </template>
 

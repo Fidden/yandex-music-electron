@@ -29,7 +29,8 @@ import { useStationStore } from '@/store/station';
 import { defineEmits, ref } from 'vue';
 
 const stationStore = useStationStore();
-const emit = defineEmits<{(e: 'updateSettings', settings: any): void,
+const emit = defineEmits<{
+    (e: 'updateSettings', settings: any): void,
     (e: 'close'): void,
 }>();
 

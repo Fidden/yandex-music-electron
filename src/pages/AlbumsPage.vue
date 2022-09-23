@@ -14,7 +14,7 @@
 
 <script lang="ts" setup>
 import LayoutItems from '@/layouts/LayoutItems.vue';
-import AlbumCard from '@/components/AlbumCard.vue';
+import AlbumCard from '@/components/album\'/AlbumCard.vue';
 import { onMounted, ref, Ref } from 'vue';
 import AlbumInterface from '@/interfaces/AlbumInterface';
 import useRequest from '@/composables/useRequest';
