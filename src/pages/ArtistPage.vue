@@ -106,7 +106,7 @@ import ArtistBriefInterface from '@/interfaces/ArtistBriefInterface';
 import { useRoute } from 'vue-router';
 import useRequest from '@/composables/useRequest';
 import ArtistCard from '@/components/artist/ArtistCard.vue';
-import AlbumCard from '@/components/album\'/AlbumCard.vue';
+import AlbumCard from '@/components/album/AlbumCard.vue';
 import TheTracksTable from '@/components/track/TracksTable.vue';
 import BaseLikeButton from '@/components/ui/BaseLikeButton.vue';
 import { useUserStore } from '@/store/user';

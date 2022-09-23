@@ -101,7 +101,7 @@ import SearchResultArtist from '@/components/search/SearchResultArtist.vue';
 import SearchResultTrack from '@/components/search/SearchResultTrack.vue';
 import SearchResultPlaylist from '@/components/search/SearchResultPlaylist.vue';
 import BaseFlickity from '@/components/ui/BaseFlickity.vue';
-import AlbumCard from '@/components/album\'/AlbumCard.vue';
+import AlbumCard from '@/components/album/AlbumCard.vue';
 import useFlickityDefaultOptions from '@/composables/useFlickityDefaultOptions';
 import SearchTracksTable from '@/components/search/SearchTracksTable.vue';
 import SearchPlaylistCard from '@/components/search/SearchPlaylistCard.vue';

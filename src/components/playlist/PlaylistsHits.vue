@@ -35,7 +35,7 @@ import { computed } from 'vue';
 import BaseFlickity from '@/components/ui/BaseFlickity.vue';
 import useFlickityDefaultOptions from '@/composables/useFlickityDefaultOptions';
 import { usePlaylistStore } from '@/store/playlist';
-import AlbumCard from '@/components/album\'/AlbumCard.vue';
+import AlbumCard from '@/components/album/AlbumCard.vue';
 
 const playlistStore = usePlaylistStore();
 

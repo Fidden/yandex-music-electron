@@ -40,7 +40,7 @@ import { Entity } from '@/interfaces/LandingBlocksInterface';
 import { useRecentStore } from '@/store/recent';
 import BaseFlickity from '@/components/ui/BaseFlickity.vue';
 import useFlickityDefaultOptions from '@/composables/useFlickityDefaultOptions';
-import AlbumCard from '@/components/album\'/AlbumCard.vue';
+import AlbumCard from '@/components/album/AlbumCard.vue';
 import ArtistCard from '@/components/artist/ArtistCard.vue';
 import PlaylistCardLanding from '@/components/playlist/PlaylistCardLanding.vue';
 

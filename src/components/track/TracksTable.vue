@@ -108,7 +108,7 @@ import { useUserStore } from '@/store/user';
 import useLikeAction from '@/composables/useLikeAction';
 import { LikesObjectTypesEnum } from '@/enums/LikesObjectTypesEnum';
 import TrackLikeInterface from '@/interfaces/TrackLikeInterface';
-import AlbumLinks from '@/components/album\'/AlbumLinks.vue';
+import AlbumLinks from '@/components/album/AlbumLinks.vue';
 import ContentWarning from '@/components/ui/ContentWarning.vue';
 
 const playerStore = usePlayerStore();
