@@ -49,3 +49,8 @@ npm run lint
 C:/<relative_path>/dist_electron/Yandex.Music Setup.exe
 ```
 
+
+### How to get token
+
+https://github.com/MarshalX/yandex-music-api/discussions/513#discussioncomment-2729781
+
