@@ -7,6 +7,7 @@ import VueLazyLoad from 'vue-lazyload';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import VueVirtualScroller from 'vue3-virtual-scroller';
+import { clickOutside } from '@/directives/clickOutside';
 
 const pinia = createPinia();
 
@@ -15,20 +16,5 @@ createApp(App)
     .use(pinia)
     .use(VueLazyLoad)
     .use(VueVirtualScroller)
-    .directive('click-outside', {
-        beforeMount(el, binding) {
-            el.clickOutsideEvent = (evt: Event) => {
-                evt.stopPropagation();
-                if (!(el === evt.target || el.contains(evt.target))) {
-                    binding.value(evt, el);
-                }
-            };
-            window.requestAnimationFrame(() => {
-                document.addEventListener('click', el.clickOutsideEvent);
-            });
-        },
-        unmounted(el) {
-            document.removeEventListener('click', el.clickOutsideEvent);
-        }
-    })
+    .directive('click-outside', clickOutside)
     .mount('#app');

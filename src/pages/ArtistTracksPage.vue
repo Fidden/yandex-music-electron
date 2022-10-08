@@ -7,7 +7,11 @@
             Все треки
         </template>
         <template #body>
-            <TheTracksTable :tracks="tracks"/>
+            <TheTracksTable
+                class="tracks-table"
+                :tracks="tracks"
+                :without-margin="true"
+            />
         </template>
     </LayoutPage>
 </template>
@@ -46,5 +50,7 @@ async function getTracks() {
 </script>
 
 <style scoped>
-
+:deep(.tracks-table) {
+    height: calc(100% - 115px);
+}
 </style>
