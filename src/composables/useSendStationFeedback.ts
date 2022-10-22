@@ -11,13 +11,13 @@ export default async function useSendStationFeedback(
 ): Promise<boolean> {
     const stationStore = useStationStore();
     const currentStation = stationStore.current;
-    let url = `rotor/station/${currentStation.type}:${currentStation.tag}/feedback?`;
+    let url = `rotor/station/${stationStore.currentStation}/feedback?`;
     if (batchId) {
         url += `batchId=${currentStation?.batchId}`;
     }
 
     const data = {
-        type: type,
+        type,
         timestamp: new Date().toISOString(),
         trackId: `${trackId}:${albumId}`,
         totalPlayedSeconds: totalPlayedSeconds?.toFixed(2)

@@ -18,5 +18,6 @@ export default async function useLikeAction(objectType: LikesObjectTypesEnum, ob
     }
 
     return objectType === LikesObjectTypesEnum.TRACK
-        ? (remove ? false : res.data.result.revision > 0) : (res.data.result === 'ok');
+        ? (remove ? false : res.data.result.revision > 0)
+        : (res.data.result === 'ok');
 }

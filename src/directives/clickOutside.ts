@@ -9,10 +9,10 @@ export const clickOutside = {
             }
         };
         window.requestAnimationFrame(() => {
-            document.addEventListener('mouseup', el.clickOutsideEvent);
+            document.addEventListener('click', el.clickOutsideEvent);
         });
     },
     unmounted(el: any) {
-        document.removeEventListener('mouseup', el.clickOutsideEvent);
+        document.removeEventListener('click', el.clickOutsideEvent);
     }
 };

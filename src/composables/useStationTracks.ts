@@ -9,13 +9,12 @@ interface Params {
 
 export default async function useStationTracks(settings = true, trackIdBefore = -1) {
     const stationStore = useStationStore();
-    const currentStation = stationStore.current;
     const params: Params = {};
 
     if (settings) { params.settings2 = true; }
     if (trackIdBefore) { params.queue = trackIdBefore; }
 
-    const res = await useRequest().get(`rotor/station/${currentStation.type}:${currentStation.tag}/tracks`, {
+    const res = await useRequest().get(`rotor/station/${stationStore.currentStation}/tracks`, {
         data: params
     });
 

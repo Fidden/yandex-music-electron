@@ -1,6 +1,5 @@
 <template>
-    <div
-        class="settings-container">
+    <div class="settings-container">
         <p class="title">
             {{ stationStore.currentInfo?.station?.name }}
         </p>
@@ -26,7 +25,7 @@
 
 <script setup lang="ts">
 import { useStationStore } from '@/store/station';
-import { defineEmits, ref } from 'vue';
+import { defineEmits, ref, watch } from 'vue';
 
 const stationStore = useStationStore();
 const emit = defineEmits<{
@@ -34,11 +33,17 @@ const emit = defineEmits<{
     (e: 'close'): void,
 }>();
 
-const stationSettings = ref({
-    diversity: stationStore.currentInfo.settings2.diversity,
-    language: stationStore.currentInfo.settings2.language,
-    moodEnergy: stationStore.currentInfo.settings2.moodEnergy
+const stationSettings = ref<typeof stationStore.currentInfo.settings2>({
+    diversity: stationStore.currentInfo.settings2?.diversity,
+    language: stationStore.currentInfo.settings2?.language,
+    moodEnergy: stationStore.currentInfo.settings2?.moodEnergy
 });
+
+watch(() => stationStore.currentInfo.settings2, (value) => {
+    stationSettings.value.diversity = value.diversity;
+    stationSettings.value.language = value.language;
+    stationSettings.value.moodEnergy = value.moodEnergy;
+}, { deep: true });
 
 function setStationSetting(key: string, value: string) {
     stationSettings.value[key as keyof typeof stationSettings.value] = value;

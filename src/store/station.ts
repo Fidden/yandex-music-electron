@@ -52,5 +52,10 @@ export const useStationStore = defineStore('station', {
         setCurrentInfo(info: Station) {
             this.currentInfo = info;
         }
+    },
+    getters: {
+        currentStation(): string {
+            return `${this.current?.type}:${this.current?.tag}`;
+        }
     }
 });
