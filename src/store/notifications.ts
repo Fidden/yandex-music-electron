@@ -17,7 +17,7 @@ export const useNotificationsStore = defineStore('notifications', {
         pushNotification(title: string) {
             this.notifications.push({
                 id: this.notifications.length,
-                title: title
+                title
             } as NotificationsInterface);
 
             setTimeout(() => {

@@ -26,9 +26,6 @@
                             <BaseMenuItem @click="usePlayShuffle(artist.popularTracks)">
                                 Перемешать
                             </BaseMenuItem>
-                            <BaseMenuItem>
-                                Поток по плейлисту
-                            </BaseMenuItem>
                             <BaseMenuItem @click="handleShare">
                                 Поделится
                             </BaseMenuItem>

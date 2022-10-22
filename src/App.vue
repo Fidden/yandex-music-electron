@@ -13,7 +13,7 @@ import { AppStateEnum } from '@/enums/AppStateEnum';
 import { onMounted, watch } from 'vue';
 import useRequest from '@/composables/useRequest';
 import { useUserStore } from '@/store/user';
-import usePlaylist from '@/composables/usePlaylist';
+import useUserFavoritePlaylist from '@/composables/useUserFavoritePlaylist';
 import { usePlaylistStore } from '@/store/playlist';
 import PlaylistInterface from '@/interfaces/PlaylistInterface';
 import AccountStatusInterface from '@/interfaces/AccountStatusInterface';
@@ -93,7 +93,7 @@ async function setStoreData() {
 function cacheImages() {
     registerRoute(
         // Cache image files.
-        new RegExp(/\.(?:png|jpg|jpeg|svg|gif)$/),
+        /\.(?:png|jpg|jpeg|svg|gif)$/,
         // Use the cache if it's available.
         new CacheFirst({
             // Use a custom cache name.
@@ -120,14 +120,7 @@ async function getAccountStatus(): Promise<AccountStatusInterface> {
 
 async function getPlaylists(): Promise<Array<PlaylistInterface>> {
     const res = await request.get(`users/${userStore.userId}/playlists/list/`);
-    return [await useUserMyFavoritesPlaylist()].concat(res.data.result);
-}
-
-async function useUserMyFavoritesPlaylist(): Promise<PlaylistInterface> {
-    const res = await usePlaylist(3, userStore.userId);
-    res.title = 'Мне нравится';
-    res.ogImage = 'music.yandex.ru/blocks/playlist-cover/playlist-cover_like.png';
-    return res;
+    return [await useUserFavoritePlaylist()].concat(res.data.result);
 }
 
 </script>

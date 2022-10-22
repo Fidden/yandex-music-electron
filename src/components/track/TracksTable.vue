@@ -1,5 +1,5 @@
 <template>
-    <div style="height: calc(100% - 175px)">
+    <div class="tracks-table">
         <TheFilter
             v-if="filterBar"
             :data="tracks"
@@ -209,16 +209,18 @@ async function handleLike(track: TrackInterface) {
         albumId: String(track.albums[0].id)
     };
 
-    if (track.liked) {
-        userStore.addTrackToLikes(trackObject);
-    } else {
-        userStore.removeTrackFromLikes(trackObject);
-    }
+    track.liked
+        ? userStore.addTrackToLikes(trackObject)
+        : userStore.removeTrackFromLikes(trackObject);
 }
 
 </script>
 
 <style scoped>
+.tracks-table {
+    height: calc(100% - 175px)
+}
+
 .scroller {
     height: 100%;
     margin-top: 20px;

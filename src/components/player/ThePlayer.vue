@@ -5,7 +5,8 @@
             class="player-container">
             <TheStationSettings
                 v-if="stationSettingsOpen && playerStore.isStation"
-                @updateSettings="updateSettings"
+                v-click-outside="settingsClose"
+                @update-settings="updateSettings"
             />
             <div class="player-seek-slider">
                 <p class="start-time">
@@ -43,27 +44,18 @@
                         class="player-track-image"
                     >
                     <div class="player-track-text">
-                        <p
-                            class="player-track-title"
-                        >
-                            {{ currentTrack.title }}
-                        </p>
-                        <div
+                        <PlayerTitle :title="currentTrack.title"/>
+                        <PlayerArtists
                             v-memo="[currentTrack.artists]"
-                            class="player-track-artist"
-                        >
-                            <ArtistsLinks
-                                :artists="currentTrack.artists"
-                                style="font-size: 12px"
-                            />
-                        </div>
+                            :artists="currentTrack.artists"
+                        />
                     </div>
                 </div>
 
                 <BaseLikeButton
                     class="control-btn"
                     :liked="currentTrack?.liked"
-                    @click="() => like()"/>
+                    @click="like"/>
 
                 <div class="player-body-controls">
                     <button
@@ -78,7 +70,7 @@
                     <button
                         v-else
                         class="control-btn"
-                        @click="stationSettingsOpen = !stationSettingsOpen"
+                        @click="settingsOpen"
                     >
                         <i class="far fa-sliders-h"/>
                     </button>
@@ -111,7 +103,7 @@
 
                     <button
                         class="control-btn"
-                        @click="() => next()">
+                        @click="next">
                         <i class="fal fa-step-forward"/>
                     </button>
                     <button
@@ -156,7 +148,6 @@ import { usePlayerStore } from '@/store/player';
 import { useQueueStore } from '@/store/queue';
 import useImage from '@/composables/useImage';
 import RangeSlider from '@/components/ui/BaseRangeSlider.vue';
-import ArtistsLinks from '@/components/artist/ArtistsLinks.vue';
 import BaseLoadingSpinner from '@/components/ui/BaseLoadingSpinner.vue';
 import useTrackDirectLink from '@/composables/useTrackDirectLink';
 import { useRpcStore } from '@/store/rpc';
@@ -171,6 +162,8 @@ import TrackLikeInterface from '@/interfaces/TrackLikeInterface';
 import BaseLikeButton from '@/components/ui/BaseLikeButton.vue';
 import TheStationSettings from '@/components/station/StationSettings.vue';
 import useStationSettings from '@/composables/useStationSettings';
+import PlayerTitle from '@/components/player/PlayerTitle.vue';
+import PlayerArtists from '@/components/player/PlayerArtists.vue';
 
 const queueStore = useQueueStore();
 const playerStore = usePlayerStore();
@@ -178,6 +171,7 @@ const rpcStore = useRpcStore();
 const userStore = useUserStore();
 
 const audio: Ref<HTMLAudioElement | null> = ref(null);
+
 const stationSettingsOpen = ref(true);
 const player = ref({
     player: null,
@@ -202,6 +196,10 @@ const currentTrack = computed(() => {
 
     playerStore.setTrackIndex(Number(track.id));
 
+    // fixme: Фантомный баг, иногда при лайке трека он скипается
+    // note: Скорее всего это происходит из за пересчета этого компутед
+    // свойства из за изменений в сторе (userStore), но почему только фантомно ?
+    // note2: Вызывается мутация которая из userStore затрагивает queueStore
     track.liked = userStore.likes.tracks.findIndex(item => item.id === track.id) !== -1;
 
     rpcStore.setRpc({
@@ -244,29 +242,34 @@ watch(currentTrack, async (value) => {
 
     const trackDirectLink = await useTrackDirectLink(Number(value.id));
 
-    audio.value.pause();
     audio.value.currentTime = 0;
+    audio.value.pause();
     audio.value.src = trackDirectLink;
 });
 
-watch(player, async (value) => {
+watch(() => player.value.time, async (value) => {
+    // Переключаем трек если время пришло
+    if (playerStore.repeat > 0 && value + 1 >= player.value.duration) {
+        handleRepeat();
+    } else {
+        if (value >= player.value.duration) {
+            await next(false);
+        }
+    }
+});
+
+watch(() => player.value.volume, (value) => {
     if (!audio.value) {
         return;
     }
 
-    playerStore.setPlaying(value.playing);
+    audio.value.volume = value * 0.01;
+    playerStore.setVolume(value);
+});
 
-    // Устанавливаем громкость
-    audio.value.volume = value.volume * 0.01;
-    playerStore.setVolume(value.volume);
-
-    // Переключаем трек если время пришло
-    if (value.time >= value.duration && (value.time !== 0 && value.duration !== 0)) {
-        player.value.time = 0;
-        player.value.duration = 0;
-        await next(false);
-    }
-}, { deep: true });
+watch(() => player.value.playing, (value) => {
+    playerStore.setPlaying(value);
+});
 
 async function like() {
     if (!currentTrack.value) {
@@ -291,11 +294,9 @@ async function like() {
     }
 }
 
-async function next(skip = true) {
-    if (!currentTrack.value) {
-        return;
-    }
-
+// todo: переделать на audio.value.loop
+//  https://stackoverflow.com/questions/20522929/how-to-repeat-html5-audio
+function handleRepeat() {
     if (playerStore.repeat > 0) {
         if (playerStore.repeat === 1) {
             playerStore.resetRepeat();
@@ -304,7 +305,11 @@ async function next(skip = true) {
         if (audio.value) {
             audio.value.currentTime = 0;
         }
+    }
+}
 
+async function next(skip = true) {
+    if (!currentTrack.value) {
         return;
     }
 
@@ -488,6 +493,17 @@ async function updateSettings(settings: { [key: string]: string }) {
 
     await loadNewStationTracks();
 }
+
+function settingsOpen() {
+    stationSettingsOpen.value = !stationSettingsOpen.value;
+}
+
+function settingsClose() {
+    if (stationSettingsOpen.value) {
+        stationSettingsOpen.value = false;
+    }
+}
+
 </script>
 
 <style scoped>
@@ -564,26 +580,6 @@ async function updateSettings(settings: { [key: string]: string }) {
 .player-track-text {
     display: flex;
     flex-direction: column;
-}
-
-.player-track-title {
-    font-weight: 500;
-    font-size: 14px;
-    line-height: 16px;
-    margin: 0;
-    color: white;
-    overflow-x: scroll;
-    width: 145px;
-    white-space: nowrap;
-}
-
-.player-track-title::-webkit-scrollbar {
-    display: none;
-}
-
-.player-track-artist {
-    color: #8E919A;
-    white-space: nowrap;
 }
 
 .player-body-controls {

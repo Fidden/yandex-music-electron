@@ -1,5 +1,5 @@
 export default interface FlickityOptionsInterface {
-    draggable?: boolean;
+    draggable?: string;
     freeScroll?: boolean;
     contain?: boolean;
     wrapAround?: boolean;

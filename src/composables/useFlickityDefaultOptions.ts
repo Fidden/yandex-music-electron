@@ -3,7 +3,7 @@ import FlickityOptionsInterface from '@/interfaces/components/FlickityOptionsInt
 const flickityOptions: FlickityOptionsInterface = {
     prevNextButtons: true,
     pageDots: false,
-    wrapAround: true,
+    wrapAround: false,
     lazyLoad: true,
     initialIndex: 0,
     cellAlign: 'left'
