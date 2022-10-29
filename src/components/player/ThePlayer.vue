@@ -164,6 +164,7 @@ import TheStationSettings from '@/components/station/StationSettings.vue';
 import useStationSettings from '@/composables/useStationSettings';
 import PlayerTitle from '@/components/player/PlayerTitle.vue';
 import PlayerArtists from '@/components/player/PlayerArtists.vue';
+import usePlayStation from '@/composables/usePlayStation';
 
 const queueStore = useQueueStore();
 const playerStore = usePlayerStore();
@@ -172,7 +173,7 @@ const userStore = useUserStore();
 
 const audio: Ref<HTMLAudioElement | null> = ref(null);
 
-const stationSettingsOpen = ref(true);
+const stationSettingsOpen = ref(false);
 const player = ref({
     player: null,
     time: 0,
@@ -337,6 +338,15 @@ async function next(skip = true) {
     } else {
         queueStore.addToPlayed(currentTrack.value);
         queueStore.removeFromQueue(currentTrack.value);
+
+        if (queueStore.queue.length || !playerStore.lastPlayedType) {
+            return;
+        }
+
+        await usePlayStation(
+            playerStore.lastPlayedType.tag,
+            playerStore.lastPlayedType.type
+        );
     }
 }
 

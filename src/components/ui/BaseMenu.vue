@@ -35,13 +35,11 @@ function handleClose() {
     display: flex;
     flex-direction: column;
     position: relative;
-    z-index: 40;
 }
 
 .menu-container-head {
     background: none;
     color: white;
-    z-index: 50;
 }
 
 .menu-container-body {
@@ -49,7 +47,7 @@ function handleClose() {
     left: 0;
     bottom: 0;
     transform: translateY(100%);
-    background: rgba(44, 53, 77, 0.57);
+    background: #252c3e;
     padding: 5px;
     overflow: hidden;
     border-radius: 4px;

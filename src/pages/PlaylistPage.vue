@@ -53,6 +53,9 @@
                             <BaseMenuItem @click="usePlayShuffle(playlistTracks)">
                                 Перемешать
                             </BaseMenuItem>
+                            <BaseMenuItem @click="usePlayStation(`${playlist.uid}_${playlist.kind}`, 'playlist')">
+                                Поток по плейлисту
+                            </BaseMenuItem>
                             <BaseMenuItem @click="handleShare">
                                 Поделится
                             </BaseMenuItem>
@@ -64,6 +67,10 @@
                 :filter-bar="true"
                 :tracks="playlistTracks"
                 :without-image="false"
+                :last-played-entity="{
+                    tag: `${playlist.uid}_${playlist.kind}`,
+                    type: 'playlist'
+                }"
             />
         </div>
         <BaseLoading v-else/>
@@ -90,6 +97,7 @@ import BaseLikeButton from '@/components/ui/BaseLikeButton.vue';
 import BaseMenu from '@/components/ui/BaseMenu.vue';
 import BaseMenuItem from '@/components/ui/BaseMenuItem.vue';
 import { useNotificationsStore } from '@/store/notifications';
+import usePlayStation from '@/composables/usePlayStation';
 
 const userStore = useUserStore();
 const notificationStore = useNotificationsStore();

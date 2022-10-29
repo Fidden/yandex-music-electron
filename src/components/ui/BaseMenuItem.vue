@@ -22,6 +22,6 @@
 }
 
 .menu-item-container:hover {
-    background: rgba(44, 53, 77);
+    background: #2C354DFF;
 }
 </style>

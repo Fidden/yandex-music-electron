@@ -110,6 +110,7 @@ import { LikesObjectTypesEnum } from '@/enums/LikesObjectTypesEnum';
 import TrackLikeInterface from '@/interfaces/TrackLikeInterface';
 import AlbumLinks from '@/components/album/AlbumLinks.vue';
 import ContentWarning from '@/components/ui/ContentWarning.vue';
+import { ILastPlatedEntityInterface } from '@/interfaces/ILastPlatedEntityInterface';
 
 const playerStore = usePlayerStore();
 const queueStore = useQueueStore();
@@ -120,6 +121,7 @@ const props = defineProps<{
     withoutImage?: boolean;
     tracks: Array<TrackInterface>;
     withoutMargin?: boolean;
+    lastPlayedEntity?: ILastPlatedEntityInterface;
 }>();
 
 const filterFunc = reactive([
@@ -195,6 +197,9 @@ function playCurrent(track: TrackInterface, index: number) {
     queueStore.setQueue(newQueue);
 
     playerStore.setIsStation(false);
+    if (props.lastPlayedEntity && props.lastPlayedEntity.tag !== playerStore.lastPlayedType?.tag) {
+        playerStore.setLastPlayedType(props.lastPlayedEntity);
+    }
 }
 
 async function handleLike(track: TrackInterface) {

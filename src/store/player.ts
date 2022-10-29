@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia';
+import { ILastPlatedEntityInterface } from '@/interfaces/ILastPlatedEntityInterface';
 
 interface State {
     shuffle: number;
@@ -6,6 +7,7 @@ interface State {
     trackIndex: number;
     playing: boolean;
     isStation: boolean;
+    lastPlayedType?: ILastPlatedEntityInterface;
 }
 
 export const usePlayerStore = defineStore('player', {
@@ -14,7 +16,8 @@ export const usePlayerStore = defineStore('player', {
         repeat: 0,
         trackIndex: -1,
         playing: false,
-        isStation: false
+        isStation: false,
+        lastPlayedType: undefined
     }),
     actions: {
         setShuffle(payload: number) {
@@ -46,6 +49,9 @@ export const usePlayerStore = defineStore('player', {
         },
         setVolume(payload: number) {
             localStorage.setItem('volume', payload.toString());
+        },
+        setLastPlayedType(payload: ILastPlatedEntityInterface) {
+            this.lastPlayedType = payload;
         }
     },
     getters: {
