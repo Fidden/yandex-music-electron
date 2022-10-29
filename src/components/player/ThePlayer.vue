@@ -197,10 +197,6 @@ const currentTrack = computed(() => {
 
     playerStore.setTrackIndex(Number(track.id));
 
-    // fixme: Фантомный баг, иногда при лайке трека он скипается
-    // note: Скорее всего это происходит из за пересчета этого компутед
-    // свойства из за изменений в сторе (userStore), но почему только фантомно ?
-    // note2: Вызывается мутация которая из userStore затрагивает queueStore
     track.liked = userStore.likes.tracks.findIndex(item => item.id === track.id) !== -1;
 
     rpcStore.setRpc({

@@ -9,6 +9,12 @@ import useRequest from '@/composables/useRequest';
 export default async function usePlayStation(tag: string, type: string) {
     const queueStore = useQueueStore();
     const stationStore = useStationStore();
+    const playerStore = usePlayerStore();
+
+    // Нам не нужно перемешивать треки в радио
+    playerStore.resetShuffle();
+    // Также не нужно повторять треки по умолчанию
+    playerStore.resetRepeat();
 
     queueStore.clearQueue();
     usePlayerStore().setIsStation(true);
