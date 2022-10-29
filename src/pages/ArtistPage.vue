@@ -26,6 +26,9 @@
                             <BaseMenuItem @click="usePlayShuffle(artist.popularTracks)">
                                 Перемешать
                             </BaseMenuItem>
+                            <BaseMenuItem @click="usePlayStation(artist.artist.id, 'artist')">
+                                Поток по исполнителю
+                            </BaseMenuItem>
                             <BaseMenuItem @click="handleShare">
                                 Поделится
                             </BaseMenuItem>
@@ -114,6 +117,7 @@ import ArtistLikeInterface from '@/interfaces/ArtistLikeInterface';
 import BaseMenu from '@/components/ui/BaseMenu.vue';
 import BaseMenuItem from '@/components/ui/BaseMenuItem.vue';
 import usePlayShuffle from '@/composables/usePlayShuffle';
+import usePlayStation from '@/composables/usePlayStation';
 
 const userStore = useUserStore();
 const notificationStore = useNotificationsStore();
