@@ -7,6 +7,7 @@ import VueLazyLoad from 'vue-lazyload';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import VueVirtualScroller from 'vue3-virtual-scroller';
+import { vue3Debounce } from 'vue-debounce';
 import { clickOutside } from '@/directives/clickOutside';
 
 const pinia = createPinia();
@@ -17,4 +18,5 @@ createApp(App)
     .use(VueLazyLoad)
     .use(VueVirtualScroller)
     .directive('click-outside', clickOutside)
+    .directive('debounce', vue3Debounce({ lock: true }))
     .mount('#app');

@@ -2,18 +2,18 @@
     <div class="search-bar">
         <input
             v-model="search"
+            v-debounce:300.cancelonempty="handleInput"
             placeholder="Поиск"
             type="text"
-            @change="handleInput">
+        >
     </div>
 </template>
 
 <script lang="ts" setup>
-// todo: debounce input
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useSearchStore } from '@/store/search';
-import useRequest from '../../composables/useRequest';
+import useRequest from '@/composables/useRequest';
 import SearchResultInterface from '@/interfaces/SearchResultInterface';
 
 const router = useRouter();
@@ -26,7 +26,13 @@ async function handleInput() {
         return;
     }
 
-    const res = await request.get('/search', {
+    if (router.currentRoute.value.name !== 'search') {
+        await router.push({ name: 'search' });
+    }
+
+    store.setSearchResponse(undefined);
+
+    const res = await request.get<{ result: SearchResultInterface }>('/search', {
         params: {
             text: search.value,
             nocorrect: 'false',
@@ -36,9 +42,7 @@ async function handleInput() {
         }
     });
 
-    store.setSearchResponse({} as SearchResultInterface);
-    store.setSearchResponse(res.data.result as SearchResultInterface);
-    await router.push({ name: 'search' });
+    store.setSearchResponse(res.data.result);
 }
 </script>
 

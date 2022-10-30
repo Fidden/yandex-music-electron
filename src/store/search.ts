@@ -2,15 +2,15 @@ import { defineStore } from 'pinia';
 import SearchResultInterface from '@/interfaces/SearchResultInterface';
 
 interface State {
-    response: SearchResultInterface,
+    response?: SearchResultInterface,
 }
 
 export const useSearchStore = defineStore('search', {
     state: (): State => ({
-        response: {} as SearchResultInterface
+        response: undefined
     }),
     actions: {
-        setSearchResponse(response: SearchResultInterface) {
+        setSearchResponse(response?: SearchResultInterface) {
             this.response = response;
         }
     }

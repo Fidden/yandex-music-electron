@@ -1,6 +1,6 @@
 <template>
     <main
-        v-if="Object.keys(response).length"
+        v-if="response"
         class="main">
         <BaseNavigation/>
         <div
@@ -91,6 +91,7 @@
             </BaseFlickity>
         </div>
     </main>
+    <BaseLoading v-else/>
 </template>
 
 <script lang="ts" setup>
@@ -106,11 +107,12 @@ import useFlickityDefaultOptions from '@/composables/useFlickityDefaultOptions';
 import SearchTracksTable from '@/components/search/SearchTracksTable.vue';
 import SearchPlaylistCard from '@/components/search/SearchPlaylistCard.vue';
 import SearchArtistCard from '@/components/search/SearchArtistCard.vue';
+import BaseLoading from '@/components/ui/BaseLoading.vue';
 
 const searchStore = useSearchStore();
 
 const response = computed(() => searchStore.response);
-const tracks = computed(() => searchStore.response.tracks?.results.slice(0, 5));
+const tracks = computed(() => searchStore.response?.tracks?.results.slice(0, 5));
 </script>
 
 <style scoped>

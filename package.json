@@ -21,6 +21,7 @@
     "discord-rpc": "^4.0.1",
     "pinia": "^2.0.16",
     "vue": "^3.0.0",
+    "vue-debounce": "^4.0.0",
     "vue-flickity": "^1.2.1",
     "vue-router": "^4.0.13",
     "vue3-virtual-scroller": "^0.2.3"
