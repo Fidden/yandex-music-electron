@@ -76,6 +76,25 @@
                 </div>
 
                 <div
+                    v-if="artist.alsoAlbums.length"
+                    class="artist-body-block">
+                    <div class="artist-body-title">
+                        <h2>Сборники</h2>
+                    </div>
+                    <BaseFlickity
+                        ref="flickity"
+                        :options="useFlickityDefaultOptions">
+                        <div
+                            v-for="album in artist.alsoAlbums"
+                            :key="album.id"
+                            class="carousel-cell"
+                        >
+                            <AlbumCard :album-id="album.id"/>
+                        </div>
+                    </BaseFlickity>
+                </div>
+
+                <div
                     v-if="artist.similarArtists.length"
                     class="artist-body-block">
                     <div class="artist-body-title">
