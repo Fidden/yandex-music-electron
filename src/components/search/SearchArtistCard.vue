@@ -3,17 +3,15 @@
         :to="{name: 'artist', params: {id: artist.id}}"
         class="artist-card"
     >
-        <img
-            v-if="artist?.cover?.uri"
-            v-lazy="useImage(artist?.cover?.uri, 200, 200)"
+        <BaseImage
+            :width="200"
+            :height="200"
+            :src="artist?.cover?.uri"
             :alt="artist.name"
-            class="card-image">
-        <img
-            v-else
-            src="../../assets/img/artist-placeholder.svg"
-            alt="placeholder"
             class="card-image"
-        >
+            type="artist"
+        />
+
         <h4>{{ artist.name }}</h4>
         <p
             v-if="artist?.counts?.tracks"
@@ -25,8 +23,8 @@
 
 <script setup lang="ts">
 import { defineProps } from 'vue';
-import useImage from '@/composables/useImage';
 import { SearchArtistInterface } from '@/interfaces/SearchArtistInterface';
+import BaseImage from '@/components/ui/BaseImage.vue';
 
 defineProps<{
     artist: SearchArtistInterface;

@@ -4,12 +4,17 @@
         @click="usePlayStation(station.station.id.tag, station.station.id.type)"
     >
         <div
-            :style="{background: station.station.icon.backgroundColor }"
+            :style="{background: station.station.icon.backgroundColor}"
             class="station-image-block"
         >
-            <img
-                v-lazy="useImage(station.station.icon.imageUrl, 200, 200)"
-                :alt="station.station.name">
+            <BaseImage
+                :width="200"
+                :height="200"
+                :src="station.station.icon.imageUrl"
+                :alt="station.station.name"
+                type="station"
+            />
+
             <div class="play-icon">
                 <i class="fas fa-play"/>
             </div>
@@ -23,8 +28,8 @@
 <script lang="ts" setup>
 import { defineProps } from 'vue';
 import { Station } from '@/interfaces/StationDashboardInterface';
-import useImage from '@/composables/useImage';
 import usePlayStation from '@/composables/usePlayStation';
+import BaseImage from '@/components/ui/BaseImage.vue';
 
 defineProps<{
     station: Station

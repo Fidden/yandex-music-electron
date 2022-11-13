@@ -3,9 +3,13 @@
         :to="{name: 'playlist', params: {kind: playlist.kind, uid: playlist.owner.uid}}"
     >
         <div class="result-best-body">
-            <img
-                v-lazy="useImage(playlist.cover.uri || playlist.ogImage, 200, 200)"
-                :alt="playlist.title">
+            <BaseImage
+                :width="200"
+                :height="200"
+                :src="playlist.cover.uri || playlist.ogImage"
+                :alt="playlist.title"
+                type="playlist"
+            />
             <p class="result-best-name">
                 {{ playlist.title }}
             </p>
@@ -24,7 +28,7 @@
 
 <script lang="ts" setup>
 import { defineProps } from 'vue';
-import useImage from '@/composables/useImage';
+import BaseImage from '@/components/ui/BaseImage.vue';
 
 defineProps<{
     playlist: any;

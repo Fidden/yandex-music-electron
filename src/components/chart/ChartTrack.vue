@@ -19,9 +19,13 @@
         </div>
         <div class="chart-track-body">
             <div class="chart-track-body-image">
-                <img
-                    v-lazy="useImage(item.track.ogImage, 100, 100)"
-                    :alt="item.track.title">
+                <BaseImage
+                    :width="100"
+                    :height="100"
+                    :src="item.track.ogImage"
+                    :alt="item.track.title"
+                    type="track"
+                />
                 <PlayingIcon
                     v-if="playerStore.trackIndex === Number(item.track.id)"
                 />
@@ -48,10 +52,10 @@ import { defineProps } from 'vue';
 import ArtistsLinks from '@/components/artist/ArtistsLinks.vue';
 import useConvertDuration from '@/composables/useConvertDuration';
 import PlayingIcon from '@/components/track/TrackPlayingIcon.vue';
-import useImage from '@/composables/useImage';
 import { Data } from '@/interfaces/LandingBlocksInterface';
 import { useQueueStore } from '@/store/queue';
 import { usePlayerStore } from '@/store/player';
+import BaseImage from '@/components/ui/BaseImage.vue';
 
 const queueStore = useQueueStore();
 const playerStore = usePlayerStore();

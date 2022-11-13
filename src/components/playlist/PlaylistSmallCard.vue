@@ -2,16 +2,20 @@
     <RouterLink
         :to="{name: 'playlist', params: {kind: playlist.kind, uid: playlist.uid}}"
         class="playlist-block">
-        <img
-            v-lazy="useImage(playlist.ogImage, 100, 100)"
-            :alt="playlist.title">
+        <BaseImage
+            :width="100"
+            :height="100"
+            :src="playlist.ogImage"
+            :alt="playlist.title"
+            type="playlist"
+        />
         <h4>{{ playlist.title }}</h4>
     </RouterLink>
 </template>
 
 <script lang="ts" setup>
 import { defineProps } from 'vue';
-import useImage from '@/composables/useImage';
+import BaseImage from '@/components/ui/BaseImage.vue';
 import PlaylistInterface from '@/interfaces/PlaylistInterface';
 
 defineProps<{

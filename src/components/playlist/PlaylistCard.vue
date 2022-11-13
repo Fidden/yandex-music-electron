@@ -5,9 +5,13 @@
         class="playlist-card"
     >
         <div class="playlist-card-image">
-            <img
+            <BaseImage
+                :width="200"
+                :height="200"
+                :src="playlist.ogImage"
                 :alt="playlist.title"
-                :src="useImage(playlist.ogImage, 200, 200)">
+                type="playlist"
+            />
         </div>
 
         <h3 class="title">
@@ -25,7 +29,7 @@
 import { defineProps, onMounted, ref, Ref } from 'vue';
 import PlaylistInterface from '@/interfaces/PlaylistInterface';
 import usePlaylist from '@/composables/usePlaylist';
-import useImage from '@/composables/useImage';
+import BaseImage from '@/components/ui/BaseImage.vue';
 
 const props = defineProps<{
     playlistUid: number;

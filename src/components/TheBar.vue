@@ -15,19 +15,17 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, Ref, ref } from 'vue';
+import { computed, ref } from 'vue';
 import { useRoute } from 'vue-router';
 
 const route = useRoute();
 
-interface BarRoutesInterface {
-    [key: string]: {
-        id: number;
-        icon: string;
-    };
+interface IBarRoute {
+    id: number;
+    icon: string;
 }
 
-const routes: Ref<BarRoutesInterface> = ref({
+const routes = ref<Record<string, IBarRoute>>({
     home: {
         id: 0,
         icon: 'fas fa-home-alt'

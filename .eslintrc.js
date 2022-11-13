@@ -35,6 +35,6 @@ module.exports = {
         '@typescript-eslint/no-explicit-any': 'off',
         '@typescript-eslint/explicit-module-boundary-types': 'off',
         '@typescript-eslint/no-extra-semi': 'off',
-        'func-call-spacing': 'off',
+        'func-call-spacing': 'off'
     }
 };

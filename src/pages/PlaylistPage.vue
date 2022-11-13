@@ -5,9 +5,13 @@
             class="main-container main-container-scroller">
             <BaseNavigation/>
             <div class="item-head">
-                <img
-                    v-lazy="useImage(playlist.ogImage, 200, 200)"
-                    :alt="playlist.title">
+                <BaseImage
+                    :width="200"
+                    :height="200"
+                    :src="playlist.ogImage"
+                    :alt="playlist.title"
+                    type="playlist"
+                />
                 <div class="item-info">
                     <p class="info-type">
                         Плейлист
@@ -80,7 +84,6 @@
 <script lang="ts" setup>
 import PlaylistInterface from '@/interfaces/PlaylistInterface';
 import usePlaylist from '@/composables/usePlaylist';
-import useImage from '@/composables/useImage';
 import useTracksCount from '@/composables/useTracksCount';
 import useConvertDuration from '@/composables/useConvertDuration';
 import BaseNavigation from '@/components/ui/BaseNavigation.vue';
@@ -98,6 +101,7 @@ import BaseMenu from '@/components/ui/BaseMenu.vue';
 import BaseMenuItem from '@/components/ui/BaseMenuItem.vue';
 import { useNotificationsStore } from '@/store/notifications';
 import usePlayStation from '@/composables/usePlayStation';
+import BaseImage from '@/components/ui/BaseImage.vue';
 
 const userStore = useUserStore();
 const notificationStore = useNotificationsStore();

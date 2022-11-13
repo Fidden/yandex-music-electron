@@ -7,9 +7,13 @@
             :style="{background: station.station.icon.backgroundColor}"
             class="station-image-block"
         >
-            <img
-                v-lazy="useImage(station.station.icon.imageUrl, 100, 100)"
-                :alt="station.station.name ">
+            <BaseImage
+                :width="100"
+                :height="100"
+                :src="station.station.icon.imageUrl"
+                :alt="station.station.name"
+                type="station"
+            />
             <div class="play-icon">
                 <i class="fas fa-play"/>
             </div>
@@ -20,9 +24,9 @@
 
 <script lang="ts" setup>
 import { defineProps } from 'vue';
-import useImage from '@/composables/useImage';
 import StationListInterface from '@/interfaces/StationListInterface';
 import usePlayStation from '@/composables/usePlayStation';
+import BaseImage from '@/components/ui/BaseImage.vue';
 
 defineProps<{
     station: StationListInterface;

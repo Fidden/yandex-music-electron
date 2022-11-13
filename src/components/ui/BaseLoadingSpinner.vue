@@ -1,12 +1,13 @@
 <template>
     <svg
         viewBox="-20 -20 40 40"
-        xmlns="http://www.w3.org/2000/svg">\
+        xmlns="http://www.w3.org/2000/svg">
         <circle
             fill="none"
             r="15.9154943092"
             stroke="snow"
-            stroke-width="4"/>
+            stroke-width="4"
+        />
     </svg>
 </template>
 

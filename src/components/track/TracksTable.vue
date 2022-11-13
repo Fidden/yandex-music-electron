@@ -44,9 +44,13 @@
                     </div>
                     <div
                         class="image">
-                        <img
+                        <BaseImage
+                            :width="100"
+                            :height="100"
+                            :src="item.ogImage"
                             :alt="item.title"
-                            :src="useImage(item.ogImage, 100, 100)">
+                            type="track"
+                        />
                         <PlayingIcon
                             v-if="playerStore.trackIndex === Number(item.id)"
                         />
@@ -99,7 +103,6 @@ import TheFilter from '@/components/ui/BaseFilter.vue';
 import PlayingIcon from '@/components/track/TrackPlayingIcon.vue';
 import ArtistsLinks from '@/components/artist/ArtistsLinks.vue';
 import useConvertDuration from '@/composables/useConvertDuration';
-import useImage from '@/composables/useImage';
 import { defineProps, onMounted, reactive, ref, Ref } from 'vue';
 import { usePlayerStore } from '@/store/player';
 import { useQueueStore } from '@/store/queue';
@@ -110,6 +113,7 @@ import { LikesObjectTypesEnum } from '@/enums/LikesObjectTypesEnum';
 import TrackLikeInterface from '@/interfaces/TrackLikeInterface';
 import AlbumLinks from '@/components/album/AlbumLinks.vue';
 import ContentWarning from '@/components/ui/ContentWarning.vue';
+import BaseImage from '@/components/ui/BaseImage.vue';
 import { ILastPlatedEntityInterface } from '@/interfaces/ILastPlatedEntityInterface';
 
 const playerStore = usePlayerStore();

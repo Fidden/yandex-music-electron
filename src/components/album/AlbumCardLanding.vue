@@ -3,10 +3,13 @@
         v-if="album"
         :to="{name: 'album', params: {id: album.id}}"
         class="album-card">
-        <img
+        <BaseImage
+            :width="150"
+            :height="150"
             :alt="album.title"
-            :src="useImage(album.coverUri, 150, 150)">
-
+            :src="album.coverUri"
+            type="album"
+        />
         <h3 class="title">
             {{ album.title }}
         </h3>
@@ -32,9 +35,9 @@
 
 <script lang="ts" setup>
 import { computed, defineProps } from 'vue';
-import useImage from '@/composables/useImage';
 import { Data, Payload } from '@/interfaces/LandingBlocksInterface';
 import ArtistsLinks from '@/components/artist/ArtistsLinks.vue';
+import BaseImage from '@/components/ui/BaseImage.vue';
 
 const props = defineProps<{
     album?: Data | Payload;

@@ -38,16 +38,19 @@
                 <div
                     v-if="currentTrack"
                     class="player-track-info">
-                    <img
-                        v-lazy="useImage(currentTrack.ogImage || currentTrack.coverUri, 100, 100)"
-                        alt="img"
+                    <BaseImage
+                        :width="100"
+                        :height="100"
+                        :src="currentTrack.ogImage || currentTrack.coverUri"
+                        alt="player-img"
                         class="player-track-image"
-                    >
+                        type="track"
+                    />
                     <div class="player-track-text">
-                        <PlayerTitle :title="currentTrack.title"/>
+                        <PlayerTitle :title="currentTrack?.title"/>
                         <PlayerArtists
-                            v-memo="[currentTrack.artists]"
-                            :artists="currentTrack.artists"
+                            v-memo="[currentTrack?.artists]"
+                            :artists="currentTrack?.artists"
                         />
                     </div>
                 </div>
@@ -165,6 +168,7 @@ import useStationSettings from '@/composables/useStationSettings';
 import PlayerTitle from '@/components/player/PlayerTitle.vue';
 import PlayerArtists from '@/components/player/PlayerArtists.vue';
 import usePlayStation from '@/composables/usePlayStation';
+import BaseImage from '@/components/ui/BaseImage.vue';
 
 const queueStore = useQueueStore();
 const playerStore = usePlayerStore();

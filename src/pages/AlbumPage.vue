@@ -1,25 +1,22 @@
 <template>
     <main
         v-if="Object.keys(album).length"
-        class="main">
+        class="main"
+    >
         <div class="main-container main-container-scroller">
             <BaseNavigation/>
             <div class="item-head">
-                <img
-                    v-if="album.ogImage"
+                <BaseImage
+                    :width="150"
+                    :height="150"
+                    :src="album.ogImage"
                     :alt="album.title"
-                    :src="useImage(album.ogImage, 150, 150)">
+                    type="album"
+                />
 
                 <div class="item-info">
-                    <p
-                        v-if="album?.type === 'single'"
-                        class="info-type">
-                        Сингл
-                    </p>
-                    <p
-                        v-else
-                        class="info-type">
-                        Альбом
+                    <p class="info-type">
+                        {{ album?.type === 'single' ? 'Сингл' : 'Альбом' }}
                     </p>
 
                     <h2 class="info-title">
@@ -52,7 +49,8 @@
                             class="btn"
                             @click="usePlayShuffle(album.volumes[0])"
                         >
-                            <i class="fas fa-play fa-sm"/>{{ album?.type === 'single' ? 'Слушать' : 'Перемешать' }}
+                            <i class="fas fa-play fa-sm"/>
+                            {{ album?.type === 'single' ? 'Слушать' : 'Перемешать' }}
                         </button>
                     </div>
                 </div>
@@ -65,19 +63,21 @@
             />
         </div>
     </main>
+    <BaseLoading v-else/>
 </template>
 
 <script lang="ts" setup>
 import BaseNavigation from '@/components/ui/BaseNavigation.vue';
 import ArtistsLinks from '@/components/artist/ArtistsLinks.vue';
 import useTracksCount from '@/composables/useTracksCount';
-import useImage from '@/composables/useImage';
 import { useRoute } from 'vue-router';
 import useRequest from '@/composables/useRequest';
 import { onMounted, ref, Ref } from 'vue';
 import AlbumWithTracksInterface from '@/interfaces/AlbumWithTracksInterface';
 import TheTracksTable from '@/components/track/TracksTable.vue';
 import usePlayShuffle from '@/composables/usePlayShuffle';
+import BaseImage from '@/components/ui/BaseImage.vue';
+import BaseLoading from '@/components/ui/BaseLoading.vue';
 
 const route = useRoute();
 const request = useRequest();

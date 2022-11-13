@@ -3,9 +3,13 @@
         v-if="album"
         :to="{name: 'album', params: {id: props.albumId}}"
         class="album-card">
-        <img
+        <BaseImage
+            :width="200"
+            :height="200"
+            :src="album.ogImage"
             :alt="album.title"
-            :src="useImage(album.coverUri, 150, 150)">
+            type="album"
+        />
 
         <h3 class="title">
             {{ album.title }}
@@ -34,13 +38,13 @@
 import { computed, defineProps, onMounted, ref, Ref } from 'vue';
 import AlbumInterface from '@/interfaces/AlbumInterface';
 import useAlbum from '@/composables/useAlbum';
-import useImage from '@/composables/useImage';
 import { Data, Payload } from '@/interfaces/LandingBlocksInterface';
 import ArtistsLinks from '@/components/artist/ArtistsLinks.vue';
+import BaseImage from '@/components/ui/BaseImage.vue';
 
 const props = defineProps<{
     albumId: number;
-    album?: AlbumInterface | Data | Payload ;
+    album?: AlbumInterface | Data | Payload;
 }>();
 
 const album: Ref<AlbumInterface | Data | Payload> = ref({} as AlbumInterface | Data | Payload);

@@ -3,9 +3,13 @@
         :to="{name: 'artist', params: {id: artist.id}}"
     >
         <div class="result-best-body">
-            <img
-                v-lazy="useImage(artist.cover.uri, 200, 200)"
-                :alt="artist.name">
+            <BaseImage
+                :width="200"
+                :height="200"
+                :src="artist.cover.uri"
+                :alt="artist.name"
+                type="artist"
+            />
             <p class="result-best-name">
                 {{ artist.name }}
             </p>
@@ -19,7 +23,7 @@
 
 <script lang="ts" setup>
 import { defineProps } from 'vue';
-import useImage from '../../composables/useImage';
+import BaseImage from '@/components/ui/BaseImage.vue';
 
 defineProps<{
     artist: any;

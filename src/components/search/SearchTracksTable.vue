@@ -12,9 +12,13 @@
                 @click="playCurrent(item, index)">
                 <div
                     class="image">
-                    <img
+                    <BaseImage
+                        :width="100"
+                        :height="100"
+                        :src="item.coverUri"
                         :alt="item.title"
-                        :src="useImage(item.coverUri, 100, 100)">
+                        type="track"
+                    />
                     <PlayingIcon
                         v-if="playerStore.trackIndex === Number(item.id)"
                     />
@@ -38,11 +42,11 @@ import { defineProps } from 'vue';
 import { SearchTrackInterface } from '@/interfaces/SearchTrackInterface';
 import ArtistsLinks from '@/components/artist/ArtistsLinks.vue';
 import PlayingIcon from '@/components/track/TrackPlayingIcon.vue';
-import useImage from '@/composables/useImage';
 import useConvertDuration from '@/composables/useConvertDuration';
 import { usePlayerStore } from '@/store/player';
 import TrackInterface from '@/interfaces/TrackInterface';
 import { useQueueStore } from '@/store/queue';
+import BaseImage from '@/components/ui/BaseImage.vue';
 
 const playerStore = usePlayerStore();
 const queueStore = useQueueStore();

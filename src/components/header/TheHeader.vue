@@ -3,7 +3,8 @@
         <div class="header-logo">
             <img
                 alt="logo"
-                src="@/assets/img/logo.svg">
+                src="@/assets/img/logo.svg"
+            >
             <p>Яндекс.Музыка</p>
         </div>
 
@@ -13,17 +14,20 @@
             <button @click="minimize">
                 <img
                     alt="min"
-                    src="../../assets/img/minimize.svg">
+                    src="@/assets/img/minimize.svg"
+                >
             </button>
             <button @click="maximize">
                 <img
                     alt="min"
-                    src="../../assets/img/maxsimize.svg">
+                    src="@/assets/img/maxsimize.svg"
+                >
             </button>
             <button @click="close">
                 <img
                     alt="min"
-                    src="../../assets/img/close.svg">
+                    src="@/assets/img/close.svg"
+                >
             </button>
         </div>
     </header>

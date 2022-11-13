@@ -5,9 +5,13 @@
         class="playlist-card"
     >
         <div class="playlist-card-image">
-            <img
+            <BaseImage
+                :width="200"
+                :height="200"
+                :src="playlist.cover?.uri"
                 :alt="playlist.title"
-                :src="useImage(playlist.cover?.uri, 200, 200)">
+                type="playlist"
+            />
         </div>
 
         <h3 class="title">
@@ -25,7 +29,7 @@
 
 <script lang="ts" setup>
 import { defineProps } from 'vue';
-import useImage from '@/composables/useImage';
+import BaseImage from '@/components/ui/BaseImage.vue';
 import { PlaylistInterface } from '@/interfaces/PersonalPlaylistsInterface';
 
 defineProps<{

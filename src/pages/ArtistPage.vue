@@ -6,11 +6,14 @@
             class="main-container">
             <BaseNavigation/>
             <div class="artist-head">
-                <img
-                    v-lazy="useImage(artist.artist.cover.uri, 150, 150)"
+                <BaseImage
+                    :width="150"
+                    :height="150"
+                    :src="artist.artist.cover.uri"
                     :alt="artist.artist.name"
+                    type="artist"
                     class="artist-image"
-                >
+                />
                 <div class="artist-head-info">
                     <p>Исполнитель</p>
                     <h1>{{ artist.artist.name }}</h1>
@@ -100,7 +103,6 @@ import BaseLoading from '@/components/ui/BaseLoading.vue';
 import BaseNavigation from '@/components/ui/BaseNavigation.vue';
 import useFlickityDefaultOptions from '@/composables/useFlickityDefaultOptions';
 import BaseFlickity from '@/components/ui/BaseFlickity.vue';
-import useImage from '@/composables/useImage';
 import { computed, nextTick, onMounted, ref, Ref, watch } from 'vue';
 import ArtistBriefInterface from '@/interfaces/ArtistBriefInterface';
 import { useRoute } from 'vue-router';
@@ -118,6 +120,7 @@ import BaseMenu from '@/components/ui/BaseMenu.vue';
 import BaseMenuItem from '@/components/ui/BaseMenuItem.vue';
 import usePlayShuffle from '@/composables/usePlayShuffle';
 import usePlayStation from '@/composables/usePlayStation';
+import BaseImage from '@/components/ui/BaseImage.vue';
 
 const userStore = useUserStore();
 const notificationStore = useNotificationsStore();

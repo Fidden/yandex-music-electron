@@ -1,8 +1,12 @@
 <template>
     <div class="result-best-body">
-        <img
-            :src="useImage(track.coverUri, 150, 150)"
-            :alt="track.title">
+        <BaseImage
+            :width="150"
+            :height="150"
+            :src="track.coverUri"
+            :alt="track.title"
+            type="track"
+        />
         <p class="result-best-name">
             {{ track.title }}
         </p>
@@ -28,7 +32,7 @@ import { useQueueStore } from '@/store/queue';
 import useTrack from '@/composables/useTrack';
 import TrackInterface from '@/interfaces/TrackInterface';
 import ArtistsLinks from '@/components/artist/ArtistsLinks.vue';
-import useImage from '@/composables/useImage';
+import BaseImage from '@/components/ui/BaseImage.vue';
 
 const queueStore = useQueueStore();
 

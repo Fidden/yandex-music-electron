@@ -2,7 +2,8 @@
     <button>
         <i
             :class="liked ? 'fas': 'far'"
-            class="fa-heart"/>
+            class="fa-heart"
+        />
     </button>
 </template>
 
