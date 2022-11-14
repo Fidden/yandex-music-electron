@@ -232,6 +232,8 @@ function handleShare() {
 .artist-image {
     border-radius: 50%;
     margin-right: 40px;
+    width: 150px;
+    height: 150px;
 }
 
 .artist-body-title {
