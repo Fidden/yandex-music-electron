@@ -9,7 +9,6 @@
             :height="200"
             :src="album.ogImage"
             :width="200"
-            type="album"
             class="album-card__image"
         />
 
@@ -69,6 +68,8 @@ const type = computed(() => {
         return 'плейлист';
     case 'single':
         return 'сингл';
+    case 'podcast':
+        return 'подкаст';
     default:
         return album.value.type;
     }
@@ -90,20 +91,6 @@ const type = computed(() => {
 
     &__image {
         margin-bottom: 12px;
-
-        button {
-            opacity: 0;
-            transition: 0.2s;
-            position: absolute;
-            left: 50%;
-            top: 50%;
-            transform: translate(-50%, -50%);
-            background: var(--main-color);
-            width: 45px;
-            height: 45px;
-            border-radius: 999px;
-            z-index: 1000;
-        }
     }
 
     &__title {

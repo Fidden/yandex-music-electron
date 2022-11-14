@@ -12,7 +12,6 @@
                 :height="100"
                 :src="station.station.icon.imageUrl"
                 :width="100"
-                type="station"
             />
             <div class="play-icon">
                 <i class="fas fa-play"/>

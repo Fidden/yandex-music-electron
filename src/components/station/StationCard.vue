@@ -12,7 +12,6 @@
                 :height="200"
                 :src="station.station.icon.imageUrl"
                 :width="200"
-                type="station"
             />
 
             <div class="play-icon">
