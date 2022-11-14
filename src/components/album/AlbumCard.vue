@@ -38,19 +38,21 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, defineProps, onMounted, ref, Ref } from 'vue';
+import { computed, defineProps, onMounted, ref } from 'vue';
 import AlbumInterface from '@/interfaces/AlbumInterface';
 import useAlbum from '@/composables/useAlbum';
 import { Data, Payload } from '@/interfaces/LandingBlocksInterface';
 import ArtistsLinks from '@/components/artist/ArtistsLinks.vue';
 import BaseImage from '@/components/ui/BaseImage.vue';
 
+type AlbumType = AlbumInterface | Data | Payload;
+
 const props = defineProps<{
     albumId: number;
-    album?: AlbumInterface | Data | Payload;
+    album?: AlbumType;
 }>();
 
-const album: Ref<AlbumInterface | Data | Payload> = ref({} as AlbumInterface | Data | Payload);
+const album = ref<AlbumType | null>(null);
 
 onMounted(async () => {
     if (props.album) {
@@ -61,6 +63,10 @@ onMounted(async () => {
 });
 
 const type = computed(() => {
+    if (!album.value) {
+        return;
+    }
+
     switch (album.value?.type) {
     case 'compilation':
         return 'сборник';

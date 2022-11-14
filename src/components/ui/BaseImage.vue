@@ -7,6 +7,7 @@
 
 <script lang="ts" setup>
 import useImage from '@/composables/useImage';
+import { computed } from 'vue';
 
 const props = defineProps<{
     src: string;
@@ -24,13 +25,12 @@ function getErrorImage() {
         return require('@/assets/img/artist-placeholder.svg');
     case 'playlist':
         return require('@/assets/img/playlist-placeholder.svg');
-        // case 'album': Todo: починить рендер картинки
-        //     return require('@/assets/img/album-placeholder.svg');
+    case 'album':
+        return require('@/assets/img/album-placeholder.svg');
     }
 }
 
-const imgSource = {
-    src: useImage(props.src, props.width, props.height),
-    error: getErrorImage()
-};
+const imgSource = computed(() =>
+    useImage(props.src, props.width, props.height) ?? getErrorImage()
+);
 </script>
