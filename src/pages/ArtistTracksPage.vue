@@ -10,7 +10,7 @@
             <TheTracksTable
                 :tracks="tracks"
                 :without-margin="true"
-                class="tracks-table"
+                :style="{height: `calc(100% + ${offset}px)`}"
             />
         </template>
     </LayoutPage>
@@ -20,10 +20,12 @@
 import LayoutPage from '@/layouts/LayoutPage.vue';
 import TheTracksTable from '@/components/track/TracksTable.vue';
 import { useRoute } from 'vue-router';
-import { onMounted, ref, Ref } from 'vue';
+import { computed, onMounted, ref, Ref } from 'vue';
 import useRequest from '@/composables/useRequest';
 import TrackInterface from '@/interfaces/TrackInterface';
+import { useQueueStore } from '@/store/queue';
 
+const queueStore = useQueueStore();
 const route = useRoute();
 const request = useRequest();
 const tracks: Ref<Array<TrackInterface>> = ref([]);
@@ -47,10 +49,6 @@ async function getTracks() {
     const res = await request.get(`/artists/${route.params.id}/track-ids-by-rating`);
     return res.data.result.tracks;
 }
-</script>
 
-<style scoped>
-:deep(.tracks-table) {
-    height: calc(100% - 115px);
-}
-</style>
+const offset = computed(() => queueStore.queue.length ? -110 : 0);
+</script>

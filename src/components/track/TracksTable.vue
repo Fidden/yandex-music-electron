@@ -89,7 +89,7 @@
                 </div>
             </template>
             <template
-                v-if="!withoutMargin"
+                v-if="!withoutMargin && queueStore.queue.length"
                 #after
             >
                 <div class="track-template"/>

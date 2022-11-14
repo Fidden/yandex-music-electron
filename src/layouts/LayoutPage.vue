@@ -1,7 +1,7 @@
 <template>
     <main class="main">
         <BaseNavigation/>
-        <div class="main-head">
+        <div class="main__head">
             <h2>
                 <slot name="title"/>
                 <br>
@@ -27,18 +27,24 @@ defineProps<{
 
 </script>
 
-<style scoped>
-.main-head h2 {
-    font-weight: 500;
-    font-size: 31.25px;
-    line-height: 20px;
-    margin-bottom: 20px;
-}
+<style scoped lang="scss">
+.main {
+    overflow-y: hidden;
 
-.main-head span {
-    font-weight: 400;
-    font-size: 14px;
-    line-height: 16px;
-    color: #8E929C;
+    &__head {
+        h2 {
+            font-weight: 500;
+            font-size: 31.25px;
+            line-height: 20px;
+            margin-bottom: 20px;
+        }
+
+        span {
+            font-weight: 400;
+            font-size: 14px;
+            line-height: 16px;
+            color: #8E929C;
+        }
+    }
 }
 </style>
