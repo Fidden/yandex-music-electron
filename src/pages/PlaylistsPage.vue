@@ -1,12 +1,14 @@
 <template>
     <main
         v-if="isLoaded"
-        class="main">
+        class="main"
+    >
         <h2 class="title">
             Плейлисты
         </h2>
         <div
-            class="container">
+            class="container"
+        >
             <PlaylistCard
                 v-for="playlist in playlists"
                 :key="playlist.uid"
@@ -16,11 +18,13 @@
         </div>
         <h2
             v-if="userStore.likes.playlists.length > 0"
-            class="title title-margin">
+            class="title title-margin"
+        >
             Вам так же понравились эти плейлисты
         </h2>
         <div
-            class="container">
+            class="container"
+        >
             <PlaylistCard
                 v-for="item in userStore.likes.playlists"
                 :key="item.playlist.uid"

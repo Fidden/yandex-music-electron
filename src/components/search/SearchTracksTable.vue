@@ -9,14 +9,16 @@
         <template #default="{ item, index }">
             <div
                 class="track"
-                @click="playCurrent(item, index)">
+                @click="playCurrent(item, index)"
+            >
                 <div
-                    class="image">
+                    class="image"
+                >
                     <BaseImage
-                        :width="100"
+                        :alt="item.title"
                         :height="100"
                         :src="item.coverUri"
-                        :alt="item.title"
+                        :width="100"
                         type="track"
                     />
                     <PlayingIcon
@@ -26,8 +28,9 @@
                 <div class="title">
                     <p>{{ item.title }}</p>
                     <ArtistsLinks
+                        :artists="item.artists"
                         class="title-artist"
-                        :artists="item.artists"/>
+                    />
                 </div>
                 <p class="duration">
                     {{ useConvertDuration(item.durationMs) }}
@@ -37,7 +40,7 @@
     </RecycleScroller>
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 import { defineProps } from 'vue';
 import { SearchTrackInterface } from '@/interfaces/SearchTrackInterface';
 import ArtistsLinks from '@/components/artist/ArtistsLinks.vue';

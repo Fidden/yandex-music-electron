@@ -1,18 +1,20 @@
 <template>
     <main
         v-if="Object.keys(artist).length"
-        class="main">
+        class="main"
+    >
         <div
-            class="main-container">
+            class="main-container"
+        >
             <BaseNavigation/>
             <div class="artist-head">
                 <BaseImage
-                    :width="150"
+                    :alt="artist.artist.name"
                     :height="150"
                     :src="artist.artist.cover.uri"
-                    :alt="artist.artist.name"
-                    type="artist"
+                    :width="150"
                     class="artist-image"
+                    type="artist"
                 />
                 <div class="artist-head-info">
                     <p>Исполнитель</p>
@@ -24,7 +26,8 @@
                         <BaseLikeButton
                             :liked="artist.artist.liked"
                             class="fa-lg"
-                            @click="handleLike"/>
+                            @click="handleLike"
+                        />
                         <BaseMenu>
                             <BaseMenuItem @click="usePlayShuffle(artist.popularTracks)">
                                 Перемешать
@@ -43,28 +46,45 @@
                 <div v-if="artist.popularTracks.length">
                     <div class="artist-body-title">
                         <h2>Популярные треки</h2>
-                        <RouterLink :to="{name: 'artist-tracks'}">
+                        <RouterLink
+                            :to="{
+                                name: 'artist-tracks',
+                                query: {artist_name: artist.artist.name}
+                            }"
+                        >
                             Посмотреть все
                         </RouterLink>
                     </div>
                     <div
-                        class="artist-body-block">
+                        class="artist-body-block"
+                    >
                         <TheTracksTable
                             :filter-bar="false"
                             :tracks="artist.popularTracks"
-                            :without-margin="true"/>
+                            :without-margin="true"
+                        />
                     </div>
                 </div>
 
                 <div
                     v-if="albums.length"
-                    class="artist-body-block">
+                    class="artist-body-block"
+                >
                     <div class="artist-body-title">
                         <h2>Популярные альбомы</h2>
+                        <RouterLink
+                            :to="{
+                                name: 'artist-albums',
+                                query: {artist_name: artist.artist.name}
+                            }"
+                        >
+                            Посмотреть все
+                        </RouterLink>
                     </div>
                     <BaseFlickity
                         ref="flickity"
-                        :options="useFlickityDefaultOptions">
+                        :options="useFlickityDefaultOptions"
+                    >
                         <div
                             v-for="album in albums"
                             :key="album.id"
@@ -77,13 +97,15 @@
 
                 <div
                     v-if="artist.alsoAlbums.length"
-                    class="artist-body-block">
+                    class="artist-body-block"
+                >
                     <div class="artist-body-title">
                         <h2>Сборники</h2>
                     </div>
                     <BaseFlickity
                         ref="flickity"
-                        :options="useFlickityDefaultOptions">
+                        :options="useFlickityDefaultOptions"
+                    >
                         <div
                             v-for="album in artist.alsoAlbums"
                             :key="album.id"
@@ -96,7 +118,8 @@
 
                 <div
                     v-if="artist.similarArtists.length"
-                    class="artist-body-block">
+                    class="artist-body-block"
+                >
                     <div class="artist-body-title">
                         <h2>Похожие артисты</h2>
                     </div>
@@ -105,9 +128,11 @@
                         <div
                             v-for="similarArtist in artist.similarArtists"
                             :key="similarArtist.id"
-                            class="carousel-cell">
+                            class="carousel-cell"
+                        >
                             <ArtistCard
-                                :artist="similarArtist"/>
+                                :artist="similarArtist"
+                            />
                         </div>
                     </BaseFlickity>
                 </div>

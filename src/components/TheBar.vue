@@ -2,13 +2,15 @@
     <div class="bar">
         <div
             :style="{top: getLineTopPos}"
-            class="bar-line"/>
+            class="bar-line"
+        />
         <RouterLink
             v-for="(item, key) in routes"
             :key="item.id"
             :class="{'active': route.name === key}"
             :to="{name: key}"
-            class="bar-button">
+            class="bar-button"
+        >
             <i :class="item.icon"/>
         </RouterLink>
     </div>

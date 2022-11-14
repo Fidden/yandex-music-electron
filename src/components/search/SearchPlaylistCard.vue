@@ -6,10 +6,10 @@
     >
         <div class="playlist-card-image">
             <BaseImage
-                :width="200"
+                :alt="playlist.title"
                 :height="200"
                 :src="playlist.cover.uri || playlist.ogImage"
-                :alt="playlist.title"
+                :width="200"
                 type="playlist"
             />
         </div>
@@ -19,13 +19,14 @@
         </h3>
         <p
             v-if="playlist.owner"
-            class="author">
+            class="author"
+        >
             От {{ playlist.owner.name }}
         </p>
     </RouterLink>
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 import { defineProps } from 'vue';
 import BaseImage from '@/components/ui/BaseImage.vue';
 import { SearchPlaylistInterface } from '@/interfaces/SearchPlaylistInterface';

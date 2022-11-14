@@ -13,7 +13,8 @@
                     :key="playlist.uid"
                     :playlist="playlist"
                     :playlist-kind="playlist.kind"
-                    :playlist-uid="playlist.uid"/>
+                    :playlist-uid="playlist.uid"
+                />
                 />
             </div>
         </template>

@@ -4,10 +4,10 @@
     >
         <div class="result-best-body">
             <BaseImage
-                :width="200"
+                :alt="playlist.title"
                 :height="200"
                 :src="playlist.cover.uri || playlist.ogImage"
-                :alt="playlist.title"
+                :width="200"
                 type="playlist"
             />
             <p class="result-best-name">

@@ -2,7 +2,8 @@
     <div class="range-container">
         <div
             :style="{width: getWidth}"
-            class="range-selected"/>
+            class="range-selected"
+        />
         <input
             v-model.number="currentValue"
             :max="maxValue"

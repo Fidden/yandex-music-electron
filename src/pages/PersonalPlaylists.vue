@@ -1,7 +1,8 @@
 <template>
     <div
         v-if="playlists.length"
-        class="main-container">
+        class="main-container"
+    >
         <div class="main-container-title">
             <h2>
                 Каждый день собираем для вас<br>
@@ -9,7 +10,8 @@
         </div>
         <BaseFlickity
             ref="flickity"
-            :options="useFlickityDefaultOptions">
+            :options="useFlickityDefaultOptions"
+        >
             <div
                 v-for="personal in playlists"
                 :key="personal.data.data.uid"

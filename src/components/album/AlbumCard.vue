@@ -2,12 +2,13 @@
     <RouterLink
         v-if="album"
         :to="{name: 'album', params: {id: props.albumId}}"
-        class="album-card">
+        class="album-card"
+    >
         <BaseImage
-            :width="200"
+            :alt="album.title"
             :height="200"
             :src="album.ogImage"
-            :alt="album.title"
+            :width="200"
             type="album"
         />
 
@@ -22,12 +23,14 @@
         <div class="album-card-footer">
             <p
                 v-if="album.type"
-                class="type">
+                class="type"
+            >
                 {{ type }}
             </p>
             <p
                 v-if="album.year"
-                class="year">
+                class="year"
+            >
                 {{ album.year }}
             </p>
         </div>

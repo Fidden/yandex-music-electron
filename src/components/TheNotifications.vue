@@ -3,14 +3,15 @@
         <Transition name="notify">
             <div
                 v-if="current"
-                class="notification-item">
+                class="notification-item"
+            >
                 {{ current.title }}
             </div>
         </Transition>
     </div>
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 import { useNotificationsStore } from '@/store/notifications';
 import { computed } from 'vue';
 
@@ -39,6 +40,7 @@ const current = computed(() => notificationStore.current);
 .notify-enter-active, .notify-leave-active {
     transform: translateY(0);
 }
+
 .notify-enter-from, .notify-leave-to {
     opacity: 0;
     transform: translateY(100px);

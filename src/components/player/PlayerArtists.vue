@@ -3,19 +3,20 @@
         v-if="artists.length"
         ref="artistsLinks"
         class="player-track-artist"
-        @mouseleave="handleLeave"
         @mouseenter="handleEnter"
+        @mouseleave="handleLeave"
     >
         <RouterLink
             v-for="(artist, index) in artists"
             :key="artist.id"
-            :to="{name: 'artist', params: {id: artist.id}}">
+            :to="{name: 'artist', params: {id: artist.id}}"
+        >
             {{ useArtistName(artist, index, artists.length) }}
         </RouterLink>
     </p>
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 import useArtistName from '@/composables/useArtistName';
 import ArtistInterface from '@/interfaces/TrackArtistInterface';
 import { onMounted, ref, watch } from 'vue';

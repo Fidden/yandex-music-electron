@@ -11,8 +11,12 @@ export default async function useStationTracks(settings = true, trackIdBefore = 
     const stationStore = useStationStore();
     const params: Params = {};
 
-    if (settings) { params.settings2 = true; }
-    if (trackIdBefore) { params.queue = trackIdBefore; }
+    if (settings) {
+        params.settings2 = true;
+    }
+    if (trackIdBefore) {
+        params.queue = trackIdBefore;
+    }
 
     const res = await useRequest().get(`rotor/station/${stationStore.currentStation}/tracks`, {
         data: params

@@ -7,10 +7,10 @@
             <BaseNavigation/>
             <div class="item-head">
                 <BaseImage
-                    :width="150"
+                    :alt="album.title"
                     :height="150"
                     :src="album.ogImage"
-                    :alt="album.title"
+                    :width="150"
                     type="album"
                 />
 
@@ -29,17 +29,20 @@
                     <div class="info-row">
                         <h3
                             v-if="album.artists"
-                            class="info-artists">
+                            class="info-artists"
+                        >
                             Исполнители:
                         </h3>
                         <ArtistsLinks :artists="album.artists"/>
                         <img
                             alt="circle"
                             class="info-circle"
-                            src="../assets/img/circle-white.svg">
+                            src="../assets/img/circle-white.svg"
+                        >
                         <p
                             v-if="album.trackCount"
-                            class="info-tracks-count">
+                            class="info-tracks-count"
+                        >
                             {{ useTracksCount(album.trackCount) }}
                         </p>
                     </div>

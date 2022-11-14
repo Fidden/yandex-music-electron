@@ -1,11 +1,13 @@
 <template>
     <p
         v-if="artists.length"
-        class="container">
+        class="container"
+    >
         <RouterLink
             v-for="(artist, index) in artists"
             :key="artist.id"
-            :to="{name: 'artist', params: {id: artist.id}}">
+            :to="{name: 'artist', params: {id: artist.id}}"
+        >
             {{ useArtistName(artist, index, artists.length) }}
         </RouterLink>
     </p>

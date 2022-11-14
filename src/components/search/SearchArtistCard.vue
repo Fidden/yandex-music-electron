@@ -4,10 +4,10 @@
         class="artist-card"
     >
         <BaseImage
-            :width="200"
+            :alt="artist.name"
             :height="200"
             :src="artist?.cover?.uri"
-            :alt="artist.name"
+            :width="200"
             class="card-image"
             type="artist"
         />
@@ -15,13 +15,14 @@
         <h4>{{ artist.name }}</h4>
         <p
             v-if="artist?.counts?.tracks"
-            class="tracks-count">
+            class="tracks-count"
+        >
             {{ artist?.counts?.tracks }} Треков
         </p>
     </RouterLink>
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 import { defineProps } from 'vue';
 import { SearchArtistInterface } from '@/interfaces/SearchArtistInterface';
 import BaseImage from '@/components/ui/BaseImage.vue';

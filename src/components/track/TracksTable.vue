@@ -14,8 +14,8 @@
         >
             <template #before>
                 <div
-                    class="scroller-before"
                     :class="{'withOutImage': withoutImage}"
+                    class="scroller-before"
                 >
                     <p class="scroller-before-number">
                         #
@@ -31,8 +31,8 @@
             </template>
             <template #default="{ item, index }">
                 <div
-                    class="track"
                     :class="{'withOutImage': withoutImage}"
+                    class="track"
                 >
                     <div
                         class="track-back"
@@ -43,12 +43,13 @@
                         <i class="fas fa-play"/>
                     </div>
                     <div
-                        class="image">
+                        class="image"
+                    >
                         <BaseImage
-                            :width="100"
+                            :alt="item.title"
                             :height="100"
                             :src="item.ogImage"
-                            :alt="item.title"
+                            :width="100"
                             type="track"
                         />
                         <PlayingIcon
@@ -68,19 +69,20 @@
                                 :content-warning="item.contentWarning"
                             />
                             <ArtistsLinks
-                                class="title-artists"
                                 :artists="item.artists"
+                                class="title-artists"
                             />
                         </span>
                     </p>
                     <AlbumLinks
-                        class="albums"
                         :albums="item.albums"
+                        class="albums"
                     />
                     <BaseLikeButton
-                        class="like"
                         :liked="item.liked"
-                        @click="handleLike(item)"/>
+                        class="like"
+                        @click="handleLike(item)"
+                    />
                     <p class="duration">
                         {{ useConvertDuration(item.durationMs) }}
                     </p>
@@ -88,7 +90,8 @@
             </template>
             <template
                 v-if="!withoutMargin"
-                #after>
+                #after
+            >
                 <div class="track-template"/>
                 <div class="track-template"/>
             </template>

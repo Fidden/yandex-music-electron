@@ -2,14 +2,14 @@
     <p
         ref="trackTitle"
         class="player-track-title"
-        @mouseleave="handleLeave"
         @mouseenter="handleEnter"
+        @mouseleave="handleLeave"
     >
         {{ title }}
     </p>
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 import { defineProps, onMounted, ref, watch } from 'vue';
 
 const trackTitle = ref<HTMLElement | null>(null);

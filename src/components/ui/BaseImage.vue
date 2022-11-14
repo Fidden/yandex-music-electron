@@ -5,7 +5,7 @@
     >
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 import useImage from '@/composables/useImage';
 import { computed } from 'vue';
 

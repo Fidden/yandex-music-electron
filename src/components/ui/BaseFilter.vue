@@ -5,13 +5,15 @@
                 v-model.trim="filter.query"
                 placeholder="Поиск"
                 type="text"
-                @input="filterByQuery">
+                @input="filterByQuery"
+            >
             <i class="far fa-search"/>
         </div>
 
         <select
             v-model.number="filter.select"
-            @change="filterBySelect">
+            @change="filterBySelect"
+        >
             <option value="-1">
                 По стандарту
             </option>

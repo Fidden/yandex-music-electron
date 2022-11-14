@@ -6,7 +6,8 @@
         <div
             v-for="(item, key) in stationStore.currentInfo?.station?.restrictions2"
             :key="item.name"
-            class="setting-block">
+            class="setting-block"
+        >
             <p class="settings-block-title">
                 {{ item.name }}
             </p>
@@ -15,7 +16,8 @@
                     v-for="possible in item.possibleValues"
                     :key="possible.value"
                     :class="{'active': stationSettings[key] === possible.value}"
-                    @click="setStationSetting(key, possible.value)">
+                    @click="setStationSetting(key, possible.value)"
+                >
                     {{ possible.name }}
                 </button>
             </div>
@@ -23,7 +25,7 @@
     </div>
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 import { useStationStore } from '@/store/station';
 import { defineEmits, ref, watch } from 'vue';
 

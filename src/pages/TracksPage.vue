@@ -1,7 +1,8 @@
 <template>
     <main
         v-if="tracks.length"
-        class="main">
+        class="main"
+    >
         <div class="main-container main-container-scroller">
             <h2 class="main-container-title">
                 Треки
@@ -9,7 +10,8 @@
             <TheTracksTable
                 v-if="tracks.length"
                 :filter-bar="true"
-                :tracks="tracks"/>
+                :tracks="tracks"
+            />
         </div>
     </main>
     <BaseLoading v-else/>

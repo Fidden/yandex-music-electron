@@ -4,10 +4,10 @@
     >
         <div class="result-best-body">
             <BaseImage
-                :width="200"
+                :alt="artist.name"
                 :height="200"
                 :src="artist.cover.uri"
-                :alt="artist.name"
+                :width="200"
                 type="artist"
             />
             <p class="result-best-name">

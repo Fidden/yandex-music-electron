@@ -7,14 +7,16 @@
             </h2>
             <RouterLink
                 :to="{name: 'new-releases'}"
-                class="main-container-show-all">
+                class="main-container-show-all"
+            >
                 Показать все
             </RouterLink>
         </div>
         <BaseFlickity
             v-if="newReleases.length"
             ref="flickity"
-            :options="useFlickityDefaultOptions">
+            :options="useFlickityDefaultOptions"
+        >
             <div
                 v-for="release in newReleases"
                 :key="release.id"

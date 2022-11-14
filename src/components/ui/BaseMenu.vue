@@ -1,21 +1,24 @@
 <template>
     <div
         v-click-outside="handleClose"
-        class="menu-container">
+        class="menu-container"
+    >
         <button
             class="menu-container-head"
-            @click="handleClick">
+            @click="handleClick"
+        >
             <i class="far fa-ellipsis-h"/>
         </button>
         <div
             v-show="opened"
-            class="menu-container-body">
+            class="menu-container-body"
+        >
             <slot/>
         </div>
     </div>
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 import { Ref, ref } from 'vue';
 
 const opened: Ref<boolean> = ref(false);

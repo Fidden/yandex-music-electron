@@ -7,7 +7,8 @@
             <ArtistCard
                 v-for="artist in artists"
                 :key="artist.id"
-                :artist="artist"/>
+                :artist="artist"
+            />
         </template>
     </LayoutItems>
 </template>

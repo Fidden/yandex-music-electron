@@ -1,24 +1,28 @@
 <template>
     <main
         v-if="isLoaded"
-        class="main">
+        class="main"
+    >
         <div class="main-container">
             <h2 class="main-container-title">
                 Радио
             </h2>
             <div
                 v-if="stationDashboard.stations?.length"
-                class="my-wave-container">
+                class="my-wave-container"
+            >
                 <div
                     v-for="item in stationDashboard.stations"
                     :key="item.station.idForFrom"
-                    class="my-wave-block">
+                    class="my-wave-block"
+                >
                     <StationCard :station="item"/>
                 </div>
             </div>
         </div>
         <div
-            class="main-container">
+            class="main-container"
+        >
             <h2 class="main-container-title station-collections-title">
                 Подборки
             </h2>
@@ -27,7 +31,8 @@
                     v-for="item in stationStore.listKeys"
                     :key="item"
                     :class="{'active': item === selectedKey}"
-                    @click="selectKey(item)">
+                    @click="selectKey(item)"
+                >
                     {{ keyToName(item) }}
                 </button>
             </div>
@@ -35,9 +40,11 @@
                 <div
                     v-for="item in stationListByKey"
                     :key="item.station.id.tag"
-                    class="genre-block">
+                    class="genre-block"
+                >
                     <StationCardSmall
-                        :station="item"/>
+                        :station="item"
+                    />
                 </div>
             </div>
         </div>

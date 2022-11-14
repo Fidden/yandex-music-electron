@@ -6,10 +6,10 @@
     >
         <div class="playlist-card-image">
             <BaseImage
-                :width="200"
+                :alt="playlist.title"
                 :height="200"
                 :src="playlist.ogImage"
-                :alt="playlist.title"
+                :width="200"
                 type="playlist"
             />
         </div>
@@ -19,7 +19,8 @@
         </h3>
         <p
             v-if="playlist.owner"
-            class="author">
+            class="author"
+        >
             От {{ playlist.owner.name }}
         </p>
     </RouterLink>

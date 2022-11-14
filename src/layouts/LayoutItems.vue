@@ -5,7 +5,8 @@
         </h2>
         <div
             v-if="loaded"
-            class="container">
+            class="container"
+        >
             <slot name="body"/>
         </div>
         <BaseLoading v-else/>
@@ -30,14 +31,15 @@ defineProps<{
 .container {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
-    gap: 7px;
+    gap: 14px 7px;
 }
 
-@media (min-width: 1001px) {
+@media (min-width: 1000px) {
     .container {
         display: flex;
         flex-direction: row;
         flex-wrap: wrap;
+        grid-template-columns: unset;
     }
 }
 </style>

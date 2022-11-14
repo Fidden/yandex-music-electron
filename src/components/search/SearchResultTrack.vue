@@ -1,10 +1,10 @@
 <template>
     <div class="result-best-body">
         <BaseImage
-            :width="150"
+            :alt="track.title"
             :height="150"
             :src="track.coverUri"
-            :alt="track.title"
+            :width="150"
             type="track"
         />
         <p class="result-best-name">
@@ -20,7 +20,8 @@
         </div>
         <button
             class="play-btn"
-            @click="playTrack">
+            @click="playTrack"
+        >
             <i class="fas fa-play"/>
         </button>
     </div>

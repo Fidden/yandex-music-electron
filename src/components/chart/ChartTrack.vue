@@ -9,21 +9,24 @@
             </p>
             <i
                 v-if="item.chart.progress === 'up'"
-                class="fas fa-caret-up fa-xs"/>
+                class="fas fa-caret-up fa-xs"
+            />
             <i
                 v-else-if="item.chart.progress === 'down'"
-                class="fas fa-caret-down fa-xs"/>
+                class="fas fa-caret-down fa-xs"
+            />
             <i
                 v-else
-                class="far fa-horizontal-rule"/>
+                class="far fa-horizontal-rule"
+            />
         </div>
         <div class="chart-track-body">
             <div class="chart-track-body-image">
                 <BaseImage
-                    :width="100"
+                    :alt="item.track.title"
                     :height="100"
                     :src="item.track.ogImage"
-                    :alt="item.track.title"
+                    :width="100"
                     type="track"
                 />
                 <PlayingIcon

@@ -1,12 +1,13 @@
 <template>
     <RouterLink
         :to="{name: 'playlist', params: {kind: playlist.kind, uid: playlist.uid}}"
-        class="playlist-block">
+        class="playlist-block"
+    >
         <BaseImage
-            :width="100"
+            :alt="playlist.title"
             :height="100"
             :src="playlist.ogImage"
-            :alt="playlist.title"
+            :width="100"
             type="playlist"
         />
         <h4>{{ playlist.title }}</h4>

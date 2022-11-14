@@ -8,10 +8,10 @@
             class="station-image-block"
         >
             <BaseImage
-                :width="100"
+                :alt="station.station.name"
                 :height="100"
                 :src="station.station.icon.imageUrl"
-                :alt="station.station.name"
+                :width="100"
                 type="station"
             />
             <div class="play-icon">

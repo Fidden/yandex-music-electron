@@ -2,14 +2,15 @@
     <main class="main">
         <div
             v-if="Object.keys(playlist).length"
-            class="main-container main-container-scroller">
+            class="main-container main-container-scroller"
+        >
             <BaseNavigation/>
             <div class="item-head">
                 <BaseImage
-                    :width="200"
+                    :alt="playlist.title"
                     :height="200"
                     :src="playlist.ogImage"
-                    :alt="playlist.title"
+                    :width="200"
                     type="playlist"
                 />
                 <div class="item-info">
@@ -21,22 +22,26 @@
                     <div class="info-row">
                         <h3
                             v-if="playlist.owner"
-                            class="info-artists">
+                            class="info-artists"
+                        >
                             Составитель: {{ playlist.owner.name }}
                         </h3>
                         <img
                             alt="circle"
                             class="info-circle"
-                            src="../assets/img/circle-white.svg">
+                            src="../assets/img/circle-white.svg"
+                        >
                         <p
                             v-if="playlist.trackCount"
-                            class="info-tracks-count">
+                            class="info-tracks-count"
+                        >
                             {{ useTracksCount(playlist.trackCount) }}
                         </p>
                         <img
                             alt="circle"
                             class="info-circle"
-                            src="../assets/img/circle-white.svg">
+                            src="../assets/img/circle-white.svg"
+                        >
                         <p class="info-tracks-duration">
                             {{ useConvertDuration(playlist.durationMs, true) }}
                         </p>
@@ -45,12 +50,13 @@
                     <div class="item-controls">
                         <button
                             class="btn"
-                            @click="usePlayShuffle(playlistTracks)">
+                            @click="usePlayShuffle(playlistTracks)"
+                        >
                             <i class="fas fa-play fa-sm"/> Перемешать
                         </button>
                         <BaseLikeButton
-                            class="fa-lg"
                             :liked="playlist?.liked"
+                            class="fa-lg"
                             @click="handleLike"
                         />
                         <BaseMenu>
@@ -69,12 +75,12 @@
             </div>
             <TheTracksTable
                 :filter-bar="true"
-                :tracks="playlistTracks"
-                :without-image="false"
                 :last-played-entity="{
                     tag: `${playlist.uid}_${playlist.kind}`,
                     type: 'playlist'
                 }"
+                :tracks="playlistTracks"
+                :without-image="false"
             />
         </div>
         <BaseLoading v-else/>

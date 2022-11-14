@@ -1,11 +1,13 @@
 <template>
     <main
         v-if="response"
-        class="main">
+        class="main"
+    >
         <BaseNavigation/>
         <div
             v-if="response.best?.result && Object.keys(response.best?.result).length"
-            class="result-block">
+            class="result-block"
+        >
             <div class="result-best">
                 <h2 class="result-best-title">
                     Лучший результат
@@ -13,15 +15,18 @@
 
                 <SearchResultArtist
                     v-if="response.best?.type === 'artist'"
-                    :artist="response.best?.result"/>
+                    :artist="response.best?.result"
+                />
 
                 <SearchResultTrack
                     v-else-if="response.best?.type === 'track'"
-                    :track="response.best?.result"/>
+                    :track="response.best?.result"
+                />
 
                 <SearchResultPlaylist
                     v-else-if="response.best?.type === 'playlist'"
-                    :playlist="response.best?.result"/>
+                    :playlist="response.best?.result"
+                />
             </div>
             <div
                 v-if="tracks?.length"
@@ -31,39 +36,46 @@
                     Треки
                 </h2>
                 <SearchTracksTable
-                    :tracks="tracks"/>
+                    :tracks="tracks"
+                />
             </div>
         </div>
         <div
             v-if="response.artists?.results?.length"
-            class="result-container">
+            class="result-container"
+        >
             <h2 class="result-container-title">
                 Исполнители
             </h2>
             <BaseFlickity
                 ref="flickity"
-                :options="useFlickityDefaultOptions">
+                :options="useFlickityDefaultOptions"
+            >
                 <div
                     v-for="artist in response.artists?.results"
                     :key="artist.id"
-                    class="carousel-cell">
+                    class="carousel-cell"
+                >
                     <SearchArtistCard :artist="artist"/>
                 </div>
             </BaseFlickity>
         </div>
         <div
             v-if="response.albums?.results?.length"
-            class="result-container">
+            class="result-container"
+        >
             <h2 class="result-container-title">
                 Альбомы
             </h2>
             <BaseFlickity
                 ref="flickity"
-                :options="useFlickityDefaultOptions">
+                :options="useFlickityDefaultOptions"
+            >
                 <div
                     v-for="album in response.albums.results"
                     :key="album.id"
-                    class="carousel-cell">
+                    class="carousel-cell"
+                >
                     <AlbumCard
                         :album="album"
                         :album-id="album.id"
@@ -73,17 +85,20 @@
         </div>
         <div
             v-if="response.playlists?.results?.length"
-            class="result-container">
+            class="result-container"
+        >
             <h2 class="result-container-title">
                 Плейлисты
             </h2>
             <BaseFlickity
                 ref="flickity"
-                :options="useFlickityDefaultOptions">
+                :options="useFlickityDefaultOptions"
+            >
                 <div
                     v-for="playlist in response.playlists?.results"
                     :key="playlist.uid"
-                    class="carousel-cell">
+                    class="carousel-cell"
+                >
                     <SearchPlaylistCard
                         :playlist="playlist"
                     />

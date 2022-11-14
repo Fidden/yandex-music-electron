@@ -3,7 +3,8 @@
         <img
             alt="logo"
             class="image"
-            src="@/assets/img/yandex-official-logo.svg">
+            src="@/assets/img/yandex-official-logo.svg"
+        >
         <slot/>
     </div>
 </template>

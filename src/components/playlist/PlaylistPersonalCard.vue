@@ -6,10 +6,10 @@
     >
         <div class="playlist-card-image">
             <BaseImage
-                :width="200"
+                :alt="playlist.title"
                 :height="200"
                 :src="playlist.cover?.uri"
-                :alt="playlist.title"
+                :width="200"
                 type="playlist"
             />
         </div>
@@ -21,7 +21,8 @@
             {{ playlist.description }}
         </p>
         <p
-            class="track-count">
+            class="track-count"
+        >
             {{ playlist.trackCount }} Треков
         </p>
     </RouterLink>

@@ -1,7 +1,8 @@
 <template>
     <div
         v-if="Object.keys(chart).length"
-        class="chart-container">
+        class="chart-container"
+    >
         <div class="main-container-title">
             <h2>
                 Чарт Яндекс.Музыки<br>
@@ -9,16 +10,19 @@
             </h2>
             <RouterLink
                 :to="{name: 'chart'}"
-                class="main-container-show-all">
+                class="main-container-show-all"
+            >
                 Показать все
             </RouterLink>
         </div>
         <div
-            class="chart-tracks-container">
+            class="chart-tracks-container"
+        >
             <ChartTrack
                 v-for="item in chartStore.data"
                 :key="item.data.id"
-                :item="item.data"/>
+                :item="item.data"
+            />
         </div>
     </div>
 </template>

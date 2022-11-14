@@ -8,11 +8,13 @@
         <BaseFlickity
             v-if="recent.length"
             ref="flickity"
-            :options="useFlickityDefaultOptions">
+            :options="useFlickityDefaultOptions"
+        >
             <div
                 v-for="item in recent"
                 :key="item.id"
-                class="carousel-cell">
+                class="carousel-cell"
+            >
                 <AlbumCard
                     v-if="item.data.context === 'album'"
                     :album="item.data.payload"

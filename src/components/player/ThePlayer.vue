@@ -2,7 +2,8 @@
     <Transition>
         <div
             v-show="currentTrack"
-            class="player-container">
+            class="player-container"
+        >
             <TheStationSettings
                 v-if="stationSettingsOpen && playerStore.isStation"
                 v-click-outside="settingsClose"
@@ -17,7 +18,8 @@
                     :max-value="player.duration"
                     :step="0.01"
                     :value="player.time"
-                    @change="setTime"/>
+                    @change="setTime"
+                />
 
                 <p class="end-time">
                     {{ convertTime(player.duration) }}
@@ -37,11 +39,12 @@
                 />
                 <div
                     v-if="currentTrack"
-                    class="player-track-info">
+                    class="player-track-info"
+                >
                     <BaseImage
-                        :width="100"
                         :height="100"
                         :src="currentTrack.ogImage || currentTrack.coverUri"
+                        :width="100"
                         alt="player-img"
                         class="player-track-image"
                         type="track"
@@ -56,9 +59,10 @@
                 </div>
 
                 <BaseLikeButton
-                    class="control-btn"
                     :liked="currentTrack?.liked"
-                    @click="like"/>
+                    class="control-btn"
+                    @click="like"
+                />
 
                 <div class="player-body-controls">
                     <button
@@ -68,7 +72,8 @@
                     >
                         <i
                             :class="{'active': playerStore.shuffle}"
-                            class="fal fa-random"/>
+                            class="fal fa-random"
+                        />
                     </button>
                     <button
                         v-else
@@ -106,7 +111,8 @@
 
                     <button
                         class="control-btn"
-                        @click="next">
+                        @click="next"
+                    >
                         <i class="fal fa-step-forward"/>
                     </button>
                     <button
@@ -115,22 +121,26 @@
                     >
                         <i
                             :class="repeatIcon"
-                            class="fal"/>
+                            class="fal"
+                        />
                     </button>
                 </div>
                 <div class="volume-container">
                     <button
                         v-if="player.volume > 0"
                         class="control-btn"
-                        @click="mute">
+                        @click="mute"
+                    >
                         <i
                             :class="volumeIcon"
-                            class="fal"/>
+                            class="fal"
+                        />
                     </button>
                     <button
                         v-else
                         class="control-btn"
-                        @click="unMute">
+                        @click="unMute"
+                    >
                         <i class="fal fa-volume-mute"/>
                     </button>
 

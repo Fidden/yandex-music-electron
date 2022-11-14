@@ -2,7 +2,8 @@
     <div class="background">
         <div
             :class="{'stop': !playerStore.playing}"
-            class="playing">
+            class="playing"
+        >
             <span class="playing__bar playing__bar1"/>
             <span class="playing__bar playing__bar2"/>
             <span class="playing__bar playing__bar3"/>

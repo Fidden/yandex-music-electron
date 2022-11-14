@@ -15,6 +15,7 @@
 ![Screen Shot](https://i.imgur.com/c5Tl0s8.png)
 
 This is an unofficial Yandex music app that was written for myself. Differences from the official client:
+
 1. Speed
 2. Convenience
 3. Built-in integration with discord
@@ -45,10 +46,10 @@ npm run lint
 ```
 
 ### Output directory
+
 ```
 C:/<relative_path>/dist_electron/Yandex.Music Setup.exe
 ```
-
 
 ### How to get token
 

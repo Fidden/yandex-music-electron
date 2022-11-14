@@ -1,7 +1,8 @@
 <template>
     <div
         ref="root"
-        class="flickity">
+        class="flickity"
+    >
         <slot/>
     </div>
 </template>

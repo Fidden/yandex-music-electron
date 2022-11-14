@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain, protocol, globalShortcut } from 'electron';
+import { app, BrowserWindow, globalShortcut, ipcMain, protocol } from 'electron';
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib';
 import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer';
 import 'v8-compile-cache';

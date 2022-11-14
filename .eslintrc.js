@@ -28,10 +28,13 @@ module.exports = {
             named: 'never',
             asyncArrow: 'always'
         }],
+        'vue/html-closing-bracket-newline': ['error', {
+            singleline: 'never',
+            multiline: 'always'
+        }],
         'vue/no-multiple-template-root': 'off',
         'vue/html-indent': 'off',
         'vue/html-closing-bracket-spacing': 'off',
-        'vue/html-closing-bracket-newline': 'off',
         '@typescript-eslint/no-explicit-any': 'off',
         '@typescript-eslint/explicit-module-boundary-types': 'off',
         '@typescript-eslint/no-extra-semi': 'off',

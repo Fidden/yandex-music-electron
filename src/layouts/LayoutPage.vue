@@ -10,7 +10,8 @@
         </div>
         <slot
             v-if="loaded"
-            name="body"/>
+            name="body"
+        />
         <BaseLoading v-else/>
     </main>
 </template>

@@ -3,18 +3,22 @@
         :to="{name: 'artist', params: {id: artist.id}}"
         class="artist-card"
     >
-        <BaseImage
-            :width="200"
-            :height="200"
-            :src="artist?.cover?.uri"
-            :alt="artist.name"
-            type="artist"
-            class="card-image"
-        />
-        <h4>{{ artist.name }}</h4>
+        <div class="artist-card__image">
+            <BaseImage
+                :alt="artist.name"
+                :height="200"
+                :src="artist?.cover?.uri"
+                :width="200"
+                type="artist"
+            />
+        </div>
+        <h4 class="artist-card__title">
+            {{ artist.name }}
+        </h4>
         <p
             v-if="artist?.counts?.tracks"
-            class="tracks-count">
+            class="artist-card__track-count"
+        >
             {{ artist?.counts?.tracks }} Треков
         </p>
     </RouterLink>
@@ -34,29 +38,39 @@ defineProps<{
 
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .artist-card {
     display: flex;
     flex-direction: column;
     align-items: center;
     text-align: center;
-}
 
-.card-image {
-    border-radius: 50%;
-    object-fit: cover;
-    margin-bottom: 20px;
-}
+    &__title {
+        font-weight: 500;
+        font-size: 16px;
+        line-height: 16px;
+        margin-bottom: 7px;
+    }
 
-.tracks-count {
-    font-weight: 400;
-    font-size: 12px;
-}
+    &__image {
+        width: 100%;
+        max-width: 100%;
+        aspect-ratio: 1/1;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-bottom: 20px;
+        overflow: hidden;
+    }
 
-h4 {
-    font-weight: 500;
-    font-size: 16px;
-    line-height: 16px;
-    margin-bottom: 7px;
+    &__tracks-count {
+        font-weight: 400;
+        font-size: 12px;
+    }
+
+    @media (min-width: 1000px) {
+        &__image {
+            width: 200px;
+        }
+    }
 }
 </style>

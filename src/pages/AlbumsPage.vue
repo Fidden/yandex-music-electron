@@ -7,7 +7,8 @@
             <AlbumCard
                 v-for="album in albums"
                 :key="album.id"
-                :album-id="album.id"/>
+                :album-id="album.id"
+            />
         </template>
     </LayoutItems>
 </template>

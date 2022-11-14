@@ -1,7 +1,8 @@
 <template>
     <div
         v-if="playlists.length"
-        class="main-container">
+        class="main-container"
+    >
         <h2 class="main-container-title">
             Главное
         </h2>

@@ -1,22 +1,22 @@
 <template>
     <LayoutPage :loaded="tracks.length > 0">
         <template #title>
-            {{ route.params.artist_name }}
+            {{ route.query.artist_name }}
         </template>
         <template #subtitle>
             Все треки
         </template>
         <template #body>
             <TheTracksTable
-                class="tracks-table"
                 :tracks="tracks"
                 :without-margin="true"
+                class="tracks-table"
             />
         </template>
     </LayoutPage>
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 import LayoutPage from '@/layouts/LayoutPage.vue';
 import TheTracksTable from '@/components/track/TracksTable.vue';
 import { useRoute } from 'vue-router';

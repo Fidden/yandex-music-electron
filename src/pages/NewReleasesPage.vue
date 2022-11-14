@@ -14,7 +14,8 @@
                     v-for="release in newReleases"
                     :key="release.id"
                     :album="release"
-                    :album-id="release.id"/>
+                    :album-id="release.id"
+                />
             </div>
         </template>
     </LayoutPage>

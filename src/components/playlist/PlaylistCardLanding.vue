@@ -6,10 +6,10 @@
     >
         <div class="playlist-card-image">
             <BaseImage
-                :width="200"
+                :alt="playlist.title"
                 :height="200"
                 :src="playlist.cover?.uri"
-                :alt="playlist.title"
+                :width="200"
                 type="playlist"
             />
         </div>
@@ -19,12 +19,14 @@
         </h3>
         <p
             v-if="playlist.owner"
-            class="author">
+            class="author"
+        >
             От {{ playlist.owner.name }}
         </p>
         <p
             v-if="showTracksCount"
-            class="track-count">
+            class="track-count"
+        >
             {{ playlist.trackCount }} Треков
         </p>
     </RouterLink>
