@@ -40,7 +40,10 @@
                     />
                     <div class="index">
                         <span>{{ index + 1 }}</span>
-                        <i class="fas fa-play"/>
+                        <i
+                            class="fas"
+                            :class="isPlaying(item) && playerStore.playing ? 'fa-pause' : 'fa-play'"
+                        />
                     </div>
                     <div
                         class="image"
@@ -53,7 +56,7 @@
                             type="track"
                         />
                         <PlayingIcon
-                            v-if="playerStore.trackIndex === Number(item.id)"
+                            v-if="isPlaying(item)"
                         />
                     </div>
                     <p class="title">
@@ -224,6 +227,10 @@ async function handleLike(track: TrackInterface) {
     track.liked
         ? userStore.addTrackToLikes(trackObject)
         : userStore.removeTrackFromLikes(trackObject);
+}
+
+function isPlaying(track: TrackInterface) {
+    return playerStore.trackIndex === Number(track.id);
 }
 
 </script>
