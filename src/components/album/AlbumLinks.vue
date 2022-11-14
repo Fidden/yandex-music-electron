@@ -1,7 +1,7 @@
 <template>
     <p
         v-if="albums.length"
-        class="container"
+        class="album-links"
     >
         <RouterLink
             v-for="(album, index) in albums"
@@ -23,22 +23,22 @@ defineProps<{
 }>();
 </script>
 
-<style scoped>
-.container {
+<style scoped lang="scss">
+.album-links {
     align-items: center;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
     max-width: 100%;
     margin: auto 0;
-}
 
-a {
-    font-size: inherit;
-    color: inherit;
-}
+    a {
+        font-size: inherit;
+        color: inherit;
 
-a:hover {
-    text-decoration: underline;
+        &:hover {
+            text-decoration: underline;
+        }
+    }
 }
 </style>

@@ -1,7 +1,7 @@
 <template>
     <p
         v-if="artists.length"
-        class="container"
+        class="artists-links"
     >
         <RouterLink
             v-for="(artist, index) in artists"
@@ -24,21 +24,21 @@ defineProps<{
 }>();
 </script>
 
-<style scoped>
-.container {
+<style scoped lang="scss">
+.artists-links {
     align-items: center;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
     max-width: 100%;
-}
 
-a {
-    font-size: inherit;
-    color: inherit;
-}
+    a {
+        font-size: inherit;
+        color: inherit;
 
-a:hover {
-    text-decoration: underline;
+        &:hover {
+            text-decoration: underline;
+        }
+    }
 }
 </style>

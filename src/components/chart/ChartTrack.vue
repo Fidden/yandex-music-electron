@@ -1,10 +1,10 @@
 <template>
     <div
-        class="chart-tracks-block"
+        class="chart-track"
         @click="() => playTrack()"
     >
-        <div class="chart-block-info">
-            <p class="chart-block-info-pos">
+        <div class="chart-track__info">
+            <p class="chart-track__infoPosition">
                 {{ item.chart.position }}
             </p>
             <i
@@ -20,8 +20,8 @@
                 class="far fa-horizontal-rule"
             />
         </div>
-        <div class="chart-track-body">
-            <div class="chart-track-body-image">
+        <div class="chart-track__body">
+            <div class="chart-track__image">
                 <BaseImage
                     :alt="item.track.title"
                     :height="100"
@@ -34,16 +34,16 @@
                 />
             </div>
 
-            <div class="chart-track-body-info">
-                <p class="chart-track-body-title">
+            <div class="chart-track__bodyInfo">
+                <p class="chart-track__title">
                     {{ item.track.title }}
                 </p>
                 <ArtistsLinks
                     :artists="item.track.artists"
-                    class="artist-links"
+                    class="chart-track__links"
                 />
             </div>
-            <p class="chart-track-duration">
+            <p class="chart-track__duration">
                 {{ useConvertDuration(item.track.durationMs) }}
             </p>
         </div>
@@ -73,86 +73,81 @@ async function playTrack() {
 
 </script>
 
-<style scoped>
-.chart-tracks-block {
+<style scoped lang="scss">
+.chart-track {
     display: flex;
     flex-direction: row;
     align-items: center;
     border-radius: 4px;
     cursor: pointer;
-}
 
-.chart-tracks-block img {
-    width: 45px;
-    height: 45px;
-}
+    img {
+        width: 45px;
+        height: 45px;
+    }
 
-.chart-block-info {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 15px;
-}
+    &__info {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 15px;
 
-.chart-block-info-pos {
-    font-size: 14px;
-    font-weight: 300;
-}
+        &Position {
+            font-size: 14px;
+            font-weight: 300;
+        }
+    }
 
-.fa-horizontal-rule {
-    width: 8px;
-    overflow: hidden;
-}
+    &__body {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        margin-left: 4px;
+        flex: 1;
+        border-radius: 4px;
+        overflow: hidden;
 
-.chart-track-body {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    margin-left: 4px;
-    flex: 1;
-    border-radius: 4px;
-    overflow: hidden;
-}
+        &Info {
+            display: flex;
+            flex-direction: column;
+            max-width: calc(100% - 100px);
+            overflow-x: hidden;
+        }
+    }
 
-.chart-track-body-image {
-    border-radius: 4px;
-    overflow: hidden;
-    position: relative;
-    display: flex;
-    flex-direction: row;
-    flex-shrink: 0;
-    margin-right: 10px;
-}
+    &__image {
+        border-radius: 4px;
+        overflow: hidden;
+        position: relative;
+        display: flex;
+        flex-direction: row;
+        flex-shrink: 0;
+        margin-right: 10px;
+    }
 
-.chart-track-body-info {
-    display: flex;
-    flex-direction: column;
-    max-width: calc(100% - 100px);
-    overflow-x: hidden;
-}
+    &__title {
+        line-height: 16px;
+        font-size: 16px;
+        font-weight: 400;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+    }
 
-.chart-track-body-title {
-    line-height: 16px;
-    font-size: 16px;
-    font-weight: 400;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    white-space: nowrap;
-}
+    &__links {
+        font-size: 13px;
+        line-height: 17px;
+        color: #8E929C;
+        font-weight: 400;
+    }
 
-.artist-links {
-    font-size: 13px;
-    line-height: 17px;
-    color: #8E929C;
-    font-weight: 400;
-}
-
-.chart-track-duration {
-    font-weight: 400;
-    font-size: 14px;
-    line-height: 16px;
-    color: #8E929C;
-    margin-left: auto;
+    &__duration {
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 16px;
+        color: #8E929C;
+        margin-left: auto;
+    }
 }
 
 .fa-caret-up {
@@ -162,4 +157,10 @@ async function playTrack() {
 .fa-caret-down {
     color: lightcoral;
 }
+
+.fa-horizontal-rule {
+    width: 8px;
+    overflow: hidden;
+}
+
 </style>
