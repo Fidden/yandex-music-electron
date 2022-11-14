@@ -29,8 +29,6 @@ defineProps<{
 
 <style scoped lang="scss">
 .main {
-    overflow-y: hidden;
-
     &__head {
         h2 {
             font-weight: 500;
