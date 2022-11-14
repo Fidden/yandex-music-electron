@@ -31,7 +31,7 @@
             </template>
             <template #default="{ item, index }">
                 <div
-                    :class="{'withOutImage': withoutImage}"
+                    :class="{'withOutImage': withoutImage, 'playing': isPlaying(item) && playerStore.playing}"
                     class="track"
                 >
                     <div
@@ -235,9 +235,9 @@ function isPlaying(track: TrackInterface) {
 
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .tracks-table {
-    height: calc(100% - 175px)
+    height: calc(100% - 175px);
 }
 
 .scroller {
@@ -257,6 +257,30 @@ function isPlaying(track: TrackInterface) {
 
 .track {
     position: relative;
+
+    &:hover {
+        background: #1E222D;
+
+        .like {
+            opacity: 1;
+            transition: 0.2s;
+        }
+
+        .index {
+            i {
+                display: block;
+            }
+
+            span {
+                display: none;
+            }
+        }
+
+        .albums {
+            transition: 0.2s;
+            color: white;
+        }
+    }
 }
 
 .track-back {
@@ -276,10 +300,28 @@ function isPlaying(track: TrackInterface) {
     color: #8E929C;
     text-align: left;
     margin-bottom: 15px;
+
+    i {
+        text-align: center;
+    }
 }
 
-.withOutImage > .image-th, .withOutImage > .image {
-    display: none;
+.withOutImage {
+    > .image-th, > .image {
+        display: none;
+    }
+
+    &.playing {
+        .index {
+            span {
+                display: none;
+            }
+
+            i {
+                display: block;
+            }
+        }
+    }
 }
 
 .scroller-before-number {
@@ -290,20 +332,11 @@ function isPlaying(track: TrackInterface) {
     margin-left: 20px;
 }
 
-.scroller-before i {
-    text-align: center;
-}
-
 .track, .track-template {
     height: 50px;
     padding: 5px 0;
     font-size: 14px;
     cursor: pointer;
-}
-
-.track:hover .like {
-    opacity: 1;
-    transition: 0.2s;
 }
 
 .like {
@@ -318,31 +351,19 @@ function isPlaying(track: TrackInterface) {
 .index {
     width: 100%;
     position: relative;
-}
 
-.index i {
-    display: none;
-    font-size: 10px;
-}
+    span, i {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        text-align: right;
+    }
 
-.index span, .index i {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    text-align: right;
-}
-
-.track:hover .index i {
-    display: block;
-}
-
-.track:hover .index span {
-    display: none;
-}
-
-.track:hover {
-    background: #1E222D;
+    i {
+        display: none;
+        font-size: 10px;
+    }
 }
 
 .image {
@@ -391,11 +412,6 @@ function isPlaying(track: TrackInterface) {
     transition: 0.2s;
     color: #8E929C;
     z-index: 20;
-}
-
-.track:hover .albums {
-    transition: 0.2s;
-    color: white;
 }
 
 .duration {
