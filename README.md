@@ -24,25 +24,25 @@ This is an unofficial Yandex music app that was written for myself. Differences 
 ### Project setup
 
 ```
-npm install
+yarn install
 ```
 
 ### Compiles and hot-reloads for development
 
 ```
-npm run electron:serve
+yarn dev
 ```
 
 ### Compiles and minifies for production
 
 ```
-npm run electron:build
+yarn build
 ```
 
 ### Lints and fixes files
 
 ```
-npm run lint
+yarn lint
 ```
 
 ### Output directory
